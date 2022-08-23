@@ -10,8 +10,6 @@
             <v-list-item-title>{{item.title}}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-
-
       </v-list>
     </v-navigation-drawer>
     <v-app-bar app>
@@ -51,8 +49,6 @@
 </div>
     </v-app-bar>
     <v-main>
-      <input v-model="username"/>
-      <button v-on:click="getLoggedinUser()">get user</button>
       <LoginDialog @closed="loginDialog=false" v-if="loginDialog"></LoginDialog>
       <v-container fluid>
 
