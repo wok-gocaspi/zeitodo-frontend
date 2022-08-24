@@ -23,7 +23,7 @@
                   fab
                   icon
                   color="primary"
-                  dark
+
                   v-bind="attrs"
                   v-on="on"
               >

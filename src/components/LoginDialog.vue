@@ -7,17 +7,7 @@
           persistent
           max-width="600px"
       >
-    <!--    <template v-slot:activator="{ on, attrs }">
-          <v-btn
-              color="primary"
-              dark
-              v-bind="attrs"
-              v-on="on"
-          >
-            Open Dialog
-          </v-btn>
 
-        </template> -->
         <v-card>
           <v-card-title>
             <span class="text-h5">Log in</span>
@@ -28,6 +18,7 @@
 
                 <v-col cols="12">
                   <v-text-field
+                      id ="username"
                       label="Username*"
                       v-model="username"
                       required
@@ -35,6 +26,7 @@
                 </v-col>
                 <v-col cols="12">
                   <v-text-field
+                      id="password"
                       label="Password*"
                       type="password"
                       v-model="password"
@@ -58,6 +50,7 @@
                 color="blue darken-1"
                 text
                 @click="dialog = false; setVisibility();Login() "
+                id="saveBtn"
             >
               Save
             </v-btn>
