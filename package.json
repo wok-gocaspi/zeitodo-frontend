@@ -6,11 +6,15 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "sonar":"node sonarqube-scanner.js",
+    "test":"jest --coverage"
   },
   "dependencies": {
     "axios": "^0.27.2",
     "core-js": "^3.8.3",
+    "express": "^4.18.1",
+    "sonarqube-scanner": "^2.8.1",
     "vue": "^2.6.14",
     "vue-router": "^3.5.1",
     "vuetify": "^2.6.0"
@@ -28,7 +32,7 @@
     "babel-jest": "^27.0.6",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3",
-    "jest": "^27.0.5",
+    "jest": "^27.5.1",
     "sass": "~1.32.0",
     "sass-loader": "^10.0.0",
     "vue-cli-plugin-vuetify": "~2.5.4",
@@ -64,5 +68,12 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "jestSonar":{
+    "reportPath":"coverage",
+    "reportFile":"test-reporter.xml",
+    "indent":4
+  }
+
 }
+
