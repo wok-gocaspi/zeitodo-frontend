@@ -1,6 +1,6 @@
 <template>
-  <v-app>
-    <v-navigation-drawer app v-model="drawer">
+  <v-app class="mx-auto">
+    <v-navigation-drawer dark color="deep-purple accent-4" app v-model="drawer">
       <v-list dense nav>
         <v-list-item v-for="item in items" v-bind:key="item.title" link :to="item.path">
           <v-list-item-icon>
@@ -14,20 +14,17 @@
     </v-navigation-drawer>
     <v-app-bar app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-<div class="toolbar-btn">
+      <div class="toolbar-btn">
         <div class="text-center">
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
-                  elevation="2"
-                  fab
                   icon
-                  color="primary"
 
                   v-bind="attrs"
                   v-on="on"
               >
-                Profil
+                <v-icon>mdi-account-circle</v-icon>
               </v-btn>
             </template>
             <v-list>
@@ -46,7 +43,7 @@
             </v-list>
           </v-menu>
         </div>
-</div>
+      </div>
     </v-app-bar>
     <v-main>
       <LoginDialog @closed="loginDialog=false" v-if="loginDialog"></LoginDialog>
@@ -76,12 +73,12 @@ export default {
       { title: 'Dashboard', icon: 'mdi-view-dashboard', path:"/" },
     ],
     profilBtn:[
-      {title: "Einstellungen", icon:"mdi-view-dashboard"},
-      {title: "Login", icon:"mdi-view-dashboard"}
+      {title: "Einstellungen", icon:"mdi-account-cog"},
+      {title: "Login", icon:"mdi-account-lock-open"}
     ],
     drawer: false,
 
-  username: '',
+    username: '',
     loginDialog: false,
 
   }),
@@ -89,12 +86,12 @@ export default {
     async getLoggedinUser() {
       this.success = await userservice.getLoggedinUser(this.username,this.username);
     },
-  }
+  },
 };
 </script>
 <style scoped>
 .toolbar-btn{
- position: absolute;
+  position: absolute;
   right: 2rem;
 }
 </style>
