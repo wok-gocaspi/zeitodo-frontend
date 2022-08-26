@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_TAGS = 'banana'
+      }
+
+    stages {
+        stage('Upload to Azure') {
+            steps {
+                script {
+                    DOCKER_TAGS = sh returnStdout: true, script: "docker image ls --format \"{{.Tag}}\" ${dockerImage}"
+                    echo "TAG: ${DOCKER_TAGS}"
+
+                    def userInput = input message: 'local docker images',
+                                          parameters: [choice(name: 'DOCKER_TAG', choices: "${DOCKER_TAGS}",
+                                            description: 'What tag of ${dockerImage} do you want to upload?')]
+
+                    // upload to azure:
+                    docker.withRegistry('https://zeitodoreg.azurecr.io', 'ZeiToDoAzure') {
+                        docker.image("${dockerImage}:${userInput}").push()
+                    }
+                }
+            }
+        }
+    }
+}
