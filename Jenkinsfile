@@ -4,6 +4,9 @@ pipeline {
     tools {
         nodejs 'node-16.16'
     }
+    environment {
+        registry = "zeitodoreg.azurecr.io/zeitodofrontend"
+      }
 
     parameters {
             gitParameter branchFilter: 'origin.*/(.*)',
@@ -15,7 +18,6 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh " npm version"
                 checkout([$class: 'GitSCM',
                     branches: [[name: "${params.BRANCH_TAG}"]],
                     userRemoteConfigs: [[url: 'https://github.com/wok-gocaspi/zeitodo-frontend.git']]])
@@ -31,9 +33,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script{
-                    docker.withRegistry('https://zeitodoreg.azurecr.io', 'ZeiToDoAzure') {
-                      docker.build("zeitodoreg.azurecr.io/zeitodofrontend")
-                    }
+                    docker.build(registry, "--build-arg VUE_APP_BASE_URL=http://zeitodobackend.northeurope.azurecontainer.io -t \"${registry}:${params.BRANCH_TAG}-${env.BUILD_NUMBER}\" .")
                 }
             }
         }
