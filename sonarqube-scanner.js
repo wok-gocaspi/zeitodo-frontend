@@ -1,7 +1,7 @@
 const scanner= require('sonarqube-scanner');
 scanner({
         options:{
-            "sonar.exclusions":"**/*.test.tsx",
+            "sonar.exclusions":"**/*.test.tsx , **/*.HelloWorld.vue",
             "sonar.tests":"./src",
             "sonar.test.inclusions":"**/*.test.tsx,**/*.test.ts",
             "sonar.typescript.lcov.reportPaths": "coverage/lcov.info",
