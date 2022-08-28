@@ -49,7 +49,7 @@
             <v-btn
                 color="blue darken-1"
                 text
-                @click="dialog = false; setVisibility();Login() "
+                @click="dialog = false; setVisibility();Login();ShowLoggedIn() "
                 id="saveBtn"
             >
               Save
@@ -86,6 +86,13 @@ export default {
           })
           .catch(error => this.error = error)
      console.log(this.response.token)
+    },
+    async ShowLoggedIn(){
+      await userService.showLoggedName()  .then(data => {
+        this.response = data.data
+      })
+          .catch(error => this.error = error)
+      console.log(this.response)
     }
   }
 }
