@@ -9,7 +9,3 @@ export default {
   name: "TimeentryView.vue"
 }
 </script>
-
-<style scoped>
-
-</style>

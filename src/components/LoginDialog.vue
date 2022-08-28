@@ -82,7 +82,7 @@ export default {
  async Login(){
    await  userService.getLoggedinUser(this.username,this.password)
           .then(data => {
-            this.response = data
+            this.response = data.data
           })
           .catch(error => this.error = error)
      console.log(this.response.token)
@@ -90,7 +90,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
