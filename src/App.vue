@@ -74,7 +74,8 @@ export default {
     ],
     profilBtn:[
       {title: "Einstellungen", icon:"mdi-account-cog"},
-      {title: "Login", icon:"mdi-account-lock-open"}
+      {title: "Login", icon:"mdi-account-lock-open"},
+      {title: "Admin Management Panel", icon:"mdi-shield-crown"}
     ],
     drawer: false,
 
