@@ -12,5 +12,12 @@ export default{
         let UserPayload = {"username": username, "password": password}
         return axios.post("/login",JSON.stringify(UserPayload))
 
+    },
+    getLoggedInUserId(username){
+        return axios.get("/uId/"+username)
+    },
+
+    getUserIfno(userid){
+        return axios.get("/user/"+userid)
     }
 }
