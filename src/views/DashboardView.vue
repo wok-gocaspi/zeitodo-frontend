@@ -4,13 +4,14 @@
     <v-btn v-on:click="getCurrentUId()">Get user Id of Peter</v-btn>
     <v-btn v-on:click="getUserInfo(tempUserId)" >Get user Info</v-btn>
     <v-btn v-on:click="getToken(testName,testPwd)">get Token of Peter</v-btn>
+    <v-btn v-on:click="getComplete()">get complete</v-btn>
   </v-container>
 
 </template>
 
 <script>
 import userService from "@/services/userService";
- import axios from "axios";
+// import axios from "axios";
 export default {
 
   name: "DashboardView.vue",
@@ -35,8 +36,8 @@ export default {
     },
 
     async getUserInfo(userId){
-     let token = this.token.token
-      axios.defaults.headers.common = {'Authorization': `Bearer ${token}`}
+ //    let token = this.token.token
+//      axios.defaults.headers.common = {'Authorization': `Bearer ${token}`}
      await userService.getUserIfno(userId)
          .then(data => console.log(data.data))
          .catch(error => console.log(error))
@@ -48,6 +49,10 @@ export default {
           })
           .catch(error => this.error = error)
       console.log(this.token.token)
+    },
+
+   async getComplete(){
+     await userService.getCompleteInfo().then(data => console.log(data))
     }
   }
 }
