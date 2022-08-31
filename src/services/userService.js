@@ -6,6 +6,7 @@ import axios from 'axios'
 
 
 
+
 export default{
 
     data: ()=>({
@@ -15,7 +16,9 @@ export default{
         token:"",
         testName:"Peter",
         testPwd:"234",
-        userInfo:{}
+        userInfo:{},
+        userId:"",
+        error:""
     }),
 
     getLoggedinUser(username, password){
@@ -53,16 +56,39 @@ export default{
 
   //    axios.defaults.headers.common = {'Authorization': `Bearer ${this.token.token}`}
     axios.defaults.headers.common['Authorization'] = `Bearer ${this.token.token}`;
-      await axios.get("/user/" + "630773229d68f010d913de28").then(user => this.userInfo = user)
-      console.log(this.userInfo)
+      await axios.get("/user/" + "630773229d68f010d913de28").then(user => this.userInfo = user.data)
+      console.log("UserInfo is: ",this.userInfo)
       return this.token
     },
 
-    async getService(){
-        axios.defaults.headers.common['Authorization'] = `Bearer ${this.token.token}`;
-        await axios.get("/user/" + "630773229d68f010d913de28").then(user => this.userInfo = user)
-        console.log(this.userInfo)
+   async getTokenUIDService(username,password){
+       let UserPayload = {"username": username, "password": password}
+
+       await axios.post("/login",JSON.stringify(UserPayload))
+           .then(response =>{this.token = response.data.token})
+           .catch(error => this.error = error)
+
+       await axios.get("/uId/" + username)
+           .then(resp => this.userId = resp.data)
+           .catch(error => this.error = error)
+
+    let [token,uId]= [this.token,this.userId]
+       console.log(this.token)
+       return [token,uId]
+    },
+
+    async getUserObject(userId){
+        axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
+        await axios.get("user/" + userId)
+            .then(resp =>{this.userInfo = resp})
+            .catch(err => this.error = err)
+
+        let userObj = this.userInfo
+        return userObj
+
     }
+
+
 
 
 }

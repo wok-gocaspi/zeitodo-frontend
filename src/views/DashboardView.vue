@@ -2,8 +2,9 @@
   <v-container>
     <h1>Test</h1>
     <v-btn v-on:click="getCurrentUId()">Get user Id of Peter</v-btn>
-    <v-btn v-on:click="getUserInfo(tempUserId)" >Get user Info</v-btn>
+    <v-btn v-on:click="getUserObj(tempUserId)" >Get user Info</v-btn>
     <v-btn v-on:click="getToken(testName,testPwd)">get Token of Peter</v-btn>
+    <v-btn v-on:click="getTokenServiceR()">get Token of Peter</v-btn>
     <v-btn v-on:click="getComplete()">get complete</v-btn>
   </v-container>
 
@@ -53,6 +54,18 @@ export default {
 
    async getComplete(){
      await userService.getCompleteInfo().then(data => console.log(data))
+    },
+
+    async getTokenServiceR(){
+     let n = "Peter"
+      let p = "234"
+   let  [t,i]= await userService.getTokenUIDService(n,p)
+      console.log("Response from Dashboard is; ", [t,i])
+    },
+    async getUserObj(id){
+     let obj = await userService.getUserObject(id)
+
+      console.log("Response is the UserObject: ", obj)
     }
   }
 }
