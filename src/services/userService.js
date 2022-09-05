@@ -56,7 +56,7 @@ export default{
 
   //    axios.defaults.headers.common = {'Authorization': `Bearer ${this.token.token}`}
     axios.defaults.headers.common['Authorization'] = `Bearer ${this.token.token}`;
-      await axios.get("/user/" + "630773229d68f010d913de28").then(user => this.userInfo = user.data)
+      await axios.get("/user/" + "63154ea8e972ed39b0c75601").then(user => this.userInfo = user.data)
       console.log("UserInfo is: ",this.userInfo)
       return this.token
     },

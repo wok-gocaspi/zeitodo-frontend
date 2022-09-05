@@ -8,11 +8,12 @@
     "test:unit": "vue-cli-service test:unit",
     "test:coverage": "vue-cli-service test:unit --coverage",
     "lint": "vue-cli-service lint",
-    "sonar":"node sonarqube-scanner.js",
-    "test":"jest --coverage"
+    "sonar": "node sonarqube-scanner.js",
+    "test": "jest --coverage"
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "chart.js": "^3.9.1",
     "core-js": "^3.8.3",
     "express": "^4.18.1",
     "sonarqube-scanner": "^2.8.1",
@@ -70,11 +71,9 @@
     "last 2 versions",
     "not dead"
   ],
-  "jestSonar":{
-    "reportPath":"coverage",
-    "reportFile":"test-reporter.xml",
-    "indent":4
+  "jestSonar": {
+    "reportPath": "coverage",
+    "reportFile": "test-reporter.xml",
+    "indent": 4
   }
-
 }
-
