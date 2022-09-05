@@ -46,7 +46,7 @@
       </div>
     </v-app-bar>
     <v-main>
-      <LoginDialog @closed="loginDialog=false" v-if="loginDialog"></LoginDialog>
+      <LoginDialog @setsnackbar="(sb) => snackbarSetEvent(sb)" @closed="loginDialog=false" v-if="loginDialog"></LoginDialog>
       <v-container fluid>
         <SnackBar v-if="snackbar" @snackbartimeout="snackbarTimeoutMethod()" :snackbardata="snackbarData"></SnackBar>
         <router-view @setsnackbar="(sb) => snackbarSetEvent(sb)"></router-view>
@@ -90,6 +90,7 @@ export default {
       this.snackbarText = ""
     },
     snackbarSetEvent(sb){
+      console.log(sb)
       this.snackbarData = sb
       this.snackbar = true
     },

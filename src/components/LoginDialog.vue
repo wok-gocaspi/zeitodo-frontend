@@ -49,7 +49,7 @@
             <v-btn
                 color="blue darken-1"
                 text
-                @click="dialog = false; setVisibility();Login() "
+                @click="Login()"
                 id="saveBtn"
             >
               Save
@@ -83,10 +83,19 @@ export default {
        await  userService.getLoggedinUser(this.username,this.password)
               .then(data => {
                 this.response = data.data
+
+                console.log("123")
               })
               .catch(error => this.error = error)
        console.log(this.response.token)
-     }
+       this.$emit("setsnackbar",{text: "Hello World", timeout: 5000, color: "green"})
+       this.setVisibility()
+       this.dialog = false
+     },
+    CloseForm(){
+
+
+    }
   }
 }
 </script>
