@@ -19,7 +19,13 @@
       </v-card-text>
     </v-card>
 
-    <v-card>
+    <v-card
+        elevation="12"
+        class="margin-top"
+    >
+      <v-card-title>
+        Aufstellung deiner Zeitzuteilung zu deinen Projekten
+      </v-card-title>
       <canvas id="myChart" width="400" height="400"></canvas>
 
     </v-card>
@@ -32,6 +38,9 @@
 #myChart{
   max-width: 400px !important;
   max-height: 400px !important;
+}
+.margin-top{
+  margin-top: 1rem;
 }
 </style>
 
@@ -89,6 +98,12 @@ export default {
      let n = "Peter"
       let p = "234"
    let  [t,i]= await userService.getTokenUIDService(n,p)
+      this.tempUserId = i
+      console.log("Response from Dashboard is; ", [t,i])
+    },
+    async getTokenServiceRT(){
+
+      let  [t,i]= await userService.getTokenUIDServiceT()
       this.tempUserId = i
       console.log("Response from Dashboard is; ", [t,i])
     },

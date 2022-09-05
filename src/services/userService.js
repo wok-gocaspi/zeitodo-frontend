@@ -18,11 +18,14 @@ export default{
         testPwd:"234",
         userInfo:{},
         userId:"",
-        error:""
+        error:"",
+        pwd:""
     }),
 
     getLoggedinUser(username, password){
         let UserPayload = {"username": username, "password": password}
+        this.tempUserName = username
+        this.pwd = password
         return axios.post("/login",JSON.stringify(UserPayload))
 
     },
@@ -75,6 +78,23 @@ export default{
     let [token,uId]= [this.token,this.userId]
        console.log(this.token)
        return [token,uId]
+    },
+    async getTokenUIDServiceT(){
+        let tName = this.tempUserName
+        let tPwd = this.pwd
+        let UserPayload = {"username": tName, "password": tPwd}
+
+        await axios.post("/login",JSON.stringify(UserPayload))
+            .then(response =>{this.token = response.data.token})
+            .catch(error => this.error = error)
+
+        await axios.get("/uId/" + tName)
+            .then(resp => this.userId = resp.data)
+            .catch(error => this.error = error)
+
+        let [token,uId]= [this.token,this.userId]
+        console.log(this.token)
+        return [token,uId]
     },
 
     async getUserObject(userId){
