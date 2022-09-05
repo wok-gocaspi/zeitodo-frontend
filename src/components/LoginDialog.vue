@@ -83,14 +83,18 @@ export default {
        await  userService.getLoggedinUser(this.username,this.password)
               .then(data => {
                 this.response = data.data
+                this.$emit("setsnackbar",{text: data.statusText, timeout: 5000, color: "green"})
+                this.setVisibility()
+                this.dialog = false
 
-                console.log("123")
               })
-              .catch(error => this.error = error)
-       console.log(this.response.token)
-       this.$emit("setsnackbar",{text: "Hello World", timeout: 5000, color: "green"})
-       this.setVisibility()
-       this.dialog = false
+              .catch(error => {
+                this.error = error
+                this.$emit("setsnackbar",{text: error, timeout: 5000, color: "red"})
+                this.setVisibility()
+                this.dialog = false
+              })
+
      },
     CloseForm(){
 
