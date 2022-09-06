@@ -60,7 +60,9 @@ export default {
     getUserErr:"",
     token:"",
     testName:"Peter",
-    testPwd:"234"
+    testPwd:"234",
+    completeEffort:{BMW:49},
+    chart:{}
   }),
 
 
@@ -112,9 +114,89 @@ export default {
       this.tempUserName = obj.data.username
 
       console.log("Response is the UserObject: ", obj)
+    },
+    async getEffort(userId){
+  let time = await userService.getProjectEffort(userId)
+      this.completeEffort = time
+      var projects = [];
+      for(var key in time){
+        projects.push(key);
+      }
+      console.log(projects)
+      let efforts = Object.values(time)
+      console.log("effort times are: ", efforts)
+
+      console.log("Responeded time object is:", time)
+      this.completeEffort.BMW = 500
+      console.log(this.chart, "is my chart")
+  //    this.chart.update()
+      const ctx = document.getElementById('myChart');
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: projects,
+          datasets: [{
+            label: '# hours worked in project',
+            data: efforts,
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+          }]
+        }
+      })
+
+      /*
+     const ctx = document.getElementById('myChart');
+  const newChart = new Chart(ctx,{
+    type: 'doughnut',
+    data: {
+      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      datasets: [{
+        label: '# of Votes',
+        data: [this.completeEffort.BMW, 19, 3, 5, 2, 3],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+      }]
     }
+  })
+      newChart;
+
+       */
+    }
+
+
   },
 
+/*
   mounted (){
     console.log("mounted")
     const ctx = document.getElementById('myChart');
@@ -124,7 +206,7 @@ export default {
         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
         datasets: [{
           label: '# of Votes',
-          data: [12, 19, 3, 5, 2, 3],
+          data: [this.completeEffort.BMW, 19, 3, 5, 2, 3],
           backgroundColor: [
             'rgba(255, 99, 132, 0.2)',
             'rgba(54, 162, 235, 0.2)',
@@ -152,12 +234,18 @@ export default {
         }
       }
     });
+    this.chart = myChart
     myChart;
 
   },
+
+ */
+
+
   async created(){
     await this.getTokenServiceR()
     await this.getUserObj(this.tempUserId)
+    await this.getEffort(this.tempUserId)
   }
 }
 </script>

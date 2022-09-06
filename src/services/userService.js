@@ -19,7 +19,8 @@ export default{
         userInfo:{},
         userId:"",
         error:"",
-        pwd:""
+        pwd:"",
+        calcTimeResp:""
     }),
 
     getLoggedinUser(username, password){
@@ -106,9 +107,18 @@ export default{
         let userObj = this.userInfo
         return userObj
 
+    },
+
+    async getProjectEffort(userId){
+        axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
+        await axios.get("timeentry/" + userId + "/calcul")
+            .then(resp =>{this.calcTimeResp = resp.data})
+            .catch(err => this.error = err)
+
+        let time = this.calcTimeResp
+        return time
+
     }
-
-
 
 
 }
