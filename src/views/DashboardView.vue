@@ -46,7 +46,8 @@
 
 <script>
 import userService from "@/services/userService";
-import Chart from 'chart.js/auto';
+// import Chart from 'chart.js/auto';
+import chartService from "@/services/chartService";
 
 // import axios from "axios";
 export default {
@@ -67,34 +68,7 @@ export default {
 
 
   methods:{
-   async getCurrentUId(){
-     await userService.getLoggedInUserId("Peter")
-         .then(data => this.tempUserId = data.data)
-         .catch(error => this.getUserErr = error)
 
-     console.log(this.tempUserId)
-    },
-
-
-    async getUserInfo(userId){
- //    let token = this.token.token
-//      axios.defaults.headers.common = {'Authorization': `Bearer ${token}`}
-     await userService.getUserIfno(userId)
-         .then(data => console.log(data.data))
-         .catch(error => console.log(error))
-    },
-    async getToken(username,password){
-      await  userService.getLoggedinUser(username,password)
-          .then(data => {
-            this.token = data.data
-          })
-          .catch(error => this.error = error)
-      console.log(this.token.token)
-    },
-
-   async getComplete(){
-     await userService.getCompleteInfo().then(data => console.log(data))
-    },
 
     async getTokenServiceR(){
      let n = "Peter"
@@ -103,94 +77,24 @@ export default {
       this.tempUserId = i
       console.log("Response from Dashboard is; ", [t,i])
     },
-    async getTokenServiceRT(){
 
-      let  [t,i]= await userService.getTokenUIDServiceT()
-      this.tempUserId = i
-      console.log("Response from Dashboard is; ", [t,i])
-    },
     async getUserObj(id){
      let obj = await userService.getUserObject(id)
       this.tempUserName = obj.data.username
 
       console.log("Response is the UserObject: ", obj)
     },
+    // fetches the object with hours per project of a given user id. Passes the fetched data to the chartService to draw a doughnut
     async getEffort(userId){
-  let time = await userService.getProjectEffort(userId)
+      let time = await userService.getProjectEffort(userId)
       this.completeEffort = time
-      var projects = [];
-      for(var key in time){
+      let projects = [];
+      for(let key in time){
         projects.push(key);
       }
-      console.log(projects)
       let efforts = Object.values(time)
-      console.log("effort times are: ", efforts)
 
-      console.log("Responeded time object is:", time)
-      this.completeEffort.BMW = 500
-      console.log(this.chart, "is my chart")
-  //    this.chart.update()
-      const ctx = document.getElementById('myChart');
-      new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: projects,
-          datasets: [{
-            label: '# hours worked in project',
-            data: efforts,
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-              'rgba(255, 99, 132, 1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-          }]
-        }
-      })
-
-      /*
-     const ctx = document.getElementById('myChart');
-  const newChart = new Chart(ctx,{
-    type: 'doughnut',
-    data: {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-      datasets: [{
-        label: '# of Votes',
-        data: [this.completeEffort.BMW, 19, 3, 5, 2, 3],
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)'
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)'
-        ],
-        borderWidth: 1
-      }]
-    }
-  })
-      newChart;
-
-       */
+      chartService.createDoughnut(projects,efforts)
     }
 
 
