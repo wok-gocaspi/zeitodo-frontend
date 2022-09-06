@@ -79,6 +79,7 @@ export default {
     },
     deleteFormClosureHandler(){
       this.deleteUserDialog = false
+      this.fetchAllUser()
     }
   },
   async created() {
