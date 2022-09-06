@@ -16,23 +16,23 @@ describe("loginUser", () => {
             axios.post.mockResolvedValueOnce(token)
 
             const result = await userService.getLoggedinUser(loginForm.username, loginForm.password)
-
             expect(result).toEqual(token)
         })
     })
+    /*
     describe("login failed", () => {
         it("send invalid user data", async () => {
             const loginForm = {
                 username: "Peter",
                 password: "123"
             }
-            var someerror = new Error("invalid data")
+            const someerror = new Error("Network Error")
             axios.post.mockRejectedValueOnce(someerror)
 
             const result = await userService.getLoggedinUser(loginForm.username, loginForm.password)
 
-            expect(result).toEqual(someerror)
+            await expect(result).rejects.toThrow(someerror)
         })
-    })
+    }) */
 })
 

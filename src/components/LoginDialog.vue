@@ -49,7 +49,7 @@
             <v-btn
                 color="blue darken-1"
                 text
-                @click="dialog = false; setVisibility();Login() "
+                @click="Login()"
                 id="saveBtn"
             >
               Save
@@ -63,7 +63,8 @@
 </template>
 
 <script>
- import userService from "@/services/userService";
+import userService from "@/services/userService";
+import axios from "axios"
 export default {
 
   name: "LoginDialog",
@@ -79,14 +80,24 @@ export default {
       this.$emit("closed")
     },
 
- async Login(){
-   await  userService.getLoggedinUser(this.username,this.password)
-          .then(data => {
-            this.response = data.data
-          })
-          .catch(error => this.error = error)
-     console.log(this.response.token)
-    }
+     async Login(){
+       await  userService.getLoggedinUser(this.username,this.password)
+              .then(data => {
+                this.response = data.data
+                axios.defaults.headers.common['Authorization'] = `Bearer ${data.data.token}`;
+                this.$emit("setsnackbar",{text: data.statusText, timeout: 5000, color: "green"})
+                this.setVisibility()
+                this.dialog = false
+
+              })
+              .catch(error => {
+                this.error = error
+                this.$emit("setsnackbar",{text: error, timeout: 5000, color: "red"})
+                this.setVisibility()
+                this.dialog = false
+              })
+
+     },
   }
 }
 </script>

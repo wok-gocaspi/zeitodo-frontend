@@ -36,7 +36,7 @@ let wrapper
  */
 
     it("calls the setVisibilityMethod",async ()=>{
-        const wrapper = shallowMount(LoginDialog, )
+        const wrapper = shallowMount(LoginDialog)
         wrapper.vm.$emit('closed')
         await wrapper.vm.$nextTick()
         let  btn = wrapper.find('#saveBtn')
@@ -46,7 +46,7 @@ let wrapper
     })
 
     it("calls the setVisibilityMethod",async ()=>{
-        const wrapper = mount(LoginDialog )
+        const wrapper = mount(LoginDialog)
         wrapper.vm.$emit('closed')
         await wrapper.vm.$nextTick()
         //   let  btn = wrapper.find('#saveBtn')
