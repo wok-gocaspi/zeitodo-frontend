@@ -40,7 +40,7 @@
        </v-list-item-action>
      </v-list-item>
    </v-list>
-  <DeleteUserDialog @close="deleteFormClosureHandler()" v-bind:userid="selectedUser.userid" v-bind:username="selectedUser.username" v-if="deleteUserDialog == true"></DeleteUserDialog>
+  <DeleteUserDialog @close="deleteFormClosureHandler()" v-bind="selectedUser" v-if="deleteUserDialog === true"></DeleteUserDialog>
  </v-container>
 
 </template>
