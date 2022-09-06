@@ -2,6 +2,7 @@
   <v-snackbar
       v-model="snackbar"
       :timeout="snackbardata.timeout"
+      class="main-snackbar"
   >
     {{ snackbardata.text }}
 
@@ -11,6 +12,7 @@
           text
           v-bind="attrs"
           @click="snackbar = false; emitTimeout()"
+          class="closeButton"
       >
         Close
       </v-btn>

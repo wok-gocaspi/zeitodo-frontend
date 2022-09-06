@@ -64,6 +64,7 @@
 
 <script>
 import userService from "@/services/userService";
+import axios from "axios"
 export default {
 
   name: "LoginDialog",
@@ -83,6 +84,7 @@ export default {
        await  userService.getLoggedinUser(this.username,this.password)
               .then(data => {
                 this.response = data.data
+                axios.defaults.headers.common['Authorization'] = `Bearer ${data.data.token}`;
                 this.$emit("setsnackbar",{text: data.statusText, timeout: 5000, color: "green"})
                 this.setVisibility()
                 this.dialog = false
@@ -96,10 +98,6 @@ export default {
               })
 
      },
-    CloseForm(){
-
-
-    }
   }
 }
 </script>
