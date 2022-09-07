@@ -20,7 +20,8 @@ export default{
         userId:"",
         error:"",
         pwd:"",
-        calcTimeResp:""
+        calcTimeResp:"",
+        allTimeEntries:{}
     }),
 
     getLoggedinUser(username, password){
@@ -118,6 +119,14 @@ export default{
         let time = this.calcTimeResp
         return time
 
+    },
+    async getAllTimeEntries(userid){
+        axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
+        await axios.get("/timeentry/" + userid + "/gettime")
+            .then(resp =>{this.allTimeEntries = resp.data})
+            .catch(err => this.error = err)
+        let entries = this.allTimeEntries
+        return entries
     }
 
 

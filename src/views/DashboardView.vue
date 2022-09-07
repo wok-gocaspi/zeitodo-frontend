@@ -30,6 +30,17 @@
 
     </v-card>
 
+    <v-card
+        elevation="12"
+        class="margin-top"
+    >
+      <v-card-title>
+        Aufstellung deiner Zeitzuteilung zu deinen Projekten
+      </v-card-title>
+      <canvas id="barChart" width="400" height="400"></canvas>
+
+    </v-card>
+
   </v-container>
 
 </template>
@@ -92,9 +103,17 @@ export default {
       for(let key in time){
         projects.push(key);
       }
-      let efforts = Object.values(time)
+     let efforts = Object.values(time)
 
-      chartService.createDoughnut(projects,efforts)
+     chartService.createDoughnut(projects,efforts)
+
+    },
+    async getAllEntries(userId){
+      let entries = await userService.getAllTimeEntries(userId)
+      console.log(entries)
+     let [dates,projects,durations ] =  chartService.extractDatesProjectDuration(entries)
+      console.log([dates,projects,durations ])
+      chartService.createBar(dates,projects,durations)
     }
 
 
@@ -150,6 +169,7 @@ export default {
     await this.getTokenServiceR()
     await this.getUserObj(this.tempUserId)
     await this.getEffort(this.tempUserId)
+    await this.getAllEntries(this.tempUserId)
   }
 }
 </script>
