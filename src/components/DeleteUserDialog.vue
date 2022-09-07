@@ -58,12 +58,11 @@ export default {
     async deleteUser(userid){
       await userService.deleteUser(userid)
           .then(res => {
-            if(res.data == 1){
-              this.$root.$emit("setsnackbar",{text: "Successfully Deleted User!", timeout: 5000, color: "green"})
-            }
+            console.log(res.data)
+              this.$parent.$parent.$emit("setsnackbar",{text: "Successfully Deleted User!", timeout: 5000, color: "green"})
           })
           .catch(err => {
-            this.$root.$emit("setsnackbar",{text: err, timeout: 5000, color: "red"})
+            this.$parent.$parent.$emit("setsnackbar",{text: err, timeout: 5000, color: "red"})
           })
     }
   },

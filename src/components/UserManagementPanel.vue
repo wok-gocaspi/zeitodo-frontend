@@ -21,7 +21,7 @@
        <v-list-item-action>
          <v-tooltip bottom>
              <template v-slot:activator="{ on, attrs }">
-               <v-btn v-bind="attrs" v-on="on" icon>
+               <v-btn @click="userUpdateSelector(user.id, user.username)" v-bind="attrs" v-on="on" icon>
                  <v-icon>mdi-account-convert</v-icon>
                </v-btn>
              </template>
@@ -40,7 +40,8 @@
        </v-list-item-action>
      </v-list-item>
    </v-list>
-  <DeleteUserDialog @close="deleteFormClosureHandler()" v-bind="selectedUser" v-if="deleteUserDialog === true"></DeleteUserDialog>
+   <DeleteUserDialog @close="deleteFormClosureHandler()" v-bind="selectedUser" v-if="deleteUserDialog === true"></DeleteUserDialog>
+   <UpdateUserDialog @close="updateFormClosureHandler()" v-if="updateUserDialog == true" v-bind="selectedUser"></UpdateUserDialog>
  </v-container>
 
 </template>
@@ -48,9 +49,10 @@
 <script>
 import userService from "@/services/userService";
 import DeleteUserDialog from "@/components/DeleteUserDialog";
+import UpdateUserDialog from "@/components/UpdateUserDialog";
 export default {
   name: "UserManagementPanel.vue",
-  components: {DeleteUserDialog},
+  components: {DeleteUserDialog, UpdateUserDialog},
   data(){
     return{
       users: "",
@@ -59,7 +61,8 @@ export default {
         username: "",
         userid: ""
       },
-      deleteUserDialog: false
+      deleteUserDialog: false,
+      updateUserDialog: false
     }
   },
   methods: {
@@ -69,7 +72,7 @@ export default {
             this.users = res.data
           })
           .catch(err => {
-            this.$root.$emit("setsnackbar",{text: err, timeout: 5000, color: "red"})
+            this.$parent.$emit("setsnackbar",{text: err, timeout: 5000, color: "red"})
           })
     },
     userDeleteSelector(userid, username){
@@ -77,8 +80,17 @@ export default {
       this.selectedUser.username = username
       this.deleteUserDialog = true
     },
+    userUpdateSelector(userid, username){
+      this.selectedUser.userid = userid
+      this.selectedUser.username = username
+      this.updateUserDialog = true
+    },
     deleteFormClosureHandler(){
       this.deleteUserDialog = false
+      this.fetchAllUser()
+    },
+    updateFormClosureHandler(){
+      this.updateUserDialog = false
       this.fetchAllUser()
     }
   },

@@ -24,6 +24,9 @@ export default{
     },
     deleteUser(userid){
         return axios.delete("/user/" + userid)
+    },
+    getUserByID(userid){
+        return axios.get("/user/" + userid)
     }
 
 }
