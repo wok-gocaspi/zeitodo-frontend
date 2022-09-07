@@ -36,7 +36,7 @@ export default{
     },
 
     getUserIfno(userid){
-        axios.defaults.headers.common['Authorization'] = `Bearer ${this.token.token}`;
+//        axios.defaults.headers.common['Authorization'] = `Bearer ${this.token.token}`;
         return axios.get("/user/"+userid)
     },
 
@@ -100,7 +100,7 @@ export default{
     },
 
     async getUserObject(userId){
-        axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
+  //      axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
         await axios.get("user/" + userId)
             .then(resp =>{this.userInfo = resp})
             .catch(err => this.error = err)
@@ -111,9 +111,12 @@ export default{
     },
 
     async getProjectEffort(userId){
-        axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
-        await axios.get("timeentry/" + userId + "/calcul")
-            .then(resp =>{this.calcTimeResp = resp.data})
+    //    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem("token")}`;
+    //    await axios.get("timeentry/" + userId + "/calcul")
+        await axios.get("/timeentry/calcul/" + userId )
+            .then(resp =>{
+                console.log(resp)
+                this.calcTimeResp = resp.data})
             .catch(err => this.error = err)
 
         let time = this.calcTimeResp
@@ -130,12 +133,18 @@ export default{
     }
 ,
     async getAllTimeEntries(userid){
-        axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
-        await axios.get("/timeentry/" + userid + "/gettime")
+    //    axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
+        await axios.get("/timeentry/gettime/" + userid )
             .then(resp =>{this.allTimeEntries = resp.data})
             .catch(err => this.error = err)
         let entries = this.allTimeEntries
         return entries
+    },
+
+    async getSelf(){
+  //      axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem("token")}`;
+        return axios.get("/user/self")
+
     }
 
 

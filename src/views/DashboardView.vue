@@ -63,7 +63,7 @@
 import userService from "@/services/userService";
 // import Chart from 'chart.js/auto';
 import chartService from "@/services/chartService";
-import { bus } from '../main'
+//import { bus } from '../main'
 // import axios from "axios";
 export default {
 
@@ -80,7 +80,8 @@ export default {
     completeEffort:{BMW:49},
     chart:{},
     busLoginData:[],
-    total:0
+    total:0,
+    err:""
   }),
 
 
@@ -90,7 +91,10 @@ export default {
     async getTokenServiceR(){
    //  let n = "Peter"
    //   let p = "234"
-   let  [t,i]= await userService.getTokenUIDService(this.busLoginData[0],this.busLoginData[1])
+ //  let  [t,i]= await userService.getTokenUIDService(this.busLoginData[0],this.busLoginData[1])
+      let username = localStorage.getItem("username")
+      let pwd = localStorage.getItem("pwd")
+      let  [t,i]= await userService.getTokenUIDService(username,pwd)
       this.tempUserId = i
       console.log("Response from Dashboard is; ", [t,i])
     },
@@ -122,6 +126,16 @@ export default {
      let [dates,projects,durations ] =  chartService.extractDatesProjectDuration(entries)
       console.log([dates,projects,durations ])
       chartService.createBar(dates,projects,durations)
+    },
+   async getUserObjSelf(){
+      await userService.getSelf()
+          .then(resp => {
+            console.log(resp)
+            this.tempUserId = resp.data.id})
+          .catch(error => this.err = error)
+   },
+    forceUpdateByLogin(){
+      this.$forceUpdate();
     }
 
 
@@ -174,6 +188,7 @@ export default {
 
 
   async created(){
+    /*
     bus.$on('login',(data)=>{
       this.busLoginData = data
       console.log("Data from the bus ",this.busLoginData)
@@ -184,6 +199,18 @@ export default {
       await this.getEffort(this.tempUserId)
       await this.getAllEntries(this.tempUserId)
     })
+
+     */
+/*
+    bus.$on("loggedIn",()=>{
+    //  this.$forceUpdate();
+      location.reload()
+    })
+
+ */
+    await this.getUserObjSelf()
+    await this.getEffort(this.tempUserId)
+    await this.getAllEntries(this.tempUserId)
 
   }
 }

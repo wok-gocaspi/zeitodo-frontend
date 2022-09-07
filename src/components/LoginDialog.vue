@@ -65,6 +65,7 @@
 <script>
  import userService from "@/services/userService";
  import { bus } from '../main'
+ import axios from "axios";
 export default {
 
   name: "LoginDialog",
@@ -87,6 +88,12 @@ export default {
           })
           .catch(error => this.error = error)
      console.log(this.response.token)
+
+   localStorage.setItem("username",this.username)
+   localStorage.setItem("pwd",this.password)
+  localStorage.setItem("token", this.response.token)
+   axios.defaults.headers.common['Authorization'] = `Bearer ${this.response.token}`
+
    bus.$emit('login',[this.username,this.password])
    bus.$emit('loggedIn')
     }
