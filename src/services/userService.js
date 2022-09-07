@@ -120,6 +120,15 @@ export default{
         return time
 
     },
+    getTotalTime(time){
+        let sum = 0
+        let efforts = Object.values(time)
+        efforts.forEach(e =>{
+            sum += e
+        })
+        return sum
+    }
+,
     async getAllTimeEntries(userid){
         axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
         await axios.get("/timeentry/" + userid + "/gettime")

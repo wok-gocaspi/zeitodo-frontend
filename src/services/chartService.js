@@ -64,16 +64,41 @@ export default {
         return [dates,projects,durations]
     },
     getTimeDiff(dateA,dateB){
-        return new Date(dateB)-new Date(dateA)
+        return this.convertMsToH(new Date(dateB)-new Date(dateA))
     },
+    convertMsToH(milliseconds) {
+    let seconds = Math.floor(milliseconds / 1000);
+    let minutes = Math.floor(seconds / 60);
+    let hours = Math.floor(minutes / 60);
+
+    seconds = seconds % 60;
+    // 👇️ if seconds are greater than 30, round minutes up (optional)
+    minutes = seconds >= 30 ? minutes + 1 : minutes;
+
+    minutes = minutes % 60;
+
+    // 👇️ If you don't want to roll hours over, e.g. 24 to 00
+    // 👇️ comment (or remove) the line below
+    // commenting next line gets you `24:00:00` instead of `00:00:00`
+    // or `36:15:31` instead of `12:15:31`, etc.
+   // hours = hours % 24;
+
+    return hours;
+}
+,
 
     createBar(dates,projects,durations){
         const ctx = document.getElementById('barChart');
         let colors = this.getRandomColor(projects)
+        let formattedDates = []
+        dates.forEach(d => {
+
+            formattedDates.push( d.split("T")[0])
+        })
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: dates,
+                labels: formattedDates,
                 datasets: [{
                     label: '# hours worked in project',
                     data: durations,

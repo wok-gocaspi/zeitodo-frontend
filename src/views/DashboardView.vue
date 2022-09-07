@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h1>Test</h1>
+    <h1>Dashboard</h1>
     <!--
     <v-btn v-on:click="getCurrentUId()">Get user Id of Peter</v-btn>
     <v-btn v-on:click="getUserObj(tempUserId)" >Get user Info</v-btn>
@@ -12,10 +12,10 @@
         elevation="12"
     >
       <v-card-title>
-        Moin ZeiToDo Nutzer: {{this.tempUserName}}
+        Moin!  {{this.tempUserName}}
       </v-card-title>
       <v-card-text>
-        Deine gesamte Arbeitszeit beträgt:
+        Deine gesamte Arbeitszeit beträgt: {{this.total}} STD
       </v-card-text>
     </v-card>
 
@@ -24,7 +24,7 @@
         class="margin-top"
     >
       <v-card-title>
-        Aufstellung deiner Zeitzuteilung zu deinen Projekten
+        Leistungen
       </v-card-title>
       <canvas id="myChart" width="400" height="400"></canvas>
 
@@ -35,7 +35,7 @@
         class="margin-top"
     >
       <v-card-title>
-        Aufstellung deiner Zeitzuteilung zu deinen Projekten
+        Projekte
       </v-card-title>
       <canvas id="barChart" width="400" height="400"></canvas>
 
@@ -47,6 +47,10 @@
 
 <style>
 #myChart{
+  max-width: 400px !important;
+  max-height: 400px !important;
+}
+#barChart{
   max-width: 400px !important;
   max-height: 400px !important;
 }
@@ -67,7 +71,7 @@ export default {
 
 
   data: ()=>({
-    tempUserName:"",
+    tempUserName:"Bitte Logge dich ein um das Dashboard zu nutzen!",
     tempUserId:"",
     getUserErr:"",
     token:"",
@@ -75,7 +79,8 @@ export default {
     testPwd:"234",
     completeEffort:{BMW:49},
     chart:{},
-    busLoginData:[]
+    busLoginData:[],
+    total:0
   }),
 
 
@@ -105,6 +110,8 @@ export default {
         projects.push(key);
       }
      let efforts = Object.values(time)
+      let total = userService.getTotalTime(time)
+      this.total = total
 
      chartService.createDoughnut(projects,efforts)
 
