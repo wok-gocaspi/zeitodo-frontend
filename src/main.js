@@ -8,6 +8,8 @@ Vue.config.productionTip = false
 
 axios.defaults.baseURL = process.env.VUE_APP_BASE_URL
 
+export const bus = new Vue()
+
 new Vue({
   router,
   vuetify,

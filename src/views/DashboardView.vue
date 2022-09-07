@@ -59,7 +59,7 @@
 import userService from "@/services/userService";
 // import Chart from 'chart.js/auto';
 import chartService from "@/services/chartService";
-
+import { bus } from '../main'
 // import axios from "axios";
 export default {
 
@@ -74,7 +74,8 @@ export default {
     testName:"Peter",
     testPwd:"234",
     completeEffort:{BMW:49},
-    chart:{}
+    chart:{},
+    busLoginData:[]
   }),
 
 
@@ -82,9 +83,9 @@ export default {
 
 
     async getTokenServiceR(){
-     let n = "Peter"
-      let p = "234"
-   let  [t,i]= await userService.getTokenUIDService(n,p)
+   //  let n = "Peter"
+   //   let p = "234"
+   let  [t,i]= await userService.getTokenUIDService(this.busLoginData[0],this.busLoginData[1])
       this.tempUserId = i
       console.log("Response from Dashboard is; ", [t,i])
     },
@@ -166,10 +167,17 @@ export default {
 
 
   async created(){
-    await this.getTokenServiceR()
-    await this.getUserObj(this.tempUserId)
-    await this.getEffort(this.tempUserId)
-    await this.getAllEntries(this.tempUserId)
+    bus.$on('login',(data)=>{
+      this.busLoginData = data
+      console.log("Data from the bus ",this.busLoginData)
+    })
+    bus.$on('loggedIn',async ()=>{
+      await this.getTokenServiceR()
+      await this.getUserObj(this.tempUserId)
+      await this.getEffort(this.tempUserId)
+      await this.getAllEntries(this.tempUserId)
+    })
+
   }
 }
 </script>

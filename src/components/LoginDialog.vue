@@ -64,6 +64,7 @@
 
 <script>
  import userService from "@/services/userService";
+ import { bus } from '../main'
 export default {
 
   name: "LoginDialog",
@@ -86,6 +87,8 @@ export default {
           })
           .catch(error => this.error = error)
      console.log(this.response.token)
+   bus.$emit('login',[this.username,this.password])
+   bus.$emit('loggedIn')
     }
   }
 }
