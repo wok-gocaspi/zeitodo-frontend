@@ -138,7 +138,7 @@ export default {
             console.log(entries, "new getAllEntries")
             let [dates,projects,durations] =  chartService.extractDatesProjectDuration(entries)
             console.log([dates,projects,durations ])
-            chartService.createBar(dates,projects,durations)
+            this.createBar(dates,projects,durations)
           })
           .catch(err => console.log(err))
     },
@@ -169,6 +169,28 @@ export default {
           datasets: [{
             label: '# hours worked in project',
             data: efforts,
+            backgroundColor: colors,
+            borderColor: colors,
+            borderWidth: 1
+          }]
+        }
+      })
+    },
+    createBar(dates,projects,durations){
+      const ctx = document.getElementById('barChart');
+      let colors = chartService.getRandomColor(projects)
+      let formattedDates = []
+      dates.forEach(d => {
+
+        formattedDates.push( d.split("T")[0])
+      })
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: formattedDates,
+          datasets: [{
+            label: '# hours worked in project',
+            data: durations,
             backgroundColor: colors,
             borderColor: colors,
             borderWidth: 1

@@ -1,4 +1,4 @@
-import Chart from "chart.js/auto";
+//import Chart from "chart.js/auto";
 
 export default {
     /*
@@ -89,7 +89,7 @@ export default {
     return hours;
 }
 ,
-
+/*
     createBar(dates,projects,durations){
         const ctx = document.getElementById('barChart');
         let colors = this.getRandomColor(projects)
@@ -112,6 +112,8 @@ export default {
             }
         })
     },
+
+ */
 
 
 }
