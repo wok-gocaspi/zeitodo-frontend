@@ -15,7 +15,8 @@
         Moin!  {{this.tempUserName}}
       </v-card-title>
       <v-card-text>
-        Deine gesamte Arbeitszeit beträgt: {{this.total}} STD
+        <h1><p align="center">   Gesamte Arbeitszeit </p></h1>
+         <h1><p align="center" >&#128337; {{this.total}} STD</p></h1>
       </v-card-text>
     </v-card>
 
@@ -26,7 +27,7 @@
       <v-card-title>
         Leistungen
       </v-card-title>
-      <canvas id="myChart" width="400" height="400"></canvas>
+      <p align="center"> <canvas id="myChart" width="400" height="400"></canvas></p>
 
     </v-card>
 
@@ -37,7 +38,7 @@
       <v-card-title>
         Projekte
       </v-card-title>
-      <canvas id="barChart" width="400" height="400"></canvas>
+      <p align="center"> <canvas id="barChart" width="400" height="400"></canvas></p>
 
     </v-card>
 
