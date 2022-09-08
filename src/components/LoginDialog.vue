@@ -19,7 +19,7 @@
                 <v-col cols="12">
                   <v-text-field
                       id ="username"
-                      label="Username*"
+                      label="Username"
                       v-model="username"
                       required
                   ></v-text-field>
@@ -27,7 +27,7 @@
                 <v-col cols="12">
                   <v-text-field
                       id="password"
-                      label="Password*"
+                      label="Password"
                       type="password"
                       v-model="password"
                       required
@@ -35,7 +35,6 @@
                 </v-col>
               </v-row>
             </v-container>
-            <small>*indicates required field</small>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -63,41 +62,10 @@
 </template>
 
 <script>
-import userService from "@/services/userService";
-import axios from "axios"
+
 export default {
 
   name: "LoginDialog",
-  data: () => ({
-    dialog: true,
-    password: "",
-    username:"",
-    response:"",
-    error:"",
-  }),
-  methods:{
-    setVisibility(){
-      this.$emit("closed")
-    },
 
-     async Login(){
-       await  userService.getLoggedinUser(this.username,this.password)
-              .then(data => {
-                this.response = data.data
-                axios.defaults.headers.common['Authorization'] = `Bearer ${data.data.token}`;
-                this.$emit("setsnackbar",{text: data.statusText, timeout: 5000, color: "green"})
-                this.setVisibility()
-                this.dialog = false
-
-              })
-              .catch(error => {
-                this.error = error
-                this.$emit("setsnackbar",{text: error, timeout: 5000, color: "red"})
-                this.setVisibility()
-                this.dialog = false
-              })
-
-     },
-  }
 }
 </script>

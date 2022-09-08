@@ -6,16 +6,17 @@
         max-width="290"
     >
       <v-card>
-        <v-card-title class="text-h5">
+        <v-card-title class="text-h5" id="usr-title">
           Delete {{username}}
         </v-card-title>
-        <v-card-text>Are you sure to delete {{username}}</v-card-text>
+        <v-card-text id="usr-text">Are you sure to delete {{username}}</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
               color="green darken-1"
               text
               @click="disableDialog()"
+              id="abort-btn"
           >
             Abort
           </v-btn>
@@ -23,6 +24,7 @@
               color="red darken-1"
               text
               @click="disableDialogWithDeletion()"
+              id="delete-btn"
           >
             Delete
           </v-btn>

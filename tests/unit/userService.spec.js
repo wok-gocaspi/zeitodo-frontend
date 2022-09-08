@@ -5,9 +5,8 @@ import axios from "axios"
 
 jest.mock("axios")
 
-describe("loginUser", () => {
-    describe("login was successful", () => {
-        it("send user data", async () => {
+describe("Axios Requests", () => {
+        it("login user", async () => {
             const loginForm = {
                 username: "Peter",
                 password: "123"
@@ -18,21 +17,49 @@ describe("loginUser", () => {
             const result = await userService.getLoggedinUser(loginForm.username, loginForm.password)
             expect(result).toEqual(token)
         })
-    })
-    /*
-    describe("login failed", () => {
-        it("send invalid user data", async () => {
-            const loginForm = {
-                username: "Peter",
-                password: "123"
-            }
-            const someerror = new Error("Network Error")
-            axios.post.mockRejectedValueOnce(someerror)
+        it("get all user", async () => {
+            const user = [
+                {
+                    "id": "123",
+                    "username": "Peter"
+                },
+                {
+                    "id": "234",
+                    "username": "Hans"
+                }
+            ]
+            axios.get.mockResolvedValueOnce(user)
 
-            const result = await userService.getLoggedinUser(loginForm.username, loginForm.password)
-
-            await expect(result).rejects.toThrow(someerror)
+            const result = await userService.getAllUser()
+            expect(result).toEqual(user)
         })
-    }) */
-})
+        it("get user", async () => {
+            const user = {
+                "id": "123",
+                "username": "Test"
+            }
+            axios.get.mockResolvedValueOnce(user)
 
+            const result = await userService.getUserByID(user.id)
+            expect(result).toEqual(user)
+        })
+        it("delete user", async () => {
+            const fakeBody = {
+                "DeletedCount": 1
+            }
+            axios.delete.mockResolvedValueOnce(fakeBody)
+            const result = await userService.deleteUser("123")
+            expect(result).toEqual(fakeBody)
+        })
+        it("patch user", async () => {
+            const fakeBody = [
+                {
+                    "id": "123",
+                    "username": "test"
+                }
+            ]
+            axios.patch.mockResolvedValueOnce(fakeBody)
+            const result = await userService.updateUser(fakeBody)
+            expect(result).toEqual(fakeBody)
+        })
+})

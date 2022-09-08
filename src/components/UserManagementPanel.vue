@@ -8,6 +8,7 @@
      <v-list-item
         v-for="user in users"
         :key="user.id"
+        class="item-list"
      >
        <v-list-item-avatar>
          <v-icon>
@@ -15,38 +16,37 @@
          </v-icon>
        </v-list-item-avatar>
        <v-list-item-content>
-         <v-list-item-title v-text="user.username"></v-list-item-title>
-         <v-list-item-subtitle v-text="user.firstname + ' ' + user.lastname"></v-list-item-subtitle>
+         <v-list-item-title id="user-title" v-text="user.username"></v-list-item-title>
+         <v-list-item-subtitle id="user-subtitle" v-text="user.firstname + ' ' + user.lastname"></v-list-item-subtitle>
        </v-list-item-content>
        <v-list-item-action>
-         <v-tooltip bottom>
+         <v-row>
+           <v-tooltip bottom>
              <template v-slot:activator="{ on, attrs }">
-               <v-btn @click="userUpdateSelector(user.id, user.username)" v-bind="attrs" v-on="on" icon>
+               <v-btn @click="userUpdateSelector(user.id, user.username)" id="update-btn" v-bind="attrs" v-on="on" icon>
                  <v-icon>mdi-account-convert</v-icon>
                </v-btn>
              </template>
-           <span>Update User</span>
-         </v-tooltip>
-       </v-list-item-action>
-       <v-list-item-action>
-         <v-tooltip bottom>
-           <template v-slot:activator="{ on, attrs }">
-             <v-btn @click="userChangePasswordSelector(user.id, user.username)" v-bind="attrs" v-on="on" icon>
-               <v-icon>mdi-lock-reset</v-icon>
-             </v-btn>
-           </template>
-           <span>Change Password</span>
-         </v-tooltip>
-       </v-list-item-action>
-       <v-list-item-action>
-         <v-tooltip bottom>
-           <template v-slot:activator="{ on, attrs }">
-             <v-btn @click="userDeleteSelector(user.id, user.username)" v-bind="attrs" v-on="on" icon>
-               <v-icon>mdi-delete</v-icon>
-             </v-btn>
-           </template>
-           <span>Delete User</span>
-         </v-tooltip>
+             <span>Update User</span>
+           </v-tooltip>
+           <v-tooltip id="cp-btn" bottom>
+             <template v-slot:activator="{ on, attrs }">
+               <v-btn @click="userChangePasswordSelector(user.id, user.username)" v-bind="attrs" v-on="on" icon>
+                 <v-icon>mdi-lock-reset</v-icon>
+               </v-btn>
+             </template>
+             <span>Change Password</span>
+           </v-tooltip>
+           <v-tooltip id="delete-btn" bottom>
+             <template v-slot:activator="{ on, attrs }">
+               <v-btn @click="userDeleteSelector(user.id, user.username)" v-bind="attrs" v-on="on" icon>
+                 <v-icon>mdi-delete</v-icon>
+               </v-btn>
+             </template>
+             <span>Delete User</span>
+           </v-tooltip>
+         </v-row>
+
        </v-list-item-action>
      </v-list-item>
    </v-list>
