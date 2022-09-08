@@ -31,6 +31,16 @@
        <v-list-item-action>
          <v-tooltip bottom>
            <template v-slot:activator="{ on, attrs }">
+             <v-btn @click="userChangePasswordSelector(user.id, user.username)" v-bind="attrs" v-on="on" icon>
+               <v-icon>mdi-lock-reset</v-icon>
+             </v-btn>
+           </template>
+           <span>Change Password</span>
+         </v-tooltip>
+       </v-list-item-action>
+       <v-list-item-action>
+         <v-tooltip bottom>
+           <template v-slot:activator="{ on, attrs }">
              <v-btn @click="userDeleteSelector(user.id, user.username)" v-bind="attrs" v-on="on" icon>
                <v-icon>mdi-delete</v-icon>
              </v-btn>
@@ -42,6 +52,7 @@
    </v-list>
    <DeleteUserDialog @close="deleteFormClosureHandler()" v-bind="selectedUser" v-if="deleteUserDialog === true"></DeleteUserDialog>
    <UpdateUserDialog @close="updateFormClosureHandler()" v-if="updateUserDialog == true" v-bind="selectedUser"></UpdateUserDialog>
+   <AdminChangePassword @close="passwordFormClosureHandler()" v-if="changeUserPasswordDialog == true" v-bind="selectedUser"></AdminChangePassword>
  </v-container>
 
 </template>
@@ -50,9 +61,10 @@
 import userService from "@/services/userService";
 import DeleteUserDialog from "@/components/DeleteUserDialog";
 import UpdateUserDialog from "@/components/UpdateUserDialog";
+import AdminChangePassword from "@/components/AdminChangePassword";
 export default {
   name: "UserManagementPanel.vue",
-  components: {DeleteUserDialog, UpdateUserDialog},
+  components: {DeleteUserDialog, UpdateUserDialog, AdminChangePassword},
   data(){
     return{
       users: "",
@@ -62,7 +74,8 @@ export default {
         userid: ""
       },
       deleteUserDialog: false,
-      updateUserDialog: false
+      updateUserDialog: false,
+      changeUserPasswordDialog: false
     }
   },
   methods: {
@@ -85,6 +98,11 @@ export default {
       this.selectedUser.username = username
       this.updateUserDialog = true
     },
+    userChangePasswordSelector(userid, username){
+      this.selectedUser.userid = userid
+      this.selectedUser.username = username
+      this.changeUserPasswordDialog = true
+    },
     deleteFormClosureHandler(){
       this.deleteUserDialog = false
       this.fetchAllUser()
@@ -92,7 +110,12 @@ export default {
     updateFormClosureHandler(){
       this.updateUserDialog = false
       this.fetchAllUser()
+    },
+    passwordFormClosureHandler(){
+      this.changeUserPasswordDialog = false
+      this.fetchAllUser()
     }
+
   },
   async created() {
     await this.fetchAllUser()

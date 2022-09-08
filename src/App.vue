@@ -90,7 +90,6 @@ export default {
       this.snackbarText = ""
     },
     snackbarSetEvent(sb){
-      console.log(sb)
       this.snackbarData = sb
       this.snackbar = true
     },

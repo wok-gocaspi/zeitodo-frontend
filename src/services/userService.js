@@ -27,6 +27,9 @@ export default{
     },
     getUserByID(userid){
         return axios.get("/user/" + userid)
-    }
+    },
+    updateUser(userBody){
+        return axios.patch("/user", JSON.stringify(userBody))
+    },
 
 }

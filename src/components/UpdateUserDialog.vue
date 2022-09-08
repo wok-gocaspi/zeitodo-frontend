@@ -16,7 +16,6 @@
                 <v-text-field
                     label="First Name"
                     v-model="user.firstname"
-                    v-on:change="printHello()"
                 ></v-text-field>
               </v-col>
               <v-col>
@@ -50,16 +49,30 @@
                 ></v-text-field>
               </v-col>
               <v-divider></v-divider>
-              <v-col cols="12"
-                     v-for="(project,index) in user.projects"
-                     v-bind:key="index">
+              <v-btn @click="addProject()">Add Project</v-btn>
+              <v-container
+                  v-for="(_, index) in user.projects"
+                  :key="index"
+                  style="padding: 0;"
+              >
+                <v-col>
+                  <v-text-field
+                      v-model="user.projects[index]"
+                      label="Project"
+                      required
+                  ></v-text-field>
+                  <v-btn @click="removeProject(index)">Remove</v-btn>
+                </v-col>
+              </v-container>
+              <v-col cols="12">
                 <v-text-field
-                    v-model="project[index]"
-                    label="Team"
+                    v-model="user.group"
+                    label="Group"
                     required
 
                 ></v-text-field>
               </v-col>
+
 
             </v-row>
           </v-container>
@@ -77,7 +90,7 @@
           <v-btn
               color="blue darken-1"
               text
-              @click="closeDialog()"
+              @click="saveDialog()"
           >
             Save
           </v-btn>
@@ -109,20 +122,41 @@ export default {
       await userService.getUserByID(id)
           .then(res => {
             this.user = res.data
-            console.log(this.user.projects)
           })
           .catch(err => {
             this.$parent.$parent.$emit("setsnackbar",{text: err, timeout: 5000, color: "red"})
           })
     },
-    closeDialog(){
+    async closeDialog(){
       this.$emit("close")
       this.dialog = false
+    },
+    saveDialog(){
+      this.updateUser()
+    },
+    removeProject(index){
+      if (index > -1){
+        this.user.projects.splice(index, 1)
+      }
+    },
+    addProject(){
+      if (this.user?.projects === null){
+        this.user.projects = []
+      }
+      this.user.projects.push("")
+    },
+    async updateUser(){
+      await userService.updateUser(this.user)
+          .then(() => {
+            this.$parent.$parent.$emit("setsnackbar",{text: "User Updated!", timeout: 5000, color: "green"})
+          })
+          .catch(err => {
+            this.$parent.$parent.$emit("setsnackbar", {text: err, timeout: 5000, color: "red"})
+          })
     }
   },
   async created() {
     await this.getUserByID(this.userid)
-    console.log(this.user)
   }
 }
 </script>
