@@ -63,6 +63,7 @@
 import userService from "@/services/userService";
 // import Chart from 'chart.js/auto';
 import chartService from "@/services/chartService";
+import Chart from "chart.js/auto";
 //import { bus } from '../main'
 // import axios from "axios";
 export default {
@@ -120,17 +121,68 @@ export default {
      chartService.createDoughnut(projects,efforts)
 
     },
+
     async getAllEntries(userId){
-      let entries = await userService.getAllTimeEntries(userId)
-      console.log(entries)
+      let entries = await userService.getAllTimeEntries2(userId)
+      entries = entries.data
+      console.log(entries, "new getAllEntries")
      let [dates,projects,durations ] =  chartService.extractDatesProjectDuration(entries)
       console.log([dates,projects,durations ])
       chartService.createBar(dates,projects,durations)
     },
+
+    async getAllEntries1(userId){
+      await userService.getAllTimeEntries2(userId)
+          .then(resp => {
+          let  entries = resp.data
+            console.log(entries, "new getAllEntries")
+            let [dates,projects,durations] =  chartService.extractDatesProjectDuration(entries)
+            console.log([dates,projects,durations ])
+            chartService.createBar(dates,projects,durations)
+          })
+          .catch(err => console.log(err))
+    },
+
+    async getEffort1(userId){
+      await userService.getProjectEffort1(userId)
+          .then(resp =>{
+            this.completeEffort = resp.data
+            let time = resp.data
+            let projects = [];
+            for(let key in time){
+              projects.push(key);
+            }
+            let efforts = Object.values(time)
+            let total = userService.getTotalTime(time)
+            this.total = total
+            const ctx = document.getElementById('myChart');
+            this.createDoughnut(projects,efforts,ctx)
+          })
+    },
+    createDoughnut(projects,efforts,ctx){
+
+      let colors = chartService.getRandomColor(projects)
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: projects,
+          datasets: [{
+            label: '# hours worked in project',
+            data: efforts,
+            backgroundColor: colors,
+            borderColor: colors,
+            borderWidth: 1
+          }]
+        }
+      })
+    },
+
+
    async getUserObjSelf(){
       await userService.getSelf()
           .then(resp => {
-            console.log(resp)
+            console.log(resp, "response for /self endpoint")
+            this.tempUserName = resp.data.username
             this.tempUserId = resp.data.id})
           .catch(error => this.err = error)
    },
@@ -209,8 +261,8 @@ export default {
 
  */
     await this.getUserObjSelf()
-    await this.getEffort(this.tempUserId)
-    await this.getAllEntries(this.tempUserId)
+    await this.getEffort1(this.tempUserId)
+    await this.getAllEntries1(this.tempUserId)
 
   }
 }

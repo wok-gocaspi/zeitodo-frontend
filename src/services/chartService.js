@@ -1,8 +1,9 @@
 import Chart from "chart.js/auto";
 
 export default {
-        createDoughnut(projects,efforts){
-            const ctx = document.getElementById('myChart');
+    /*
+        createDoughnut(projects,efforts,ctx){
+
             let colors = this.getRandomColor(projects)
             new Chart(ctx, {
                 type: 'doughnut',
@@ -18,6 +19,8 @@ export default {
                 }
             })
         },
+
+     */
  random_rgba() {
     let o = Math.round, r = Math.random, s = 255;
     return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';

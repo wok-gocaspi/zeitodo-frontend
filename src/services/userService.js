@@ -123,6 +123,13 @@ export default{
         return time
 
     },
+
+     getProjectEffort1(userId){
+        //    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem("token")}`;
+        //    await axios.get("timeentry/" + userId + "/calcul")
+       return axios.get("/timeentry/calcul/" + userId )
+
+    },
     getTotalTime(time){
         let sum = 0
         let efforts = Object.values(time)
@@ -139,6 +146,17 @@ export default{
             .catch(err => this.error = err)
         let entries = this.allTimeEntries
         return entries
+    },
+    async getAllTimeEntries1(userid){
+        //    axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
+     let timeEntries =   await axios.get("/timeentry/gettime/" + userid )
+         this.allTimeEntries = timeEntries.data
+       console.log("timeEntries to the logged in uId: ", timeEntries.data)
+        return timeEntries.data
+    },
+     getAllTimeEntries2(userid){
+       return  axios.get("/timeentry/gettime/" + userid )
+
     },
 
     async getSelf(){
