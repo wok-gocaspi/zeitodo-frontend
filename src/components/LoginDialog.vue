@@ -49,7 +49,7 @@
             <v-btn
                 color="blue darken-1"
                 text
-                @click="Login()"
+                @click="dialog = false; setVisibility();Login() "
                 id="saveBtn"
             >
               Save
@@ -63,8 +63,9 @@
 </template>
 
 <script>
-import userService from "@/services/userService";
-import axios from "axios"
+ import userService from "@/services/userService";
+ import { bus } from '../main'
+ import axios from "axios";
 export default {
 
   name: "LoginDialog",
@@ -80,24 +81,22 @@ export default {
       this.$emit("closed")
     },
 
-     async Login(){
-       await  userService.getLoggedinUser(this.username,this.password)
-              .then(data => {
-                this.response = data.data
-                axios.defaults.headers.common['Authorization'] = `Bearer ${data.data.token}`;
-                this.$emit("setsnackbar",{text: data.statusText, timeout: 5000, color: "green"})
-                this.setVisibility()
-                this.dialog = false
+ async Login(){
+   await  userService.getLoggedinUser(this.username,this.password)
+          .then(data => {
+            this.response = data.data
+          })
+          .catch(error => this.error = error)
+     console.log(this.response.token)
 
-              })
-              .catch(error => {
-                this.error = error
-                this.$emit("setsnackbar",{text: error, timeout: 5000, color: "red"})
-                this.setVisibility()
-                this.dialog = false
-              })
+   localStorage.setItem("username",this.username)
+   localStorage.setItem("pwd",this.password)
+  localStorage.setItem("token", this.response.token)
+   axios.defaults.headers.common['Authorization'] = `Bearer ${this.response.token}`
 
-     },
+   bus.$emit('login',[this.username,this.password])
+   bus.$emit('loggedIn')
+    }
   }
 }
 </script>

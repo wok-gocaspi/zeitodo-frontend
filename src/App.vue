@@ -62,6 +62,8 @@
 import userservice from "@/services/userService";
 import LoginDialog from "@/components/LoginDialog";
 import SnackBar from '@/components/SnackbarComponent'
+import {bus} from "@/main";
+
 
 
 export default {
@@ -97,7 +99,15 @@ export default {
     async getLoggedinUser() {
       this.success = await userservice.getLoggedinUser(this.username,this.username);
     },
+
   },
+
+  created() {
+    bus.$on("loggedIn",()=>{
+      //  this.$forceUpdate();
+      location.reload()
+    })
+  }
 };
 </script>
 <style scoped>
