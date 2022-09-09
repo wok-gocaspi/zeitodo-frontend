@@ -1,12 +1,5 @@
 import axios from 'axios'
 
-
-
-
-
-
-
-
 export default{
 
     data: ()=>({
@@ -29,11 +22,19 @@ export default{
         this.tempUserName = username
         this.pwd = password
         return axios.post("/login",JSON.stringify(UserPayload))
-
     },
-
-
-
+    getAllUser(){
+        return axios.get("/user")
+    },
+    deleteUser(userid){
+        return axios.delete("/user/" + userid)
+    },
+    getUserByID(userid){
+        return axios.get("/user/" + userid)
+    },
+    updateUser(userBody){
+        return axios.patch("/user", JSON.stringify(userBody))
+    },
      getProjectEffort1(userId){
         //    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem("token")}`;
         //    await axios.get("timeentry/" + userId + "/calcul")
@@ -47,8 +48,7 @@ export default{
             sum += e
         })
         return sum
-    }
-,
+    },
      getAllTimeEntries2(userid){
        return  axios.get("/timeentry/gettime/" + userid )
     },

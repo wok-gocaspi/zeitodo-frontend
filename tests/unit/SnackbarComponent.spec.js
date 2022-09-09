@@ -27,6 +27,11 @@ describe("Test Close Button", () => {
         wrapper = mount(SnackbarComponent, {
             propsData: {
                 snackbardata: {text: "Hello World", timeout: 5000, color: "blue"}
+            },
+            data(){
+                return{
+                    snackbar: true
+                }
             }
         })
     })
@@ -37,5 +42,6 @@ describe("Test Close Button", () => {
         button.vm.$emit('click')
         await wrapper.vm.$nextTick()
         expect(emitTimeout).toHaveBeenCalledTimes(1)
+        expect(wrapper.vm.snackbar).toBeFalsy()
     })
 })
