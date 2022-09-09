@@ -3,6 +3,7 @@ node_modules
 /dist
 /coverage
 /.scannerwork
+sonarqube-scanner.js
 
 # local env files
 .env.local
