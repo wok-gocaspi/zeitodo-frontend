@@ -6,6 +6,6 @@
 
 <script>
 export default {
-  name: "TimeentryView.vue"
+  name: "TimeentryView.vue",
 }
 </script>

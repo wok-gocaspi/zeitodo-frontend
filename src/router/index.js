@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import DashboardView from '../views/DashboardView'
 import TimeentryView from "@/views/TimeentryView";
-
 Vue.use(VueRouter)
 
 const routes = [
@@ -15,7 +14,7 @@ const routes = [
     path: '/timeentry',
     name: 'timeentry',
     component: TimeentryView
-  },
+  }
 ]
 
 const router = new VueRouter({

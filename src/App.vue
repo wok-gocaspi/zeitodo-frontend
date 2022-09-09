@@ -46,10 +46,10 @@
       </div>
     </v-app-bar>
     <v-main>
-      <LoginDialog @closed="loginDialog=false" v-if="loginDialog"></LoginDialog>
+      <LoginDialog @setsnackbar="(sb) => snackbarSetEvent(sb)" @closed="loginDialog=false" v-if="loginDialog"></LoginDialog>
       <v-container fluid>
-
-        <router-view></router-view>
+        <SnackBar v-if="snackbar" @snackbartimeout="snackbarTimeoutMethod()" :snackbardata="snackbarData"></SnackBar>
+        <router-view @setsnackbar="(sb) => snackbarSetEvent(sb)"></router-view>
 
       </v-container>
     </v-main>
@@ -61,13 +61,14 @@
 <script>
 import userservice from "@/services/userService";
 import LoginDialog from "@/components/LoginDialog";
+import SnackBar from '@/components/SnackbarComponent'
 import {bus} from "@/main";
 
 
 
 export default {
   name: 'App',
-  components: {LoginDialog},
+  components: {LoginDialog, SnackBar},
 
   data: () => ({
     items: [
@@ -81,9 +82,20 @@ export default {
 
     username: '',
     loginDialog: false,
+    snackbar: false,
+    snackbarData: ""
 
   }),
   methods: {
+    snackbarTimeoutMethod(){
+      this.snackbar = false
+      this.snackbarText = ""
+    },
+    snackbarSetEvent(sb){
+      console.log(sb)
+      this.snackbarData = sb
+      this.snackbar = true
+    },
     async getLoggedinUser() {
       this.success = await userservice.getLoggedinUser(this.username,this.username);
     },
