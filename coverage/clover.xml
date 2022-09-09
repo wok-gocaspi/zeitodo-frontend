@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1662683931957" clover="3.2.0">
-  <project timestamp="1662683931957" name="All files">
-    <metrics statements="13" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="2" elements="20" coveredelements="7" complexity="0" loc="13" ncloc="13" packages="1" files="1" classes="1"/>
+<coverage generated="1662684802680" clover="3.2.0">
+  <project timestamp="1662684802680" name="All files">
+    <metrics statements="13" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="7" elements="20" coveredelements="20" complexity="0" loc="13" ncloc="13" packages="1" files="1" classes="1"/>
     <file name="userService.js" path="/home/nil/IdeaProjects/zeitodo-frontend/src/services/userService.js">
-      <metrics statements="13" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="2"/>
-      <line num="12" count="0" type="stmt"/>
+      <metrics statements="13" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="7"/>
+      <line num="12" count="1" type="stmt"/>
       <line num="28" count="1" type="stmt"/>
       <line num="29" count="1" type="stmt"/>
       <line num="30" count="1" type="stmt"/>
       <line num="31" count="1" type="stmt"/>
-      <line num="40" count="0" type="stmt"/>
-      <line num="44" count="0" type="stmt"/>
-      <line num="45" count="0" type="stmt"/>
-      <line num="46" count="0" type="stmt"/>
-      <line num="47" count="0" type="stmt"/>
-      <line num="49" count="0" type="stmt"/>
-      <line num="53" count="0" type="stmt"/>
+      <line num="40" count="1" type="stmt"/>
+      <line num="44" count="1" type="stmt"/>
+      <line num="45" count="1" type="stmt"/>
+      <line num="46" count="1" type="stmt"/>
+      <line num="47" count="3" type="stmt"/>
+      <line num="49" count="1" type="stmt"/>
+      <line num="53" count="1" type="stmt"/>
       <line num="58" count="1" type="stmt"/>
     </file>
   </project>

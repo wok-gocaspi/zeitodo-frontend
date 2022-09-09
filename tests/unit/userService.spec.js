@@ -76,3 +76,20 @@ describe("UserService", () => {
     });
 
 });
+
+describe("UserService", () => {
+    it("getTotalTime takes an object of timeEntries and returns the total time spend in all projects", async () => {
+        const timeEntriesOfFakeUser =  {
+            BMW: 10,
+            AUDI: 15,
+            Mercedes:20
+        }
+        const expected = 45;
+
+        let data = userService.data()
+
+        let result =   userService.getTotalTime(timeEntriesOfFakeUser)
+        expect(data).toBeTruthy()
+        expect(result).toEqual(expected)
+    });
+});
