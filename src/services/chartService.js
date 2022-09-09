@@ -13,6 +13,9 @@ export default {
         return colors
 
     },
+    dateSorter(a,b){
+        return a > b ? 1 : a < b ? -1 : 0;
+    },
 
     extractDatesProjectDuration(timeEntries){
         let dates = []
@@ -21,7 +24,7 @@ export default {
         timeEntries.sort((a,b) =>{
             a = a.start.split('-').join('');
             b = b.start.split('-').join('');
-            return a > b ? 1 : a < b ? -1 : 0;
+            return this.dateSorter(a,b);
         });
         timeEntries.forEach((entry) =>  {
             dates.push(entry.start)
