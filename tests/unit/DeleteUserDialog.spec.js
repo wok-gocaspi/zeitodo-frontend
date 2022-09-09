@@ -1,5 +1,5 @@
 import DeleteUserDialog from "@/components/DeleteUserDialog";
-import { shallowMount} from '@vue/test-utils'
+import { shallowMount } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 import Vue from "vue"
 
