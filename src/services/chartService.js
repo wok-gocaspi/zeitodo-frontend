@@ -1,26 +1,7 @@
-//import Chart from "chart.js/auto";
+
 
 export default {
-    /*
-        createDoughnut(projects,efforts,ctx){
 
-            let colors = this.getRandomColor(projects)
-            new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: projects,
-                    datasets: [{
-                        label: '# hours worked in project',
-                        data: efforts,
-                        backgroundColor: colors,
-                        borderColor: colors,
-                        borderWidth: 1
-                    }]
-                }
-            })
-        },
-
-     */
  random_rgba() {
     let o = Math.round, r = Math.random, s = 255;
     return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
@@ -35,21 +16,7 @@ export default {
            return colors
 
 },
-    extractDatesAndProjects(timeEntries){
-          let dates = []
-        let projects = []
-        timeEntries.forEach((entry) =>  {
-            dates.push(entry.start)
-            projects.push(entry.project)
-        })
-        dates.sort((a,b) =>{
-            a = a.split('-').join('');
-            b = b.split('-').join('');
-            return a > b ? 1 : a < b ? -1 : 0;
-        });
 
-        return [dates,projects]
-    },
     extractDatesProjectDuration(timeEntries){
         let dates = []
         let projects = []
@@ -87,33 +54,5 @@ export default {
    // hours = hours % 24;
 
     return hours;
-}
-,
-/*
-    createBar(dates,projects,durations){
-        const ctx = document.getElementById('barChart');
-        let colors = this.getRandomColor(projects)
-        let formattedDates = []
-        dates.forEach(d => {
-
-            formattedDates.push( d.split("T")[0])
-        })
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: formattedDates,
-                datasets: [{
-                    label: '# hours worked in project',
-                    data: durations,
-                    backgroundColor: colors,
-                    borderColor: colors,
-                    borderWidth: 1
-                }]
-            }
-        })
-    },
-
- */
-
-
+},
 }
