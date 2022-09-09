@@ -7,10 +7,6 @@
 
 <script>
 export default {
-  name: "DashboardView.vue"
+  name: "DashboardView.vue",
 }
 </script>
-
-<style scoped>
-
-</style>

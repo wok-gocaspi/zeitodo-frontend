@@ -1,5 +1,16 @@
-function test(){
-    console.log("hello world")
-}
+import axios from 'axios'
 
-module.exports = {test}
+
+
+
+
+
+
+export default{
+
+    getLoggedinUser(username, password){
+        let UserPayload = {"username": username, "password": password}
+        return axios.post("/login",JSON.stringify(UserPayload))
+
+    }
+}
