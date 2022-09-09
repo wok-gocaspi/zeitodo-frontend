@@ -53,7 +53,7 @@ describe("GetRndColor", () => {
     it("mocking the axios call to post correct username and password. The expected response is a valid baerer token", async () => {
         let fakeDateA =  "2052-08-03T09:00:00.801Z"
         let fakeDateB = "2052-08-03T10:00:00.801Z"
-       let expected = 2
+    let expected = 2
         let res = chartService.getTimeDiff(fakeDateA,fakeDateB)
         console.log(res)
         expect(res).toBeTruthy()

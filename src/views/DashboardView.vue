@@ -65,7 +65,6 @@ import chartService from "@/services/chartService";
 import Chart from "chart.js/auto";
 
 export default {
-
   name: "DashboardView.vue",
 
 
@@ -114,8 +113,18 @@ export default {
             this.createDoughnut(projects,efforts,ctx)
           })
     },
-    createDoughnut(projects,efforts,ctx){
 
+   async getUserObjSelf(){
+      await userService.getSelf()
+          .then(resp => {
+            console.log(resp, "response for /self endpoint")
+            this.tempUserName = resp.data.username
+            this.tempUserId = resp.data.id})
+          .catch(error => this.err = error)
+   },
+
+      // chart generation methods. parameter ctx controls the canvas that gets used to plot the graph
+    createDoughnut(projects,efforts,ctx){
       let colors = chartService.getRandomColor(projects)
       new Chart(ctx, {
         type: 'doughnut',
@@ -153,15 +162,6 @@ export default {
         }
       })
     },
-
-   async getUserObjSelf(){
-      await userService.getSelf()
-          .then(resp => {
-            console.log(resp, "response for /self endpoint")
-            this.tempUserName = resp.data.username
-            this.tempUserId = resp.data.id})
-          .catch(error => this.err = error)
-   },
 
   },
 

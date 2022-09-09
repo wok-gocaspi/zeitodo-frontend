@@ -7,13 +7,12 @@ export default {
     return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
 }
 ,
-
-    getRandomColor(projects) {
-           let colors = [];
-           projects.forEach(() => {
-              colors.push(this.random_rgba())
-           });
-           return colors
+getRandomColor(projects) {
+       let colors = [];
+       projects.forEach(() => {
+          colors.push(this.random_rgba())
+       });
+       return colors
 
 },
 
