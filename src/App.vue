@@ -32,6 +32,8 @@
                   v-for="(opt, index) in profilBtn"
                   :key="index"
                   v-on:click="loginDialog = true"
+                  link
+                  :to="opt.path"
               >
                 <v-list-item-icon>
                   <v-icon>{{opt.icon}}</v-icon>
@@ -46,7 +48,6 @@
       </div>
     </v-app-bar>
     <v-main>
-      <LoginDialog @setsnackbar="(sb) => snackbarSetEvent(sb)" @closed="loginDialog=false" v-if="loginDialog"></LoginDialog>
       <v-container fluid>
         <SnackBar v-if="snackbar" @snackbartimeout="snackbarTimeoutMethod()" :snackbardata="snackbarData"></SnackBar>
         <router-view @setsnackbar="(sb) => snackbarSetEvent(sb)"></router-view>
@@ -60,26 +61,25 @@
 
 <script>
 import userservice from "@/services/userService";
-import LoginDialog from "@/components/LoginDialog";
 import SnackBar from '@/components/SnackbarComponent'
+import {bus} from "@/main";
+
 
 
 export default {
   name: 'App',
-  components: {LoginDialog, SnackBar},
+  components: {SnackBar},
 
   data: () => ({
     items: [
       { title: 'Dashboard', icon: 'mdi-view-dashboard', path:"/" },
     ],
     profilBtn:[
-      {title: "Einstellungen", icon:"mdi-account-cog"},
-      {title: "Login", icon:"mdi-account-lock-open"}
+      {title: "Admin Panel", icon:"mdi-account-cog", path:"/admin/panel"},
+      {title: "Login", icon:"mdi-account-lock-open", path:"/login"}
     ],
     drawer: false,
 
-    username: '',
-    loginDialog: false,
     snackbar: false,
     snackbarData: ""
 
@@ -90,14 +90,21 @@ export default {
       this.snackbarText = ""
     },
     snackbarSetEvent(sb){
-      console.log(sb)
       this.snackbarData = sb
       this.snackbar = true
     },
     async getLoggedinUser() {
       this.success = await userservice.getLoggedinUser(this.username,this.username);
     },
+
   },
+
+  created() {
+    bus.$on("loggedIn",()=>{
+      //  this.$forceUpdate();
+      location.reload()
+    })
+  }
 };
 </script>
 <style scoped>

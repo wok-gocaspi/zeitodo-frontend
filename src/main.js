@@ -8,6 +8,10 @@ Vue.config.productionTip = false
 
 axios.defaults.baseURL = process.env.VUE_APP_BASE_URL
 
+export const bus = new Vue()
+
+axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem("token")}`
+
 new Vue({
   router,
   vuetify,
