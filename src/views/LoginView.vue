@@ -61,6 +61,7 @@ export default {
           .then(data => {
             this.response = data.data
             axios.defaults.headers.common['Authorization'] = `Bearer ${data.data.token}`;
+            localStorage.setItem("token", data.data.token)
             this.$emit("setsnackbar",{text: "Successfully logged in!", timeout: 5000, color: "green"})
             this.$router.push("/")
 

@@ -36,10 +36,7 @@ export default{
         return axios.patch("/user", JSON.stringify(userBody))
     },
      getProjectEffort1(userId){
-        //    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem("token")}`;
-        //    await axios.get("timeentry/" + userId + "/calcul")
        return axios.get("/timeentry/calcul/" + userId )
-
     },
     getTotalTime(time){
         let sum = 0
@@ -54,10 +51,7 @@ export default{
     },
 
     async getSelf(){
-  //      axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem("token")}`;
         return axios.get("/user/self")
-
     }
-
 
 }
