@@ -10,6 +10,7 @@
     -->
     <v-card
         elevation="12"
+        id="topCard"
     >
       <v-card-title>
         Moin!  {{this.tempUserName}}
@@ -23,22 +24,32 @@
     <v-card
         elevation="12"
         class="margin-top"
+        id="midCard"
     >
       <v-card-title>
         Leistungen
       </v-card-title>
-      <p align="center"> <canvas id="myChart" width="400" height="400"></canvas></p>
+      <v-card-subtitle>
+        Das Kuchendiagramm zeigt den Anteil aller Projekte an der Gesamtarbeitszeit. Um ein Projekt von der Betrachtung auszuschließen,
+        wähle das Projekt über die Toggle-Buttons aus.
+      </v-card-subtitle>
+      <p align="center"> <canvas id="myChart" ></canvas></p>
 
     </v-card>
 
     <v-card
         elevation="12"
         class="margin-top"
+        id="botCard"
     >
       <v-card-title>
         Projekte
       </v-card-title>
-      <p align="center"> <canvas id="barChart" width="400" height="400"></canvas></p>
+      <v-card-subtitle>
+        Das Diagramm zeigt die Tage an denen ein Zeiteintrag geleistet wurde gegenübergestellt die Anzahl an eingetragenen Stunden
+        an diesem Eintrag. Alle Projekte mit selben Projekttitel sind gleich coloriert.
+      </v-card-subtitle>
+        <p align="center"> <canvas id="barChart" ></canvas></p>
 
     </v-card>
 
@@ -48,15 +59,35 @@
 
 <style>
 #myChart{
-  max-width: 400px !important;
-  max-height: 400px !important;
+
+  max-width: 300px !important;
+  max-height: 300px !important;
+
+
+
 }
 #barChart{
-  max-width: 400px !important;
-  max-height: 400px !important;
+  /*
+    max-width: 400px !important;
+   max-height: 400px !important;
+
+   */
+
+
 }
 .margin-top{
   margin-top: 1rem;
+}
+
+#topCard{
+
+}
+#midCard{
+  padding-bottom: 1rem;
+
+}
+#botCard{
+
 }
 </style>
 
@@ -114,6 +145,25 @@ export default {
             this.createDoughnut(projects,efforts,ctx)
           })
     },
+    /*
+    returnBarLabels(completeEffortObject, allTimeEntries){
+      let colorMap = []
+      let labels = []
+      for(let key in completeEffortObject){
+        colorMap.push(chartService.random_rgba());
+      }
+
+      for (let i=0;i<allTimeEntries.length();i++){
+      let startDay = allTimeEntries[i].start.split("T")[0]
+      let projectCursor = allTimeEntries[i].project
+        for(let j=0;j<colorMap.length();j++){
+
+        }
+      }
+    }
+,
+     */
+
 
    async getUserObjSelf(){
       await userService.getSelf()
@@ -143,7 +193,8 @@ export default {
     },
     createBar(dates,projects,durations){
       const ctx = document.getElementById('barChart');
-      let colors = chartService.getRandomColor(projects)
+   //   let colors = chartService.getRandomColor(projects)
+      let colorMap = chartService.getColor_projectSpecific(projects)
       let formattedDates = []
       dates.forEach(d => {
 
@@ -156,8 +207,8 @@ export default {
           datasets: [{
             label: '# hours worked in project',
             data: durations,
-            backgroundColor: colors,
-            borderColor: colors,
+            backgroundColor: colorMap,
+            borderColor: colorMap,
             borderWidth: 1
           }]
         }
