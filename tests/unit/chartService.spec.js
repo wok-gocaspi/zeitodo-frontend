@@ -74,3 +74,11 @@ describe("getTimeDiff", ()=>{
  //       expect(res).toEqual(expected)
     });
 })
+
+describe("getColor_projectSpecific", ()=>{
+    it("given a array of projects the method returnjs a color map that defines one color for each different project", ()=>{
+        let projectArray = ["project1","project2","project1","project3",]
+        let res = chartService.getColor_projectSpecific(projectArray)
+        expect(res).toBeTruthy()
+    })
+})

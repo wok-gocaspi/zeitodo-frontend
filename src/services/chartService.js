@@ -13,6 +13,24 @@ export default {
         return colors
 
     },
+
+    getColor_projectSpecific(projects){
+        let colorMap = []
+        let coloredProjects = []
+        projects.forEach(project =>{
+
+         //   let color = this.random_rgba()
+            if (!coloredProjects.includes(project)){
+                coloredProjects.push(project)
+                colorMap.push(this.random_rgba())
+            } else {
+               let colorIndex = coloredProjects.indexOf(project)
+                let colorOfSetProject = colorMap[colorIndex]
+                colorMap.push(colorOfSetProject)
+            }
+        })
+        return colorMap
+    },
     dateSorter(a,b){
 
         if (a>b) {
