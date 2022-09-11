@@ -10,6 +10,7 @@
     -->
     <v-card
         elevation="12"
+        id="topCard"
     >
       <v-card-title>
         Moin!  {{this.tempUserName}}
@@ -23,22 +24,27 @@
     <v-card
         elevation="12"
         class="margin-top"
+        id="midCard"
     >
       <v-card-title>
         Leistungen
       </v-card-title>
-      <p align="center"> <canvas id="myChart" width="400" height="400"></canvas></p>
+      <p align="center"> <canvas id="myChart" ></canvas></p>
 
     </v-card>
 
     <v-card
         elevation="12"
         class="margin-top"
+        id="botCard"
     >
       <v-card-title>
         Projekte
       </v-card-title>
-      <p align="center"> <canvas id="barChart" width="400" height="400"></canvas></p>
+
+        <p align="center"> <canvas id="barChart" ></canvas></p>
+
+
 
     </v-card>
 
@@ -50,13 +56,31 @@
 #myChart{
   max-width: 400px !important;
   max-height: 400px !important;
+
+
+
 }
 #barChart{
-  max-width: 400px !important;
-  max-height: 400px !important;
+  /*
+    max-width: 400px !important;
+   max-height: 400px !important;
+
+   */
+
+
 }
 .margin-top{
   margin-top: 1rem;
+}
+
+#topCard{
+
+}
+#midCard{
+
+}
+#botCard{
+
 }
 </style>
 
@@ -114,6 +138,25 @@ export default {
             this.createDoughnut(projects,efforts,ctx)
           })
     },
+    /*
+    returnBarLabels(completeEffortObject, allTimeEntries){
+      let colorMap = []
+      let labels = []
+      for(let key in completeEffortObject){
+        colorMap.push(chartService.random_rgba());
+      }
+
+      for (let i=0;i<allTimeEntries.length();i++){
+      let startDay = allTimeEntries[i].start.split("T")[0]
+      let projectCursor = allTimeEntries[i].project
+        for(let j=0;j<colorMap.length();j++){
+
+        }
+      }
+    }
+,
+     */
+
 
    async getUserObjSelf(){
       await userService.getSelf()
@@ -143,7 +186,8 @@ export default {
     },
     createBar(dates,projects,durations){
       const ctx = document.getElementById('barChart');
-      let colors = chartService.getRandomColor(projects)
+   //   let colors = chartService.getRandomColor(projects)
+      let colorMap = chartService.getColor_projectSpecific(projects)
       let formattedDates = []
       dates.forEach(d => {
 
@@ -156,8 +200,8 @@ export default {
           datasets: [{
             label: '# hours worked in project',
             data: durations,
-            backgroundColor: colors,
-            borderColor: colors,
+            backgroundColor: colorMap,
+            borderColor: colorMap,
             borderWidth: 1
           }]
         }
