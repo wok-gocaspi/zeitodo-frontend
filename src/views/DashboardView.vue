@@ -29,6 +29,10 @@
       <v-card-title>
         Leistungen
       </v-card-title>
+      <v-card-subtitle>
+        Das Kuchendiagramm zeigt den Anteil aller Projekte an der Gesamtarbeitszeit. Um ein Projekt von der Betrachtung auszuschließen,
+        wähle das Projekt über die Toggle-Buttons aus.
+      </v-card-subtitle>
       <p align="center"> <canvas id="myChart" ></canvas></p>
 
     </v-card>
@@ -41,10 +45,11 @@
       <v-card-title>
         Projekte
       </v-card-title>
-
+      <v-card-subtitle>
+        Das Diagramm zeigt die Tage an denen ein Zeiteintrag geleistet wurde gegenübergestellt die Anzahl an eingetragenen Stunden
+        an diesem Eintrag. Alle Projekte mit selben Projekttitel sind gleich coloriert.
+      </v-card-subtitle>
         <p align="center"> <canvas id="barChart" ></canvas></p>
-
-
 
     </v-card>
 
@@ -54,8 +59,9 @@
 
 <style>
 #myChart{
-  max-width: 400px !important;
-  max-height: 400px !important;
+
+  max-width: 300px !important;
+  max-height: 300px !important;
 
 
 
@@ -77,6 +83,7 @@
 
 }
 #midCard{
+  padding-bottom: 1rem;
 
 }
 #botCard{
