@@ -73,6 +73,8 @@ export default {
   data: () => ({
     items: [
       { title: 'Dashboard', icon: 'mdi-view-dashboard', path:"/" },
+      { title: 'Zeiteinträge', icon: 'mdi-account-edit-outline', path:"/timeentry" },
+
     ],
     profilBtn:[
       {title: "Admin Panel", icon:"mdi-account-cog", path:"/admin/panel"},
