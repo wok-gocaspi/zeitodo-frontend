@@ -1,6 +1,11 @@
 <template>
   <v-app class="mx-auto">
     <v-navigation-drawer dark color="deep-purple accent-4" app v-model="drawer">
+      <v-list-item>
+        <v-list-item-title>ZeiToDo</v-list-item-title>
+        <v-list-item-subtitle v-if="userStore.userIsSet">Hallo, {{user.username}}</v-list-item-subtitle>
+        <v-list-item-subtitle v-else-if="!userStore.userIsSet" if="!user.username">Bitte Logge dich ein!</v-list-item-subtitle>
+      </v-list-item>
       <v-list dense nav>
         <v-list-item v-for="item in items" v-bind:key="item.title" link :to="item.path">
           <v-list-item-icon>
@@ -31,7 +36,6 @@
               <v-list-item
                   v-for="(opt, index) in profilBtn"
                   :key="index"
-                  v-on:click="loginDialog = true"
                   link
                   :to="opt.path"
               >
@@ -62,14 +66,17 @@
 <script>
 import userservice from "@/services/userService";
 import SnackBar from '@/components/SnackbarComponent'
-import {bus} from "@/main";
-
-
+import {storeToRefs} from 'pinia'
+import {useUserStore} from "@/stores/user";
 
 export default {
   name: 'App',
   components: {SnackBar},
-
+  setup(){
+    const userStore = useUserStore()
+    const {user, error} = storeToRefs(userStore)
+    return {user, error, userStore}
+  },
   data: () => ({
     items: [
       { title: 'Dashboard', icon: 'mdi-view-dashboard', path:"/" },
@@ -98,13 +105,6 @@ export default {
     },
 
   },
-
-  created() {
-    bus.$on("loggedIn",()=>{
-      //  this.$forceUpdate();
-      location.reload()
-    })
-  }
 };
 </script>
 <style scoped>

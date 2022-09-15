@@ -44,11 +44,14 @@
 </template>
 
 <script>
-import userService from "@/services/userService";
-import axios from "axios";
+import {useUserStore} from "@/stores/user";
 
 export default {
   name: "LoginView.vue",
+  setup(){
+    const userStore = useUserStore()
+    return {userStore}
+  },
   data: () => ({
     password: "",
     username:"",
@@ -57,20 +60,10 @@ export default {
   }),
   methods:{
     async Login(){
-      await userService.getLoggedinUser(this.username,this.password)
-          .then(data => {
-            this.response = data.data
-            axios.defaults.headers.common['Authorization'] = `Bearer ${data.data.token}`;
-            localStorage.setItem("token", data.data.token)
-            this.$emit("setsnackbar",{text: "Successfully logged in!", timeout: 5000, color: "green"})
-            this.$router.push("/")
-
-          })
-          .catch(error => {
-            this.error = error
-            this.$emit("setsnackbar",{text: error.response.data.errorMessage, timeout: 5000, color: "red"})
-          })
-
+      await this.userStore.loginUser(this.username, this.password)
+      if(this.userStore.isError){
+        this.$emit("setsnackbar", {text: "invalid credentials", color: "red", timeout: 5000})
+      }
     },
   }
 }
