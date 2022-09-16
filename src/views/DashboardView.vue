@@ -12,8 +12,11 @@
         elevation="12"
         id="topCard"
     >
-      <v-card-title>
-        Moin!  {{this.tempUserName}}
+      <v-card-title v-if="userStore.isLoggedIn">
+        Moin! {{user.username}}
+      </v-card-title>
+      <v-card-title v-if="!userStore.isLoggedIn">
+        Bitte logge dich ein!
       </v-card-title>
       <v-card-text>
         <h1><p align="center">   Gesamte Arbeitszeit </p></h1>
@@ -95,14 +98,18 @@
 import userService from "@/services/userService";
 import chartService from "@/services/chartService";
 import Chart from "chart.js/auto";
+import {useUserStore} from "@/stores/user";
+import {storeToRefs} from "pinia";
 
 export default {
   name: "DashboardView.vue",
-
+  setup(){
+    const userStore = useUserStore()
+    const {user, error} = storeToRefs(userStore)
+    return{userStore,user,error}
+  },
 
   data: ()=>({
-    tempUserName:"Bitte Logge dich ein um das Dashboard zu nutzen!",
-    tempUserId:"",
     getUserErr:"",
     token:"",
     testName:"Peter",
@@ -165,15 +172,6 @@ export default {
      */
 
 
-   async getUserObjSelf(){
-      await userService.getSelf()
-          .then(resp => {
-            console.log(resp, "response for /self endpoint")
-            this.tempUserName = resp.data.username
-            this.tempUserId = resp.data.id})
-          .catch(error => this.err = error)
-   },
-
       // chart generation methods. parameter ctx controls the canvas that gets used to plot the graph
     createDoughnut(projects,efforts,ctx){
       let colors = chartService.getRandomColor(projects)
@@ -219,9 +217,8 @@ export default {
 
 
   async created(){
-    await this.getUserObjSelf()
-    await this.getEffort1(this.tempUserId)
-    await this.getAllEntries1(this.tempUserId)
+    await this.getEffort1(this.user.id)
+    await this.getAllEntries1(this.user.id)
   }
 }
 </script>

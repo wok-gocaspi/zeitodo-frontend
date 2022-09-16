@@ -7,20 +7,13 @@ export const useUserStore = defineStore('user', {
     state: () => ({user: "", error: ""}),
     getters: {
         isError: (state) => {
-            if(state.error){
-                return true
-            }
-            else {
-                return false
-            }
+            return Boolean(state.error)
         },
-        userIsSet: (state) => {
-            if(state.user){
-                return true
-            }
-            else {
-                return false
-            }
+        isLoggedIn: (state) => {
+            return Boolean(state.user)
+        },
+        isAdmin: (state) => {
+            return Boolean(state.user.group === "admin")
         }
     },
     actions: {
@@ -45,7 +38,8 @@ export const useUserStore = defineStore('user', {
         async logoutUser(){
             this.user = ""
             this.error = ""
-            axios.defaults.headers.common['Authorization'] = `Bearer `
+            axios.defaults.headers.common['Authorization'] = ""
+            await router.push('/login')
         }
     },
 
