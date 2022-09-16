@@ -21,6 +21,7 @@ export const useUserStore = defineStore('user', {
             await userService.getLoggedinUser(username, pass)
                 .then(async res => {
                     axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`
+                    localStorage.setItem("token", res.data.token)
                     await userService.getSelf()
                         .then(res => {
                             this.error = ""
@@ -40,6 +41,26 @@ export const useUserStore = defineStore('user', {
             this.error = ""
             axios.defaults.headers.common['Authorization'] = ""
             await router.push('/login')
+        },
+        async renewToken(){
+            await userService.refreshUserToken()
+                .then(res => {
+                    axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`
+                })
+                .catch(() => {
+                    this.user = ""
+                    this.error = ""
+                    router.push("/login")
+                })
+        },
+        async updateUserInfo(){
+            await userService.getSelf()
+                .then(res => {
+                    this.user = res.data
+                })
+                .catch(err => {
+                    console.log(err)
+                })
         }
     },
 
