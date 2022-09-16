@@ -96,11 +96,16 @@ import {useUserStore} from "@/stores/user";
 
 export default {
   name: 'App',
+
   components: {SnackBar},
   setup(){
     const userStore = useUserStore()
     const {user, error} = storeToRefs(userStore)
     return {user, error, userStore}
+  },
+  created() {
+    this.refreshToken()
+    this.userStore.updateUserInfo()
   },
   data: () => ({
     items: [
@@ -127,6 +132,12 @@ export default {
     },
     async logout(){
       await this.userStore.logoutUser()
+    },
+    async refreshToken(){
+      setInterval(async() => {
+        console.log("refreshing token...")
+        await this.userStore.renewToken()
+      }, 288000)
     }
 
   },

@@ -138,7 +138,7 @@ export default {
 
     async getEffort1(userId){
       await userService.getProjectEffort1(userId)
-          .then(resp =>{
+          .then(async (resp) =>{
             this.completeEffort = resp.data
             let time = resp.data
             let projects = [];
@@ -149,7 +149,7 @@ export default {
             let total = userService.getTotalTime(time)
             this.total = total
             const ctx = document.getElementById('myChart');
-            this.createDoughnut(projects,efforts,ctx)
+            await this.createDoughnut(projects,efforts,ctx)
           })
     },
     /*
@@ -173,7 +173,7 @@ export default {
 
 
       // chart generation methods. parameter ctx controls the canvas that gets used to plot the graph
-    createDoughnut(projects,efforts,ctx){
+    async createDoughnut(projects,efforts,ctx){
       let colors = chartService.getRandomColor(projects)
       new Chart(ctx, {
         type: 'doughnut',
@@ -189,7 +189,7 @@ export default {
         }
       })
     },
-    createBar(dates,projects,durations){
+    async createBar(dates,projects,durations){
       const ctx = document.getElementById('barChart');
    //   let colors = chartService.getRandomColor(projects)
       let colorMap = chartService.getColor_projectSpecific(projects)
@@ -216,7 +216,7 @@ export default {
   },
 
 
-  async created(){
+  async mounted(){
     await this.getEffort1(this.user.id)
     await this.getAllEntries1(this.user.id)
   }
