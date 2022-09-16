@@ -110,6 +110,7 @@ export default {
   data: () => ({
     items: [
       { title: 'Dashboard', icon: 'mdi-view-dashboard', path:"/" },
+      { title: 'Proposals', icon: 'mdi-archive', path:"/proposals"}
     ],
     profilBtn:[
       {title: "Admin Panel", icon:"mdi-account-cog", path:"/admin/panel"},
