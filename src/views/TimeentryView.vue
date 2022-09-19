@@ -10,27 +10,115 @@
     </v-card-title>
 </v-container>
     <v-row
-      align="center"
+      justify="center"
       >
-  <v-card-text>
-    <v-btn
+      <v-dialog
+        v-model="dialog"
+        persistent
+        max-width="600px"
+        >
+        <template v-slot:activator="{ on, attrs }">
+
+        <v-btn
         outlined
         class="mr-2"
         color="primary"
-        @click="setToday"
-        v-model="right"
-        label="Right"
-
-    >
-       &#43;Zeiteintrag
-      <v-icon
         dark
-        right
-        ></v-icon>
-    </v-btn>
+        v-bind ="attrs"
+        v-on="on"
+        >
 
-  </v-card-text>
+       &#43;Zeiteintrag
+        </v-btn>
+        </template>
+
+        <v-card style="background-color: aqua">
+
+          <v-card-title>
+            <span class="text-h5">Neuer Zeiteintrag</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-row>
+                <form action="https://localhost:8080">
+                  <label for="start"><p>Datum :<input type="date" name="trip-start" ></p></label><br>
+
+
+                </form>
+                <v-row>
+                <form>
+                  <label>
+                     Start_Zeit:
+                      <input type="time" name="starttime">
+                  </label>
+
+                  <label>
+
+                    End_Zeit:
+                      <input type="time" name="endtime">
+                  </label>
+                </form>
+                  </v-row>
+                <v-row>
+                <form><br>
+                  <label>
+                    Start_Pause:
+                    <input type="time" name="startpause">
+                  </label>
+
+                  <label>
+                    End_Pause:
+                    <input type="time" name="endpause">
+                  </label>
+                </form>
+                  </v-row>
+                <v-col
+                    cols="12"
+                    sm="6"
+                >
+                  <v-select
+                      :items="['ProjektX', 'ZeiToDo', 'Employee-Register', 'Audi']"
+                      label="Kunden/Projekt*"
+                      required
+                  ></v-select>
+                </v-col>
+                <v-col
+                    cols="12"
+                    sm="6"
+                >
+                  <v-autocomplete
+                      :items="['Intern Arbeitszeit']"
+                      label="Leistung"
+                      multiple
+                  ></v-autocomplete>
+                </v-col>
+              </v-row>
+            </v-container>
+            <small>*indicates required field</small>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+                color="blue darken-1"
+                text
+                @click="dialog = false"
+            >
+              Close
+            </v-btn>
+            <v-btn
+                color="blue darken-1"
+                text
+                @click="dialog = false"
+            >
+              Save
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-row>
+
+
+
   </v-card>
 
   <v-card
@@ -153,8 +241,10 @@
 <script>
 
 export default {
+
   name: "TimeentryView.vue",
   data: () => ({
+    dialog: false,
     focus: '',
     type: 'month',
     typeToLabel: {
@@ -168,7 +258,12 @@ export default {
     selectedOpen: false,
     events: [],
     colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
-    names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'],
+    names: ['Meeting', 'Holiday', 'Travel', 'Event', 'Birthday', 'Conference'],
+    dragEvent: null,
+    dragStart: null,
+    createStart:null,
+    extendOriginal:null,
+
   }),
   mounted () {
     this.$refs.calendar.checkChange()
