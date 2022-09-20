@@ -29,48 +29,55 @@
         >
 
        &#43;Zeiteintrag
+
         </v-btn>
         </template>
+        <v-card>
+          <span class="text-h5" >Neuer Zeiteintrag</span> &#8505;
 
-        <v-card style="background-color: aqua">
+        </v-card>
+        <v-card >
 
-          <v-card-title>
-            <span class="text-h5">Neuer Zeiteintrag</span>
-          </v-card-title>
           <v-card-text>
             <v-container>
               <v-row>
-                <form action="https://localhost:8080">
-                  <label for="start"><p>Datum :<input type="date" name="trip-start" ></p></label><br>
+
+                <form action="/timeentry" method="post"><br>
+                  <div class="v-input-holder">
+
+
+                  <label for=""><p>Datum :<input type="date" name="trip-start" v-model="date" ></p></label><br>
+                  </div>
 
 
                 </form>
                 <v-row>
-                <form>
-                  <label>
-                     Start_Zeit:
-                      <input type="time" name="starttime">
-                  </label>
+                <form action="/timeentry" method="post"><br><br><br>
+                  <div class="form-group">
+                  <label for="">Start_Zeit:</label>
+                  <input type="time" name="start" v-model="timeentry.start">
+                  </div>
+                   <div class="form-group">
+                  <label for="">End_Zeit:</label>
+                    <input type="time" name="end" v-model="timeentry.end">
+                   </div>
 
-                  <label>
-
-                    End_Zeit:
-                      <input type="time" name="endtime">
-                  </label>
                 </form>
                   </v-row>
                 <v-row>
-                <form><br>
+                <form action="/timeentry" method="post"><br><br>
+                  <div class="form-group">
                   <label>
                     Start_Pause:
-                    <input type="time" name="startpause">
+                    <input type="time" name="breakStart" v-model="timeentry.breakStart">
                   </label>
+                  </div>
 
                   <label>
                     End_Pause:
-                    <input type="time" name="endpause">
+                    <input type="time" name="breakEnd" v-model="timeentry.breakEnd">
                   </label>
-                </form>
+                </form >
                   </v-row>
                 <v-col
                     cols="12"
@@ -80,6 +87,7 @@
                       :items="['ProjektX', 'ZeiToDo', 'Employee-Register', 'Audi']"
                       label="Kunden/Projekt*"
                       required
+                      v-model="timeentry.project"
                   ></v-select>
                 </v-col>
                 <v-col
@@ -90,12 +98,15 @@
                       :items="['Intern Arbeitszeit']"
                       label="Leistung"
                       multiple
+
                   ></v-autocomplete>
                 </v-col>
               </v-row>
             </v-container>
             <small>*indicates required field</small>
+
           </v-card-text>
+
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
@@ -108,15 +119,15 @@
             <v-btn
                 color="blue darken-1"
                 text
-                @click="dialog = false"
+                @click="getTimeentry(timeentry)"
             >
               Save
             </v-btn>
+
           </v-card-actions>
         </v-card>
       </v-dialog>
     </v-row>
-
 
 
   </v-card>
@@ -214,19 +225,59 @@
 
         <v-sheet height="600">
           <v-calendar
-            ref="calendar"
-            :type="type"
-            v-model="focus"
-            color="primary"
-            :events="events"
-            :event-color="getEventColor"
+              ref="calendar"
+              :now="today"
+              :value="today"
+              :events="events"
+              color="primary"
+              :type="type"
+              v-model="focus"
+              @click:event="showEvent"
+              @click:day="viewDay"
+              @click:more="viewDay"
 
-            @click:event="showEvent"
-            @click:more="viewDay"
-            @click:date="viewDay"
-            @change="updateRange"
-        ></v-calendar>
-
+          ></v-calendar>
+         <v-menu
+           v-model="selectedOpen"
+           :close-on-content-click="false"
+           :activator="selectedElement"
+           offset-x
+           >
+          <v-card
+              color="grey lighten-4"
+              min-width="350px"
+              flat
+          >
+            <v-toolbar
+                :color="selectedEvent.color"
+                dark
+            >
+              <v-btn icon>
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
+              <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
+              <v-spacer></v-spacer>
+              <v-btn icon>
+                <v-icon>mdi-heart</v-icon>
+              </v-btn>
+              <v-btn icon>
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn>
+            </v-toolbar>
+            <v-card-text>
+              <span v-html="selectedEvent.details"></span>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn
+                  text
+                  color="secondary"
+                  @click="selectedOpen = false"
+              >
+                Cancel
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+           </v-menu>
         </v-sheet>
       </v-col>
     </v-row>
@@ -239,7 +290,7 @@
 </template>
 
 <script>
-
+import timeentryService from "@/services/timeentryService";
 export default {
 
   name: "TimeentryView.vue",
@@ -257,18 +308,67 @@ export default {
     selectedElement: null,
     selectedOpen: false,
     events: [],
-    colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
+    colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', ],
     names: ['Meeting', 'Holiday', 'Travel', 'Event', 'Birthday', 'Conference'],
     dragEvent: null,
     dragStart: null,
     createStart:null,
     extendOriginal:null,
+    date :"",
+    timeentry:{
+      start:"",
+      end:"",
+      breakStart:"",
+      breakEnd:"",
+      project:"",
+    },
+
+
 
   }),
   mounted () {
+
     this.$refs.calendar.checkChange()
   },
+   computed :{
+
+    startdate(){
+      return this.date + "T" + this.timeentry.start + ":00+01:00"
+    },
+     enddate(){
+       return this.date + "T" + this.timeentry.end + ":00+01:00"
+       },
+     breakstartdate(){
+       return this.date + "T" + this.timeentry.breakStart + ":00+01:00"
+     },
+     breakenddate(){
+       return this.date + "T" + this.timeentry.breakEnd + ":00+01:00"
+     }
+   },
+
   methods: {
+    getTimeentry(timeentry){
+
+      let te = timeentry
+      te.start=this.startdate
+      te.end=this.enddate
+      te.breakStart=this.breakstartdate
+      te.breakEnd=this.breakenddate
+
+
+      console.log(JSON.stringify(te))
+      this.events.push({
+
+        name:te.project,start:Date.parse(te.start),end:Date.parse(te.end),color:"blue",timed:true
+
+      })
+
+      timeentryService.creattimeentry(JSON.stringify(te))
+          .then(res => {
+            console.log(res)
+          })
+    },
+
     viewDay ({ date }) {
       this.focus = date
       this.type = 'day'
@@ -333,7 +433,5 @@ export default {
   },
 }
 
-/*export default {
-  name: "TimeentryView.vue",
-}*/
+
 </script>

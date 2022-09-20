@@ -53,5 +53,4 @@ export default{
     async getSelf(){
         return axios.get("/user/self")
     }
-
 }
