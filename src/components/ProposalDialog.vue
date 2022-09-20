@@ -13,20 +13,16 @@
           <v-container>
             <v-row>
               <v-col>
-                <p>Start Date</p>
-                <v-date-picker v-model="proposal.startDate"></v-date-picker>
-              </v-col>
-              <v-col>
-
-                <p>End Date</p>
-                <v-date-picker v-model="proposal.endDate"></v-date-picker>
+                <p>Select you're Timespan</p>
+                <v-date-picker v-model="datePicker" range></v-date-picker>
               </v-col>
             </v-row>
-
+            {{sDate}}
               <v-col>
                 <v-select
-                  :items="proposal.type"
+                  :items="proposalTypes"
                   label="Type"
+                  v-model="proposal.type"
                   >
 
                 </v-select>
@@ -73,11 +69,11 @@ export default {
       proposal: {
         startDate: "",
         endDate: "",
-        type: ["sickness", "vacation"],
+        type: "",
         userid: this.user.id
       },
-      startDate: "",
-      endDate: ""
+      datePicker: [],
+      proposalTypes: ["sickness", "vacation"]
     }
   },
   methods: {
@@ -86,7 +82,9 @@ export default {
       this.dialog = false
     },
     submitData(){
-      ProposalService.createProposal(this.proposal)
+      this.proposal.startDate = this.sDate
+      this.proposal.endDate = this.eDate
+      ProposalService.createProposal(JSON.stringify(this.proposal))
           .then(() => {
             this.$parent.$emit("setsnackbar", {text: "Proposal was created!", color: "green", timeout: 5000})
           })
@@ -96,7 +94,12 @@ export default {
     }
   },
   computed: {
-
+    sDate(){
+      return this.datePicker[1]
+    },
+    eDate(){
+      return this.datePicker[0]
+    }
   }
 }
 </script>

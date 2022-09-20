@@ -5,14 +5,28 @@ export default {
         return axios.get("/proposals/" + userid)
     },
     createProposal(proposal){
-        proposal.startDate = this.MDTime2ZTime(proposal.startDate)
-        proposal.endDate = this.MDTime2ZTime(proposal.endDate)
-        return axios.post('/proposals', JSON.stringify(proposal))
+        proposal = JSON.parse(proposal)
+        if (Date.parse(proposal.startDate) > Date.parse(proposal.endDate)){
+            let sDate = proposal.startDate
+            proposal.startDate = this.MDTime2ZTime(proposal.endDate)
+            proposal.endDate = this.MDTime2ZTime(sDate)
+        } else {
+            proposal.startDate = this.MDTime2ZTime(proposal.startDate)
+            proposal.endDate = this.MDTime2ZTime(proposal.endDate)
+        }
+
+        let proposalArray = []
+        proposalArray.push(proposal)
+
+        return axios.post('/proposals/' + proposal.userid, JSON.stringify(proposalArray))
+    },
+    deleteProposal(proposal){
+        proposal = JSON.parse(proposal)
+        return axios.delete("/proposals/" + proposal.userId, {params: {date: proposal.startDate}})
     },
     MDTime2ZTime(mdtime){
         mdtime = mdtime.split("-")
         const month = mdtime[1]
-        console.log(month)
         var monthName
         switch (month) {
             case '01':

@@ -40,7 +40,7 @@
                 <v-row>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
-                      <v-btn @click="userUpdateSelector(user.id, user.username)" id="update-btn" v-bind="attrs" v-on="on" icon>
+                      <v-btn @click="openDeleteProposalDialog(index)" id="update-btn" v-bind="attrs" v-on="on" icon>
                         <v-icon>mdi-close</v-icon>
                       </v-btn>
                     </template>
@@ -56,6 +56,7 @@
       </v-card>
     </v-container>
     <ProposalDialog v-if="proposalDialog" @close="closeProposalDialogHandler()"></ProposalDialog>
+    <DeleteProposalDialog v-if="deleteProposalDialog" @close="closeDeleteProposalHandler()" v-bind:proposal="this.selectedProposal"></DeleteProposalDialog>
   </v-container>
 
 </template>
@@ -65,9 +66,10 @@ import proposalService from "@/services/proposalService";
 import {useUserStore} from "@/stores/user";
 import {storeToRefs} from "pinia";
 import ProposalDialog from "@/components/ProposalDialog";
+import DeleteProposalDialog from "@/components/DeleteProposalDialog";
 export default {
   name: "ProposalView.vue",
-  components: {ProposalDialog},
+  components: {ProposalDialog, DeleteProposalDialog},
   setup(){
     const userStore = useUserStore()
     const {user} = storeToRefs(userStore)
@@ -78,21 +80,36 @@ export default {
   data(){
     return {
       proposals: "",
-      proposalDialog: false
+      proposalDialog: false,
+      deleteProposalDialog: false,
+      selectedProposal: ""
     }
   },
   created(){
-    proposalService.getProposalsByUserID(this.user.id)
-        .then(res => {
-          this.proposals = res.data
-        })
-        .catch(err => {
-          this.$emit("setsnackbar", {text: err.response.data.errorMessage, color: "red", timeout: 5000})
-        })
+    this.loadProposals()
   },
   methods: {
     closeProposalDialogHandler(){
+      this.loadProposals()
       this.proposalDialog = false
+    },
+    closeDeleteProposalHandler(){
+      this.deleteProposalDialog = false
+      this.loadProposals()
+    },
+    openDeleteProposalDialog(index){
+      this.selectedProposal = this.proposals[index]
+      this.deleteProposalDialog = true
+    },
+    loadProposals(){
+      proposalService.getProposalsByUserID(this.user.id)
+          .then(res => {
+            this.proposals = res.data
+          })
+          .catch(err => {
+            this.proposals = []
+            this.$emit("setsnackbar", {text: err.response.data.errorMessage, color: "red", timeout: 5000})
+          })
     }
   }
 }
