@@ -12,26 +12,26 @@
     <v-row
       justify="center"
       >
+
+
+        <v-btn
+            outlined
+            class="mr-2"
+            color="primary"
+            dark
+            @click="timeentrydialoge()"
+        >
+
+          &#43;Zeiteintrag
+
+        </v-btn>
+
       <v-dialog
         v-model="dialog"
         persistent
         max-width="600px"
         >
-        <template v-slot:activator="{ on, attrs }">
 
-        <v-btn
-        outlined
-        class="mr-2"
-        color="primary"
-        dark
-        v-bind ="attrs"
-        v-on="on"
-        >
-
-       &#43;Zeiteintrag
-
-        </v-btn>
-        </template>
         <v-card>
           <span class="text-h5" >Neuer Zeiteintrag</span> &#8505;
 
@@ -112,14 +112,14 @@
             <v-btn
                 color="blue darken-1"
                 text
-                @click="dialog = false"
+                @click="cleartimenetry()"
             >
               Close
             </v-btn>
             <v-btn
                 color="blue darken-1"
                 text
-                @click="getTimeentry(timeentry)"
+                @click="savetimeentry()"
             >
               Save
             </v-btn>
@@ -226,15 +226,16 @@
         <v-sheet height="600">
           <v-calendar
               ref="calendar"
-              :now="today"
-              :value="today"
               :events="events"
+              :event-color="getEventColor"
               color="primary"
               :type="type"
               v-model="focus"
               @click:event="showEvent"
               @click:day="viewDay"
               @click:more="viewDay"
+
+
 
           ></v-calendar>
          <v-menu
@@ -252,8 +253,9 @@
                 :color="selectedEvent.color"
                 dark
             >
-              <v-btn icon>
+              <v-btn icon @click="updatedialog()">
                 <v-icon>mdi-pencil</v-icon>
+
               </v-btn>
               <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
               <v-spacer></v-spacer>
@@ -266,6 +268,10 @@
             </v-toolbar>
             <v-card-text>
               <span v-html="selectedEvent.details"></span>
+            </v-card-text>
+            <v-card-text>
+              <span v-html="selectedEvent.start"></span>
+
             </v-card-text>
             <v-card-actions>
               <v-btn
@@ -291,6 +297,8 @@
 
 <script>
 import timeentryService from "@/services/timeentryService";
+
+
 export default {
 
   name: "TimeentryView.vue",
@@ -322,6 +330,9 @@ export default {
       breakEnd:"",
       project:"",
     },
+    selectedtype:"",
+
+
 
 
 
@@ -330,49 +341,135 @@ export default {
 
     this.$refs.calendar.checkChange()
   },
-   computed :{
+    created() {
+      this.gettimeentry()
+
+    },
+  computed :{
 
     startdate(){
-      return this.date + "T" + this.timeentry.start + ":00+01:00"
+      return this.date + "T" + this.timeentry.start + ":00+02:00"
     },
      enddate(){
-       return this.date + "T" + this.timeentry.end + ":00+01:00"
+       return this.date + "T" + this.timeentry.end + ":00+02:00"
        },
      breakstartdate(){
-       return this.date + "T" + this.timeentry.breakStart + ":00+01:00"
+       return this.date + "T" + this.timeentry.breakStart + ":00+02:00"
      },
      breakenddate(){
-       return this.date + "T" + this.timeentry.breakEnd + ":00+01:00"
+       return this.date + "T" + this.timeentry.breakEnd + ":00+02:00"
      }
    },
 
   methods: {
-    getTimeentry(timeentry){
+    creattimeentry(timeentry){
 
       let te = timeentry
-      te.start=this.startdate
-      te.end=this.enddate
-      te.breakStart=this.breakstartdate
-      te.breakEnd=this.breakenddate
+
+      te.start=new Date(this.startdate)
+      te.start=te.start.toISOString()
+
+      te.end=new Date(this.enddate)
+      te.end=te.end.toISOString()
+
+      te.breakStart=new Date(this.breakstartdate)
+      te.breakStart=te.breakStart.toISOString()
+
+      te.breakEnd=new Date(this.breakenddate)
+      te.breakEnd=te.breakEnd.toISOString()
 
 
       console.log(JSON.stringify(te))
       this.events.push({
 
-        name:te.project,start:Date.parse(te.start),end:Date.parse(te.end),color:"blue",timed:true
+        name:te.project,start:Date.parse(te.start),end:Date.parse(te.end),breakStart:Date.parse(te.breakStart),breakEnd:Date.parse(te.breakEnd),color:"blue",timed:true
 
-      })
+
+
+                      })
 
       timeentryService.creattimeentry(JSON.stringify(te))
           .then(res => {
             console.log(res)
           })
     },
+      gettimeentry(){
+
+
+        timeentryService.getTimeentry()
+            .then(res => {
+              res.data.forEach((te)=>{
+                this.events.push({
+                  name:te.project,start:Date.parse(te.start),end:Date.parse(te.end),breakStart:Date.parse(te.breakStart),breakEnd:Date.parse(te.breakEnd),color:"blue",timed:true
+
+                })
+
+              })
+            })
+
+      },
+      updatedialog(){
+
+        this.date=timeentryService.getdate(this.selectedEvent.start)
+        this.timeentry.start=timeentryService.gettime(this.selectedEvent.start)
+        this.timeentry.end=timeentryService.gettime(this.selectedEvent.end)
+        this.timeentry.breakStart=timeentryService.gettime(this.selectedEvent.breakStart)
+        this.timeentry.breakEnd=timeentryService.gettime(this.selectedEvent.breakEnd)
+        this.timeentry.project=this.selectedEvent.name
+        this.dialog = true
+        this.selectedtype="update"
+
+    },
+
+    savetimeentry(){
+
+
+
+        if (this.selectedtype=="create"){
+          this.creattimeentry(this.timeentry)
+
+        }else {
+          this.updatetimeentry()
+
+        }
+
+    },
+   updatetimeentry(){
+
+     let te = this.timeentry
+
+     te.start=this.startdate
+     te.end=this.enddate
+     te.breakStart=this.breakstartdate
+     te.breakEnd=this.breakenddate
+
+        timeentryService.updatetimeentry(JSON.stringify(te))
+
+
+   },
+
+   timeentrydialoge(){
+
+        this.dialog=true
+        this.selectedtype="create"
+   },
+
+    cleartimenetry(){
+       this.dialog=false
+      this.date=""
+      this.timeentry.start=""
+      this.timeentry.end=""
+      this.timeentry.breakStart=""
+      this.timeentry.breakEnd=""
+      this.timeentry.project=""
+    },
+
+
 
     viewDay ({ date }) {
-      this.focus = date
-      this.type = 'day'
-    },
+           this.focus = date
+           this.type = 'day'
+                        },
     getEventColor (event) {
       return event.color
     },
@@ -406,7 +503,7 @@ export default {
 
       const min = new Date(`${start.date}T00:00:00`)
       const max = new Date(`${end.date}T23:59:59`)
-      const days = (max.getTime() - min.getTime()) / 86400000
+      const days = (max.getTime()- min.getTime()) / 86400000
       const eventCount = this.rnd(days, days + 20)
 
       for (let i = 0; i < eventCount; i++) {
