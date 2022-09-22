@@ -4,6 +4,7 @@ import TimeentryView from "@/views/TimeentryView";
 import AdminManagement from "@/views/AdminManagement";
 import LoginView from "@/views/LoginView";
 import {useUserStore} from "@/stores/user";
+import ProposalView from "@/views/ProposalView";
 
 const routes = [
   {
@@ -18,6 +19,14 @@ const routes = [
     path: '/timeentry',
     name: 'timeentry',
     component: TimeentryView,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/proposals',
+    name: 'proposals',
+    component: ProposalView,
     meta: {
       requiresAuth: true
     }
