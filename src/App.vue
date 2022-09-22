@@ -103,13 +103,14 @@ export default {
     const {user, error} = storeToRefs(userStore)
     return {user, error, userStore}
   },
-  created() {
+  created(){
     this.refreshToken()
     this.userStore.updateUserInfo()
   },
   data: () => ({
     items: [
       { title: 'Dashboard', icon: 'mdi-view-dashboard', path:"/" },
+      { title: 'Zeiteinträge', icon: 'mdi-account-edit-outline', path:"/timeentry" },
       { title: 'Proposals', icon: 'mdi-archive', path:"/proposals"}
     ],
     profilBtn:[
