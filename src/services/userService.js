@@ -23,6 +23,9 @@ export default{
         this.pwd = password
         return axios.post("/login",JSON.stringify(UserPayload))
     },
+    refreshUserToken(){
+        return axios.post("/refresh")
+    },
     getAllUser(){
         return axios.get("/user")
     },
@@ -53,5 +56,4 @@ export default{
     async getSelf(){
         return axios.get("/user/self")
     }
-
 }
