@@ -66,12 +66,12 @@ describe("Axios Requests", () => {
 
     })
     it("test mdtime2time", async() => {
-        const dateSamples = ["01-"]
-        axios.get.mockResolvedValueOnce(mockProposal)
-        const result = await proposalService.getProposalsByUserID(userid)
-        expect(result).toEqual(mockProposal)
-
-
+        const dateSamples = ["2022-01-10", "2022-02-13", "2022-03-12", "2022-04-20", "2022-05-21", "2022-06-17", "2022-07-23", "2022-08-26", "2022-09-22", "2022-10-03", "2022-11-17", "2022-12-19"]
+        const dateResults = ["2022-Jan-10", "2022-Feb-13", "2022-Mar-12", "2022-Apr-20", "2022-May-21", "2022-Jun-17", "2022-Jul-23", "2022-Aug-26", "2022-Sep-22", "2022-Oct-03", "2022-Nov-17", "2022-Dec-19"]
+        dateSamples.forEach((date, index) => {
+            let result = proposalService.MDTime2ZTime(date)
+            expect(result).toEqual(dateResults[index])
+        })
     })
 
 

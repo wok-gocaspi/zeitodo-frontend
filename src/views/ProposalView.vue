@@ -25,22 +25,22 @@
                 class="item-list"
             >
               <v-list-item-avatar>
-                <v-icon v-if="proposal.approved === true">
+                <v-icon id="proposal-approved-true" v-if="proposal.approved === true">
                   mdi-check
                 </v-icon>
-                <v-icon v-else-if="proposal.approved === false">
+                <v-icon id="proposal-approved-false" v-else-if="proposal.approved === false">
                   mdi-clock
                 </v-icon>
               </v-list-item-avatar>
               <v-list-item-content>
-                <v-list-item-title id="user-title" v-text="proposal.startDate + ' --- ' + proposal.endDate "></v-list-item-title>
-                <v-list-item-subtitle v-text="proposal.type"></v-list-item-subtitle>
+                <v-list-item-title id="proposal-title" v-text="proposal.startDate + ' --- ' + proposal.endDate "></v-list-item-title>
+                <v-list-item-subtitle id="proposal-subtitle" v-text="proposal.type"></v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-action>
                 <v-row>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
-                      <v-btn @click="openDeleteProposalDialog(index)" id="update-btn" v-bind="attrs" v-on="on" icon>
+                      <v-btn @click="openDeleteProposalDialog(index)" id="close-btn" v-bind="attrs" v-on="on" icon>
                         <v-icon>mdi-close</v-icon>
                       </v-btn>
                     </template>

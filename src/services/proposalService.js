@@ -17,7 +17,6 @@ export default {
 
         let proposalArray = []
         proposalArray.push(proposal)
-
         return axios.post('/proposals/' + proposal.userid, JSON.stringify(proposalArray))
     },
     deleteProposal(proposal){
@@ -27,7 +26,7 @@ export default {
     MDTime2ZTime(mdtime){
         mdtime = mdtime.split("-")
         const month = mdtime[1]
-        var monthName
+        let monthName
         switch (month) {
             case '01':
                 monthName = 'Jan'
