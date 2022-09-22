@@ -19,7 +19,6 @@ export default {
         let coloredProjects = []
         projects.forEach(project =>{
 
-         //   let color = this.random_rgba()
             if (!coloredProjects.includes(project)){
                 coloredProjects.push(project)
                 colorMap.push(this.random_rgba())

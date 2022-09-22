@@ -54,19 +54,10 @@ export default {
 
     },
      gettime(time){
-
-        let d = new Date(time)
-         let UTCtime=moment(d).tz("Europe/Berlin").format("HH:mm")
-         console.log(d.getUTCDate())
-
-         return UTCtime
+        return moment(new Date(time)).tz("Europe/Berlin").format("HH:mm")
     },
      getdate (date){
-
-        let d = new Date(date)
-         let UTCdate=moment(d).tz("Europe/Berlin").format("YYYY-MM-DD")
-
-         return UTCdate
+        return moment(new Date(date)).tz("Europe/Berlin").format("YYYY-MM-DD")
     }
 
 
