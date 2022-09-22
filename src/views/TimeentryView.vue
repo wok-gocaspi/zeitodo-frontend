@@ -270,7 +270,7 @@
               <span v-html="selectedEvent.details"></span>
             </v-card-text>
             <v-card-text>
-              <span v-html="selectedEvent.start"></span>
+
 
             </v-card-text>
             <v-card-actions>

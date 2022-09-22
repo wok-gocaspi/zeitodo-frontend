@@ -1,6 +1,14 @@
 <template>
   <v-app class="mx-auto">
     <v-navigation-drawer dark color="deep-purple accent-4" app v-model="drawer">
+      <v-list dense>
+        <v-list-item>
+          <v-list-item-title>ZeiToDo</v-list-item-title>
+          <v-list-item-subtitle v-if="userStore.isLoggedIn">Hallo, {{user.username}}</v-list-item-subtitle>
+          <v-list-item-subtitle v-else-if="!userStore.isLoggedIn" if="!user.username">Bitte einloggen!</v-list-item-subtitle>
+        </v-list-item>
+      </v-list>
+      <v-divider></v-divider>
       <v-list dense nav>
         <v-list-item v-for="item in items" v-bind:key="item.title" link :to="item.path">
           <v-list-item-icon>
@@ -27,19 +35,41 @@
                 <v-icon>mdi-account-circle</v-icon>
               </v-btn>
             </template>
-            <v-list>
+            <v-list >
               <v-list-item
-                  v-for="(opt, index) in profilBtn"
-                  :key="index"
-                  v-on:click="loginDialog = true"
                   link
-                  :to="opt.path"
+                  :to="'/login'"
+                  v-if="!userStore.isLoggedIn"
               >
                 <v-list-item-icon>
-                  <v-icon>{{opt.icon}}</v-icon>
+                  <v-icon>mdi-account-lock-open</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
-                  <v-list-item-title>{{opt.title}}</v-list-item-title>
+                  <v-list-item-title>Login</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item
+                  link
+                  @click="logout()"
+                  v-if="userStore.isLoggedIn"
+              >
+                <v-list-item-icon>
+                  <v-icon>mdi-account-lock-open</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>Logout</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item
+                  link
+                  :to="'/admin/panel'"
+                  v-if="userStore.isAdmin"
+              >
+                <v-list-item-icon>
+                  <v-icon>mdi-account-cog</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>Admin Panel</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </v-list>
@@ -60,21 +90,28 @@
 </template>
 
 <script>
-import userservice from "@/services/userService";
 import SnackBar from '@/components/SnackbarComponent'
-import {bus} from "@/main";
-
-
+import {storeToRefs} from 'pinia'
+import {useUserStore} from "@/stores/user";
 
 export default {
   name: 'App',
-  components: {SnackBar},
 
+  components: {SnackBar},
+  setup(){
+    const userStore = useUserStore()
+    const {user, error} = storeToRefs(userStore)
+    return {user, error, userStore}
+  },
+  created(){
+    this.refreshToken()
+    this.userStore.updateUserInfo()
+  },
   data: () => ({
     items: [
       { title: 'Dashboard', icon: 'mdi-view-dashboard', path:"/" },
       { title: 'Zeiteinträge', icon: 'mdi-account-edit-outline', path:"/timeentry" },
-
+      { title: 'Proposals', icon: 'mdi-archive', path:"/proposals"}
     ],
     profilBtn:[
       {title: "Admin Panel", icon:"mdi-account-cog", path:"/admin/panel"},
@@ -95,18 +132,17 @@ export default {
       this.snackbarData = sb
       this.snackbar = true
     },
-    async getLoggedinUser() {
-      this.success = await userservice.getLoggedinUser(this.username,this.username);
+    async logout(){
+      await this.userStore.logoutUser()
     },
+    async refreshToken(){
+      setInterval(async() => {
+        console.log("refreshing token...")
+        await this.userStore.renewToken()
+      }, 288000)
+    }
 
   },
-
-  created() {
-    bus.$on("loggedIn",()=>{
-      //  this.$forceUpdate();
-      location.reload()
-    })
-  }
 };
 </script>
 <style scoped>

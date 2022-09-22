@@ -12,8 +12,11 @@
         elevation="12"
         id="topCard"
     >
-      <v-card-title>
-        Moin!  {{this.tempUserName}}
+      <v-card-title v-if="userStore.isLoggedIn">
+        Moin! {{user.username}}
+      </v-card-title>
+      <v-card-title v-if="!userStore.isLoggedIn">
+        Bitte logge dich ein!
       </v-card-title>
       <v-card-text>
         <h1><p align="center">   Gesamte Arbeitszeit </p></h1>
@@ -95,14 +98,18 @@
 import userService from "@/services/userService";
 import chartService from "@/services/chartService";
 import Chart from "chart.js/auto";
+import {useUserStore} from "@/stores/user";
+import {storeToRefs} from "pinia";
 
 export default {
   name: "DashboardView.vue",
-
+  setup(){
+    const userStore = useUserStore()
+    const {user, error} = storeToRefs(userStore)
+    return{userStore,user,error}
+  },
 
   data: ()=>({
-    tempUserName:"Bitte Logge dich ein um das Dashboard zu nutzen!",
-    tempUserId:"",
     getUserErr:"",
     token:"",
     testName:"Peter",
@@ -131,7 +138,7 @@ export default {
 
     async getEffort1(userId){
       await userService.getProjectEffort1(userId)
-          .then(resp =>{
+          .then(async (resp) =>{
             this.completeEffort = resp.data
             let time = resp.data
             let projects = [];
@@ -142,7 +149,7 @@ export default {
             let total = userService.getTotalTime(time)
             this.total = total
             const ctx = document.getElementById('myChart');
-            this.createDoughnut(projects,efforts,ctx)
+            await this.createDoughnut(projects,efforts,ctx)
           })
     },
     /*
@@ -165,17 +172,8 @@ export default {
      */
 
 
-   async getUserObjSelf(){
-      await userService.getSelf()
-          .then(resp => {
-            console.log(resp, "response for /self endpoint")
-            this.tempUserName = resp.data.username
-            this.tempUserId = resp.data.id})
-          .catch(error => this.err = error)
-   },
-
       // chart generation methods. parameter ctx controls the canvas that gets used to plot the graph
-    createDoughnut(projects,efforts,ctx){
+    async createDoughnut(projects,efforts,ctx){
       let colors = chartService.getRandomColor(projects)
       new Chart(ctx, {
         type: 'doughnut',
@@ -191,7 +189,7 @@ export default {
         }
       })
     },
-    createBar(dates,projects,durations){
+    async createBar(dates,projects,durations){
       const ctx = document.getElementById('barChart');
    //   let colors = chartService.getRandomColor(projects)
       let colorMap = chartService.getColor_projectSpecific(projects)
@@ -218,10 +216,9 @@ export default {
   },
 
 
-  async created(){
-    await this.getUserObjSelf()
-    await this.getEffort1(this.tempUserId)
-    await this.getAllEntries1(this.tempUserId)
+  async mounted(){
+    await this.getEffort1(this.user.id)
+    await this.getAllEntries1(this.user.id)
   }
 }
 </script>
