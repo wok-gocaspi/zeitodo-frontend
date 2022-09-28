@@ -1,5 +1,8 @@
 export default {
-
+    ALL_DIFFERENT_PROJECTS(){
+      //  return ["ProjektX", "ZeiToDo","Employee-Register","Audi"]
+        return ["VW", "Bert","BMW","Audi"]
+    },
     random_rgba() {
         let o = Math.round, r = Math.random, s = 255;
         return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
@@ -64,4 +67,7 @@ export default {
 
         return Math.floor(minutes / 60);
     },
+    genBarChartDataSet(){
+
+    }
 }

@@ -131,7 +131,7 @@ export default {
             console.log(entries, "new getAllEntries")
             let [dates,projects,durations] =  chartService.extractDatesProjectDuration(entries)
             console.log([dates,projects,durations ])
-            this.createBar(dates,projects,durations)
+            this.createBarRewriten(dates,projects,durations)
           })
           .catch(err => console.log(err))
     },
@@ -192,6 +192,8 @@ export default {
     async createBar(dates,projects,durations){
       const ctx = document.getElementById('barChart');
    //   let colors = chartService.getRandomColor(projects)
+      let check = this.dataSetToOneProject(dates,projects,durations, "Bert")
+      console.log("This is my checker", check)
       let colorMap = chartService.getColor_projectSpecific(projects)
       let formattedDates = []
       dates.forEach(d => {
@@ -208,11 +210,85 @@ export default {
             backgroundColor: colorMap,
             borderColor: colorMap,
             borderWidth: 1
-          }]
+          },
+            {
+              label: '# hours worked in project',
+              data: durations,
+              backgroundColor: colorMap,
+              borderColor: colorMap,
+              borderWidth: 1
+            }
+            ]
+        },
+        scales: {
+          x: {
+            stacked: true,
+          },
+          y: {
+            stacked: true
+          }
         }
       })
     },
+    // dataSet creates an Object to an given projectname (projectChecker) with all x (dates), y (duration of this date) values
+    //
+    dataSetToOneProject(dates,projects,durations,projectChecker){
+      let dataToProject = []
+      let datesOfProject = []
+      for (let i=0;i<dates.length;i++){
+        if (projects[i] == projectChecker){
+          dataToProject.push(durations[i])
+          datesOfProject.push(dates[i])
+        }
+      }
+      return {projectName: projectChecker,dates: datesOfProject, values: dataToProject}
+    },
+    async createBarRewriten(dates,projects,durations){
+      const ctx = document.getElementById('barChart');
+      //   let colors = chartService.getRandomColor(projects)
 
+
+
+      let colorMap = chartService.getColor_projectSpecific(projects)
+      let formattedDates = []
+      dates.forEach(d => {
+
+        formattedDates.push( d.split("T")[0])
+      })
+      let checkBert = this.dataSetToOneProject(formattedDates,projects,durations, "Bert")
+      let checkBMW = this.dataSetToOneProject(formattedDates,projects,durations, "VW")
+  console.log("Check of VW",checkBMW)
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: formattedDates,
+          datasets: [{
+            label: '# hours worked in project Bert',
+            data: checkBert.values,
+            backgroundColor: colorMap,
+            borderColor: colorMap,
+            borderWidth: 1
+          },
+            {
+              label: '# hours worked in project VW',
+              data: checkBMW.values,
+              backgroundColor: colorMap,
+              borderColor: colorMap,
+              borderWidth: 1
+            }
+          ]
+        },
+        scales: {
+          x: {
+            stacked: false,
+          },
+          y: {
+            stacked: false
+          }
+        }
+      })
+    },
   },
 
 
