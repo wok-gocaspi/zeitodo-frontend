@@ -6,14 +6,14 @@ describe("GetRndColor", () => {
     it("mocking the axios call to post correct username and password. The expected response is a valid baerer token", async () => {
 
         let res = chartService.random_rgba()
-        console.log(res)
+
         expect(res).toBeTruthy()
     });
 
     it("mocking the axios call to post correct username and password. The expected response is a valid baerer token", async () => {
         let input = ["project1","project2"]
         let res = chartService.getRandomColor(input)
-        console.log(res)
+
         expect(res.length).toEqual(input.length)
         expect(res).toBeTruthy()
     });
@@ -46,7 +46,7 @@ describe("GetRndColor", () => {
 
  */
         let res = chartService.extractDatesProjectDuration(fakeTimeEntires)
-        console.log(res)
+
         expect(res).toBeTruthy()
  //       expect(res).toBe(expectedSort)
     });
@@ -56,7 +56,7 @@ describe("GetRndColor", () => {
         let fakeDateB = "2052-08-03T10:00:00.801Z"
    //     let expected = 2
         let res = chartService.getTimeDiff(fakeDateA,fakeDateB)
-        console.log(res)
+
         expect(res).toBeTruthy()
    //     expect(res).toEqual(expected)
     });
@@ -69,7 +69,7 @@ describe("getTimeDiff", ()=>{
         let fakeDateB = "2052-08-03T10:00:00.801Z"
    //     let expected = 1
         let res = chartService.getTimeDiff(fakeDateA,fakeDateB)
-        console.log(res)
+
         expect(res).toBeTruthy()
  //       expect(res).toEqual(expected)
     });

@@ -5,6 +5,9 @@ import AdminManagement from "@/views/AdminManagement";
 import LoginView from "@/views/LoginView";
 import {useUserStore} from "@/stores/user";
 import ProposalView from "@/views/ProposalView";
+import StundenkontoView from "@/views/StundenkontoView";
+
+
 
 const routes = [
   {
@@ -31,6 +34,16 @@ const routes = [
       requiresAuth: true
     }
   },
+
+  {
+    path: '/stundenkonto',
+    name: 'stundenkonto',
+    component: StundenkontoView,
+    meta: {
+      requiresAuth: true
+    }
+  },
+
   {
     path: '/admin/panel',
     name: 'AdminManagementPanel',

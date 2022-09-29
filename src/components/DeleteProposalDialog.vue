@@ -52,7 +52,7 @@ export default {
       this.$emit('close')
     },
     async saveDialog(){
-      console.log(JSON.stringify(this.proposal))
+
       await ProposalService.deleteProposal(JSON.stringify(this.proposal))
           .then(() => {
             this.$parent.$parent.$emit("setsnackbar",{text: "Successfully Deleted Proposal!", timeout: 5000, color: "green"})

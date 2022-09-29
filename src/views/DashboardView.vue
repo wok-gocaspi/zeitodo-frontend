@@ -124,17 +124,17 @@ export default {
 
   methods:{
 
-    async getAllEntries1(userId){
+    async getAllEntries1(userId) {
       await userService.getAllTimeEntries2(userId)
           .then(resp => {
-          let  entries = resp.data
-            console.log(entries, "new getAllEntries")
-            let [dates,projects,durations] =  chartService.extractDatesProjectDuration(entries)
-            console.log([dates,projects,durations ])
-            this.createBar(dates,projects,durations)
+            let entries = resp.data
+
+            let [dates, projects, durations] = chartService.extractDatesProjectDuration(entries)
+
+            this.createBar(dates, projects, durations)
           })
-          .catch(err => console.log(err))
     },
+
 
     async getEffort1(userId){
       await userService.getProjectEffort1(userId)
@@ -172,7 +172,7 @@ export default {
      */
 
 
-      // chart generation methods. parameter ctx controls the canvas that gets used to plot the graph
+
     async createDoughnut(projects,efforts,ctx){
       let colors = chartService.getRandomColor(projects)
       new Chart(ctx, {
@@ -191,7 +191,7 @@ export default {
     },
     async createBar(dates,projects,durations){
       const ctx = document.getElementById('barChart');
-   //   let colors = chartService.getRandomColor(projects)
+
       let colorMap = chartService.getColor_projectSpecific(projects)
       let formattedDates = []
       dates.forEach(d => {

@@ -58,9 +58,7 @@ export const useUserStore = defineStore('user', {
                 .then(res => {
                     this.user = res.data
                 })
-                .catch(err => {
-                    console.log(err)
-                })
+
         }
     },
 

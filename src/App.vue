@@ -111,7 +111,10 @@ export default {
     items: [
       { title: 'Dashboard', icon: 'mdi-view-dashboard', path:"/" },
       { title: 'Zeiteinträge', icon: 'mdi-account-edit-outline', path:"/timeentry" },
-      { title: 'Proposals', icon: 'mdi-archive', path:"/proposals"}
+      { title: 'Proposals', icon: 'mdi-archive', path:"/proposals"},
+      { title: 'Stundenkonto', icon: 'mdi-account-eye-outline', path:"/stundenkonto"},
+
+
     ],
     profilBtn:[
       {title: "Admin Panel", icon:"mdi-account-cog", path:"/admin/panel"},
@@ -137,7 +140,7 @@ export default {
     },
     async refreshToken(){
       setInterval(async() => {
-        console.log("refreshing token...")
+
         await this.userStore.renewToken()
       }, 288000)
     }

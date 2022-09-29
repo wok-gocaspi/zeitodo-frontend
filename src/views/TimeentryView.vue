@@ -379,7 +379,7 @@ export default {
       te.breakEnd=te.breakEnd.toISOString()
 
 
-      console.log(JSON.stringify(te))
+
       this.events.push({
 
         name:te.project,start:Date.parse(te.start),end:Date.parse(te.end),breakStart:Date.parse(te.breakStart),breakEnd:Date.parse(te.breakEnd),color:"blue",timed:true
@@ -389,9 +389,7 @@ export default {
                       })
 
       timeentryService.creattimeentry(JSON.stringify(te))
-          .then(res => {
-            console.log(res)
-          })
+
     },
       gettimeentry(){
 
