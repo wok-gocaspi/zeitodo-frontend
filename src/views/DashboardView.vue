@@ -13,7 +13,7 @@
         id="topCard"
     >
       <v-card-title v-if="userStore.isLoggedIn">
-        Moin! {{user.username}}
+
       </v-card-title>
       <v-card-title v-if="!userStore.isLoggedIn">
         Bitte logge dich ein!
@@ -33,8 +33,7 @@
         Leistungen
       </v-card-title>
       <v-card-subtitle>
-        Das Kuchendiagramm zeigt den Anteil aller Projekte an der Gesamtarbeitszeit. Um ein Projekt von der Betrachtung auszuschließen,
-        wähle das Projekt über die Toggle-Buttons aus.
+
       </v-card-subtitle>
       <p align="center"> <canvas id="myChart" ></canvas></p>
 
@@ -49,8 +48,7 @@
         Projekte
       </v-card-title>
       <v-card-subtitle>
-        Das Diagramm zeigt die Tage an denen ein Zeiteintrag geleistet wurde gegenübergestellt die Anzahl an eingetragenen Stunden
-        an diesem Eintrag. Alle Projekte mit selben Projekttitel sind gleich coloriert.
+
       </v-card-subtitle>
         <p align="center"> <canvas id="barChart" ></canvas></p>
 
@@ -196,29 +194,28 @@ export default {
             await this.createDoughnut(projects,efforts,ctx)
           })
     },
-    /*
-    returnBarLabels(completeEffortObject, allTimeEntries){
-      let colorMap = []
-      let labels = []
-      for(let key in completeEffortObject){
-        colorMap.push(chartService.random_rgba());
-      }
-
-      for (let i=0;i<allTimeEntries.length();i++){
-      let startDay = allTimeEntries[i].start.split("T")[0]
-      let projectCursor = allTimeEntries[i].project
-        for(let j=0;j<colorMap.length();j++){
-
-        }
-      }
-    }
-,
-     */
-
 
       // chart generation methods. parameter ctx controls the canvas that gets used to plot the graph
     async createDoughnut(projects,efforts,ctx){
-      let colors = chartService.getRandomColor(projects)
+   //   let colors = chartService.ALL_DIFFERENT_PROJECT_COLORS()
+      let colorMap = []
+      console.log("doughnut projects:", projects)
+
+      for (let i = 0; i < projects.length;i++){
+        if(projects[i] === "Employee-Register"){
+          colorMap.push('green')
+        }
+        if(projects[i] === "Audi"){
+          colorMap.push('indigo')
+        }
+        if(projects[i] === "ProjektX"){
+          colorMap.push('orange')
+        }
+        if(projects[i] === "ZeiToDo"){
+          colorMap.push('cyan')
+        }
+      }
+
       new Chart(ctx, {
         type: 'doughnut',
         data: {
@@ -226,77 +223,14 @@ export default {
           datasets: [{
             label: '# hours worked in project',
             data: efforts,
-            backgroundColor: colors,
-            borderColor: colors,
+            backgroundColor: colorMap,
+            borderColor: colorMap,
             borderWidth: 1
           }]
         }
       })
     },
-    async createBar(dates,projects,durations){
-      const ctx = document.getElementById('barChart');
-   //   let colors = chartService.getRandomColor(projects)
-      let check = this.dataSetToOneProject(dates,projects,durations, "Bert")
-      console.log("This is my checker", check)
-      let colorMap = chartService.getColor_projectSpecific(projects)
-      let formattedDates = []
-      dates.forEach(d => {
 
-        formattedDates.push( d.split("T")[0])
-      })
-      new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: formattedDates,
-          datasets: [{
-            label: '# hours worked in project',
-            data: durations,
-            backgroundColor: colorMap,
-            borderColor: colorMap,
-            borderWidth: 1
-          },
-            {
-              label: '# hours worked in project',
-              data: durations,
-              backgroundColor: colorMap,
-              borderColor: colorMap,
-              borderWidth: 1
-            }
-            ]
-        },
-        scales: {
-          x: {
-            stacked: true,
-          },
-          y: {
-            stacked: true
-          }
-        }
-      })
-    },
-    dataSetToOneProjectNew(dates,projects,durations,projectChecker){
-      let dataToProject = []
-      let datesOfProject = []
-      for (let i=0;i<dates.length;i++){
-        if (projects[i] === projectChecker ){
-          dataToProject.push(durations[i])
-          datesOfProject.push(dates[i])
-        }
-        else if ( dates[i+1] && projects[i+1] === projectChecker && dates[i+1].split("T")[0] === dates[i].split("T")[0]){
-          dataToProject.push(durations[i+1])
-          datesOfProject.push(dates[i])
-        }
-        else if (projects[i-1] === projectChecker && dates[i-1].split("T")[0] === dates[i].split("T")[0]){
-          dataToProject.push(durations[i-1])
-          datesOfProject.push(dates[i])
-        }
-        else {
-          dataToProject.push(0)
-          datesOfProject.push(dates[i])
-        }
-      }
-      return {projectName: projectChecker,dates: datesOfProject, values: dataToProject}
-    },
     // dataSet creates an Object to an given projectname (projectChecker) with all x (dates), y (duration of this date) values
     //
     dataSetToOneProject(dates,projects,durations,projectChecker){
@@ -324,22 +258,15 @@ export default {
     },
     async createBarRewriten(dates,projects,durations){
       const ctx = document.getElementById('barChart');
-      //   let colors = chartService.getRandomColor(projects)
 
-
-
-  //    let colorMap = chartService.getColor_projectSpecific(projects)
       let formattedDates = []
       dates.forEach(d => {
         if (!formattedDates.includes(d.split("T")[0])){
           formattedDates.push( d.split("T")[0])
-        }
-
-      })
+        }})
 
       let Audi = this.getDateListAudi(dates,projects,durations)
       let  AudiData =[]
-      console.log("AudiDateListe: ", Audi)
 formattedDates.forEach(date =>{
   let sum = 0
   for (let i = 0; i< Audi[0].length; i++){
@@ -348,12 +275,10 @@ formattedDates.forEach(date =>{
     }
   }
   AudiData.push(sum)
-
 })
-      console.log("Sum of formatted Audi data" , AudiData)
+
       let ZeiToDo = this.getDateListZeiToDo(dates,projects,durations)
       let  ZeitodoData =[]
-      console.log("ZeiToDoDateListe: ", ZeiToDo)
       formattedDates.forEach(date =>{
         let sum = 0
         for (let i = 0; i< ZeiToDo[0].length; i++){
@@ -362,12 +287,10 @@ formattedDates.forEach(date =>{
           }
         }
         ZeitodoData.push(sum)
-
       })
-      console.log("Sum of formatted ZeiToDo data" , ZeitodoData)
+
       let EmployeeRegister = this.getDateListEmployeeRegister(dates,projects,durations)
       let  EmployeeRegisterData =[]
-      console.log("EmployeeRegisterDateListe: ", EmployeeRegister)
       formattedDates.forEach(date =>{
         let sum = 0
         for (let i = 0; i< EmployeeRegister[0].length; i++){
@@ -376,12 +299,10 @@ formattedDates.forEach(date =>{
           }
         }
         EmployeeRegisterData.push(sum)
-
       })
-      console.log("Sum of formatted EmployeeRegister data" , EmployeeRegisterData)
+
       let ProjektX = this.getDateListProjektX(dates,projects,durations)
       let  ProjektXData =[]
-      console.log("ProjektXDateListe: ", ProjektX)
       formattedDates.forEach(date =>{
         let sum = 0
         for (let i = 0; i< ProjektX[0].length; i++){
@@ -392,8 +313,6 @@ formattedDates.forEach(date =>{
         ProjektXData.push(sum)
 
       })
-      console.log("Sum of formatted ProjektX data" , ProjektXData)
-
 
       let checkProjektX = this.dataSetToOneProject(dates,projects,durations, "ProjektX")
       let checkZeiToDo = this.dataSetToOneProject(dates,projects,durations, "ZeiToDo")
