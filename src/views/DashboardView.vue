@@ -135,6 +135,50 @@ export default {
           })
           .catch(err => console.log(err))
     },
+    getDateListAudi(dates,projects,durations){
+      let AudiDates =[]
+      let AudiValues = []
+      for (let i = 0; i< dates.length; i++){
+        if (projects[i] === "Audi"){
+          AudiDates.push(dates[i])
+          AudiValues.push(durations[i])
+        }
+      }
+      return [AudiDates,AudiValues]
+    },
+    getDateListZeiToDo(dates,projects,durations){
+      let AudiDates =[]
+      let AudiValues = []
+      for (let i = 0; i< dates.length; i++){
+        if (projects[i] === "ZeiToDo"){
+          AudiDates.push(dates[i])
+          AudiValues.push(durations[i])
+        }
+      }
+      return [AudiDates,AudiValues]
+    },
+    getDateListEmployeeRegister(dates,projects,durations){
+      let AudiDates =[]
+      let AudiValues = []
+      for (let i = 0; i< dates.length; i++){
+        if (projects[i] === "Employee-Register"){
+          AudiDates.push(dates[i])
+          AudiValues.push(durations[i])
+        }
+      }
+      return [AudiDates,AudiValues]
+    },
+    getDateListProjektX(dates,projects,durations){
+      let AudiDates =[]
+      let AudiValues = []
+      for (let i = 0; i< dates.length; i++){
+        if (projects[i] === "ProjektX"){
+          AudiDates.push(dates[i])
+          AudiValues.push(durations[i])
+        }
+      }
+      return [AudiDates,AudiValues]
+    },
 
     async getEffort1(userId){
       await userService.getProjectEffort1(userId)
@@ -230,14 +274,49 @@ export default {
         }
       })
     },
+    dataSetToOneProjectNew(dates,projects,durations,projectChecker){
+      let dataToProject = []
+      let datesOfProject = []
+      for (let i=0;i<dates.length;i++){
+        if (projects[i] === projectChecker ){
+          dataToProject.push(durations[i])
+          datesOfProject.push(dates[i])
+        }
+        else if ( dates[i+1] && projects[i+1] === projectChecker && dates[i+1].split("T")[0] === dates[i].split("T")[0]){
+          dataToProject.push(durations[i+1])
+          datesOfProject.push(dates[i])
+        }
+        else if (projects[i-1] === projectChecker && dates[i-1].split("T")[0] === dates[i].split("T")[0]){
+          dataToProject.push(durations[i-1])
+          datesOfProject.push(dates[i])
+        }
+        else {
+          dataToProject.push(0)
+          datesOfProject.push(dates[i])
+        }
+      }
+      return {projectName: projectChecker,dates: datesOfProject, values: dataToProject}
+    },
     // dataSet creates an Object to an given projectname (projectChecker) with all x (dates), y (duration of this date) values
     //
     dataSetToOneProject(dates,projects,durations,projectChecker){
       let dataToProject = []
       let datesOfProject = []
       for (let i=0;i<dates.length;i++){
-        if (projects[i] == projectChecker){
+        if (projects[i] === projectChecker ){
           dataToProject.push(durations[i])
+          datesOfProject.push(dates[i])
+        }
+       else if ( dates[i+1] && projects[i+1] === projectChecker && dates[i+1].split("T")[0] === dates[i].split("T")[0] && !(projects[i] === projectChecker ) ){
+          dataToProject.push(durations[i+1])
+          datesOfProject.push(dates[i])
+        }
+        else if (projects[i-1] === projectChecker && dates[i-1].split("T")[0] === dates[i].split("T")[0] && !(projects[i] === projectChecker )){
+          dataToProject.push(durations[i-1])
+          datesOfProject.push(dates[i])
+        }
+        else {
+          dataToProject.push(0)
           datesOfProject.push(dates[i])
         }
       }
@@ -249,35 +328,99 @@ export default {
 
 
 
-      let colorMap = chartService.getColor_projectSpecific(projects)
+  //    let colorMap = chartService.getColor_projectSpecific(projects)
       let formattedDates = []
       dates.forEach(d => {
+        if (!formattedDates.includes(d.split("T")[0])){
+          formattedDates.push( d.split("T")[0])
+        }
 
-        formattedDates.push( d.split("T")[0])
       })
-      let checkBert = this.dataSetToOneProject(formattedDates,projects,durations, "Bert")
-      let checkBMW = this.dataSetToOneProject(formattedDates,projects,durations, "VW")
-  console.log("Check of VW",checkBMW)
+
+      let Audi = this.getDateListAudi(dates,projects,durations)
+      let  AudiData =[]
+      console.log("AudiDateListe: ", Audi)
+formattedDates.forEach(date =>{
+  let sum = 0
+  for (let i = 0; i< Audi[0].length; i++){
+    if (date === Audi[0][i].split("T")[0]){
+      sum += Audi[1][i]
+    }
+  }
+  AudiData.push(sum)
+
+})
+      console.log("Sum of formatted Audi data" , AudiData)
+      let ZeiToDo = this.getDateListZeiToDo(dates,projects,durations)
+      let  ZeitodoData =[]
+      console.log("ZeiToDoDateListe: ", ZeiToDo)
+      formattedDates.forEach(date =>{
+        let sum = 0
+        for (let i = 0; i< ZeiToDo[0].length; i++){
+          if (date === ZeiToDo[0][i].split("T")[0]){
+            sum += ZeiToDo[1][i]
+          }
+        }
+        ZeitodoData.push(sum)
+
+      })
+      console.log("Sum of formatted ZeiToDo data" , ZeitodoData)
+      let EmployeeRegister = this.getDateListEmployeeRegister(dates,projects,durations)
+      let  EmployeeRegisterData =[]
+      console.log("EmployeeRegisterDateListe: ", EmployeeRegister)
+      formattedDates.forEach(date =>{
+        let sum = 0
+        for (let i = 0; i< EmployeeRegister[0].length; i++){
+          if (date === EmployeeRegister[0][i].split("T")[0]){
+            sum += EmployeeRegister[1][i]
+          }
+        }
+        EmployeeRegisterData.push(sum)
+
+      })
+      console.log("Sum of formatted EmployeeRegister data" , EmployeeRegisterData)
+      let ProjektX = this.getDateListProjektX(dates,projects,durations)
+      let  ProjektXData =[]
+      console.log("ProjektXDateListe: ", ProjektX)
+      formattedDates.forEach(date =>{
+        let sum = 0
+        for (let i = 0; i< ProjektX[0].length; i++){
+          if (date === ProjektX[0][i].split("T")[0]){
+            sum += ProjektX[1][i]
+          }
+        }
+        ProjektXData.push(sum)
+
+      })
+      console.log("Sum of formatted ProjektX data" , ProjektXData)
+
+
+      let checkProjektX = this.dataSetToOneProject(dates,projects,durations, "ProjektX")
+      let checkZeiToDo = this.dataSetToOneProject(dates,projects,durations, "ZeiToDo")
+      let checkEmployeeRegister = this.dataSetToOneProject(dates,projects,durations, "Employee-Register")
+      let checkAudi = this.dataSetToOneProject(dates,projects,durations, "Audi")
+      let checkArray = [checkAudi,checkZeiToDo,checkProjektX,checkEmployeeRegister,]
+      let formattedCheckArray =[AudiData,ZeitodoData, ProjektXData,EmployeeRegisterData]
+      let sets = []
+      let colorMap = chartService.ALL_DIFFERENT_PROJECT_COLORS()
+      for (let i = 0; i < 4 ; i++){
+        if (checkArray[i].values.length > 0){
+          sets.push({
+            label: '# hours worked in project: ' + checkArray[i].projectName,
+            data: formattedCheckArray[i],
+            backgroundColor: colorMap[i],
+            borderColor: colorMap[i],
+            borderWidth: 1
+          })
+        }
+      }
+  console.log("Check of Sets",sets)
 
       new Chart(ctx, {
         type: 'bar',
         data: {
           labels: formattedDates,
-          datasets: [{
-            label: '# hours worked in project Bert',
-            data: checkBert.values,
-            backgroundColor: colorMap,
-            borderColor: colorMap,
-            borderWidth: 1
-          },
-            {
-              label: '# hours worked in project VW',
-              data: checkBMW.values,
-              backgroundColor: colorMap,
-              borderColor: colorMap,
-              borderWidth: 1
-            }
-          ]
+          datasets: sets
         },
         scales: {
           x: {

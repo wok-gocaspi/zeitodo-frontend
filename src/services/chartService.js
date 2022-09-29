@@ -3,6 +3,9 @@ export default {
       //  return ["ProjektX", "ZeiToDo","Employee-Register","Audi"]
         return ["VW", "Bert","BMW","Audi"]
     },
+    ALL_DIFFERENT_PROJECT_COLORS(){
+ return ['indigo','cyan','orange','green']
+    },
     random_rgba() {
         let o = Math.round, r = Math.random, s = 255;
         return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
