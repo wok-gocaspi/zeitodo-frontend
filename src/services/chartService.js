@@ -68,29 +68,21 @@ export default {
     convertMsToH(milliseconds) {
         let seconds = Math.floor(milliseconds / 1000);
         let minutes = Math.floor(seconds / 60);
-
-
       return Math.floor(minutes / 60);
-
     },
     convertMsToMinutes(milliseconds) {
         let seconds = Math.floor(milliseconds / 1000);
-        let minutes = Math.floor(seconds / 60);
-
-
-        return minutes;
-
+        return Math.floor(seconds / 60)
     },
     allArrayElementsAreZero(floatArray){
+        if(!Array.isArray(floatArray)){
+            return true
+        }
         let sum = 0
         floatArray.forEach(entry =>{
         sum += entry
         })
-       if (sum == 0){
-           return true
-       }
-       else {
-           return false
-       }
+        return sum == 0 ? true:false
     }
+
 }

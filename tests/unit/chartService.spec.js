@@ -3,14 +3,14 @@ import chartService from "@/services/chartService";
 
 
 describe("GetRndColor", () => {
-    it("mocking the axios call to post correct username and password. The expected response is a valid baerer token", async () => {
+    it("random_rgba returns a string containing a randomized rgba code", async () => {
 
         let res = chartService.random_rgba()
         console.log(res)
         expect(res).toBeTruthy()
     });
 
-    it("mocking the axios call to post correct username and password. The expected response is a valid baerer token", async () => {
+    it("getRandomColor returns a random but valid rgba color code for each project in a given array of project-titles", async () => {
         let input = ["project1","project2"]
         let res = chartService.getRandomColor(input)
         console.log(res)
@@ -18,7 +18,8 @@ describe("GetRndColor", () => {
         expect(res).toBeTruthy()
     });
 
-    it("mocking the axios call to post correct username and password. The expected response is a valid baerer token", async () => {
+    it("given an array of time entries the function extractDatesProjectDuration returns three sorted arrays" +
+        "the date array is sorted from last to most recent date, the project and durations array is sorted accordily to the sorted date array", async () => {
         let fakeTimeEntires = [
             {
                 "userId": "6316ed4de7a88b65f17e47ff",
@@ -51,7 +52,7 @@ describe("GetRndColor", () => {
       expect(res).toStrictEqual(expectedSort)
     });
 
-    it("mocking the axios call to post correct username and password. The expected response is a valid baerer token", async () => {
+    it("given to dates, the function returns the differrence in milliseconds of the two dates", async () => {
         let fakeDateA =  "2052-08-03T09:00:00.801Z"
         let fakeDateB = "2052-08-03T10:00:00.801Z"
    //     let expected = 2
@@ -63,8 +64,8 @@ describe("GetRndColor", () => {
 
 });
 
-describe("getTimeDiff", ()=>{
-    it("mocking the axios call to post correct username and password. The expected response is a valid baerer token", async () => {
+describe("ChartService, getTimeDiff", ()=>{
+    it("given to dates, the function returns the differrence in milliseconds of the two dates", async () => {
         let fakeDateA =  "2052-08-03T09:00:00.801Z"
         let fakeDateB = "2052-08-03T10:00:00.801Z"
    //     let expected = 1
@@ -75,8 +76,8 @@ describe("getTimeDiff", ()=>{
     });
 })
 
-describe("getColor_projectSpecific", ()=>{
-    it("given a array of projects the method returnjs a color map that defines one color for each different project", ()=>{
+describe("ChartService, getColor_projectSpecific", ()=>{
+    it("given a array of projects the method returns a color map that defines one color for each different project", ()=>{
         let projectArray = ["project1","project2","project1","project3",]
         let res = chartService.getColor_projectSpecific(projectArray)
         expect(res).toBeTruthy()
@@ -106,5 +107,43 @@ describe("ChartService, ALL_DIFFERENT_PROJECT_COLORS returns the pre-defined pro
         let res = chartService.ALL_DIFFERENT_PROJECT_COLORS()
      //   expect(res).toBeTruthy()
         expect(res).toEqual(expectedColors)
+    })
+})
+describe("ChartService, allArrayElementsAreZero", ()=>{
+    it("given a array of numbers the function returns true if the input is not an array or all elements in the array are 0", ()=>{
+        let zeroArray = [0,0,0,0]
+        let nonZeroArray = [0,1,0,0]
+        let notArray = "this is not an array"
+        let resToZero = chartService.allArrayElementsAreZero(zeroArray)
+        let resToNonZero = chartService.allArrayElementsAreZero(nonZeroArray)
+        let resToNotArray = chartService.allArrayElementsAreZero(notArray)
+      //  expect(res).toBeTruthy()
+        expect(resToZero).toBe(true)
+        expect(resToNonZero).toBe(false)
+        expect(resToNotArray).toBe(true)
+    })
+})
+
+describe("ChartService, convertMsToH", ()=>{
+    it("given a number of milliseconds the function returns the amount of Hours to that amount of milliseconds", ()=>{
+        let oneHour = 1000*60*60
+        let twoHour = 2000*60*60
+        let res1 = chartService.convertMsToH(oneHour)
+     //   expect(res).toBeTruthy()
+        expect(res1).toEqual(1)
+        let res2 = chartService.convertMsToH(twoHour)
+        expect(res2).toEqual(2)
+    })
+})
+
+describe("ChartService, convertMsToM", ()=>{
+    it("given a number of milliseconds the function returns the amount of Minutes to that amount of milliseconds", ()=>{
+        let oneHour = 1000*60
+        let twoHour = 2000*60
+        let res1 = chartService.convertMsToMinutes(oneHour)
+        //   expect(res).toBeTruthy()
+        expect(res1).toEqual(1)
+        let res2 = chartService.convertMsToMinutes(twoHour)
+        expect(res2).toEqual(2)
     })
 })
