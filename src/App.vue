@@ -23,7 +23,7 @@
     <v-app-bar app>
 
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title><h1>Dashboard</h1></v-toolbar-title>
+      <v-toolbar-title><h1>{{ items.title }}</h1></v-toolbar-title>
       <div class="toolbar-btn">
         <div class="text-center">
           <v-menu offset-y>
@@ -119,6 +119,7 @@ export default {
 
     ],
     profilBtn:[
+
       {title: "Admin Panel", icon:"mdi-account-cog", path:"/admin/panel"},
       {title: "Login", icon:"mdi-account-lock-open", path:"/login"}
     ],

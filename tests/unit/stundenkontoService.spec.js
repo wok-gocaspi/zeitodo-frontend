@@ -1,7 +1,7 @@
 
 import stundenkontoService from "@/services/stundenkontoService";
 import moment from "moment-timezone";
-import axios from "axios";
+
 
 
 
@@ -19,7 +19,7 @@ describe("Axios Requests",()=>{
                 type: "sickness"
             }
         )
-        axios.get.mockResolvedValueOnce(proposal)
+
         const result = await stundenkontoService.getAbsence(userid)
         expect(result).toEqual(proposal)
 
@@ -39,8 +39,9 @@ describe("Axios Requests",()=>{
 
             }
         )
-        const result = await stundenkontoService.getvacationandsickness(userid)
-        expect(result).toEqual(proposal)
+
+        const result = await stundenkontoService.getvacationandsickness(JSON.stringify(userid))
+        expect(result).toEqual(JSON.stringify(proposal))
     })
 })
 describe("Axios Requests",()=>{
