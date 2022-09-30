@@ -26,8 +26,8 @@
 
     >
       <h1>Abwesenheiten &#128197; &#127973;</h1><br><br>
-      <div >&emsp;Urlaubstage :&emsp;&emsp; von 30</div><br>
-      <div >&emsp;Krankheitstage :</div><br><br>
+      <div >&emsp;Urlaubstage :&emsp;{{this.absence.vacation}} von {{this.absence.totalVacation}}</div><br>
+      <div >&emsp;Krankheitstage :&emsp;{{this.absence.sickness}}</div><br><br>
     </v-card></div>
          </v-flex>
        <v-flex xs12 md4>
@@ -36,7 +36,7 @@
         color="grey lighten-3"
     >
       <div><h1>Stundenkonto &#128337;</h1></div><br><br>
-      <div align="left">&emsp;{{this.total}} h von 160 h Soll-Stunden</div><br><br><br><br>
+      <div align="left">&emsp;{{this.total}} h von {{this.total}} h Soll-Stunden</div><br><br><br><br>
     </v-card></div>
          </v-flex>
      </v-layout>
@@ -156,24 +156,16 @@
                     :color="selectedEvent.color"
                     dark
                 >
-                  <v-btn icon @click="updatedialog()">
-                    <v-icon>mdi-pencil</v-icon>
 
-                  </v-btn>
                   <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
                   <v-spacer></v-spacer>
-                  <v-btn icon>
-                    <v-icon>mdi-heart</v-icon>
-                  </v-btn>
-                  <v-btn icon>
-                    <v-icon>mdi-dots-vertical</v-icon>
-                  </v-btn>
+
                 </v-toolbar>
                 <v-card-text>
                   <span v-html="selectedEvent.details"></span>
                 </v-card-text>
                 <v-card-text>
-
+                  <div align="center"></div>
 
                 </v-card-text>
                 <v-card-actions>
@@ -207,6 +199,7 @@ import chartService from "@/services/chartService";
 import {useUserStore} from "@/stores/user";
 import {storeToRefs} from "pinia";
 import stundenkontoService from "@/services/stundenkontoService";
+
 
 
 export default {
@@ -264,6 +257,7 @@ export default {
       project:"",
     },
     selectedtype:"",
+    absence:"",
 
 
   }),
@@ -306,6 +300,7 @@ export default {
           })
 
     },
+
 
     async getEffort1(userId){
       await userService.getProjectEffort1(userId)
@@ -370,6 +365,10 @@ export default {
               })
 
           })
+         stundenkontoService.getAbsence(this.user.id)
+             .then(res=>{
+               this.absence = res.data
+             })
 
 
     },
@@ -389,6 +388,7 @@ export default {
           })
 
     },
+
     updatedialog(){
 
       this.date=timeentryService.getdate(this.selectedEvent.start)

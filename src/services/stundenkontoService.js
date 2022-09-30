@@ -1,11 +1,15 @@
 
 import moment from "moment-timezone";
 import proposalService from "@/services/proposalService";
+import axios from "axios";
 
 export default {
 
 
+   async getAbsence (userid){
+     return axios.get("/proposals/absence/"+userid)
 
+   },
     async getvacationandsickness(userid){
         let filterproposal ={
             vacation :[],

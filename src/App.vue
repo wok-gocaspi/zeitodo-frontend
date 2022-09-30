@@ -21,7 +21,9 @@
       </v-list>
     </v-navigation-drawer>
     <v-app-bar app>
+
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-toolbar-title><h1>Dashboard</h1></v-toolbar-title>
       <div class="toolbar-btn">
         <div class="text-center">
           <v-menu offset-y>

@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h1>Dashboard</h1>
+
     <!--
     <v-btn v-on:click="getCurrentUId()">Get user Id of Peter</v-btn>
     <v-btn v-on:click="getUserObj(tempUserId)" >Get user Info</v-btn>
@@ -13,7 +13,7 @@
         id="topCard"
     >
       <v-card-title v-if="userStore.isLoggedIn">
-        Moin! {{user.username}}
+
       </v-card-title>
       <v-card-title v-if="!userStore.isLoggedIn">
         Bitte logge dich ein!
