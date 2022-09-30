@@ -1,8 +1,10 @@
 export default {
+    /*
     ALL_DIFFERENT_PROJECTS(){
-      //  return ["ProjektX", "ZeiToDo","Employee-Register","Audi"]
-        return ["VW", "Bert","BMW","Audi"]
+  return ["ProjektX", "ZeiToDo","Employee-Register","Audi"]
     },
+
+     */
     ALL_DIFFERENT_PROJECT_COLORS(){
  return ['indigo','cyan','orange','green']
     },

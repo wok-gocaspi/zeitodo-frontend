@@ -37,18 +37,18 @@ describe("GetRndColor", () => {
                 "project": "Bert"
             }
         ]
-/*
+
         let expectedSort = [
             [ '2052-08-01T09:00:00.801Z', '2053-08-01T09:00:00.801Z' ],
             [ 'Bert', 'Bert' ],
-            [ 49, 49 ]
+            [ -38880, -38880 ]
         ]
 
- */
+
         let res = chartService.extractDatesProjectDuration(fakeTimeEntires)
         console.log(res)
         expect(res).toBeTruthy()
- //       expect(res).toBe(expectedSort)
+      expect(res).toStrictEqual(expectedSort)
     });
 
     it("mocking the axios call to post correct username and password. The expected response is a valid baerer token", async () => {
@@ -80,5 +80,31 @@ describe("getColor_projectSpecific", ()=>{
         let projectArray = ["project1","project2","project1","project3",]
         let res = chartService.getColor_projectSpecific(projectArray)
         expect(res).toBeTruthy()
+    })
+})
+
+describe("ChartService, dateSorting", ()=>{
+    it("given a array of projects dates, the dates are sorted from to most recent date", ()=>{
+        let fakeDateA =  "2052-08-03T09:00:00.801Z"
+        let fakeDateB = "2052-08-05T10:00:00.801Z"
+    //    let fakeDateC = "2052-08-07T10:00:00.801Z"
+        let expectedABComparisson = 1
+        let expectedBAComparisson = -1
+
+        let resAB = chartService.dateSorter(fakeDateB,fakeDateA)
+        expect(resAB).toEqual(expectedABComparisson)
+    //    expect(res).toBeTruthy()
+        let resBA = chartService.dateSorter(fakeDateA,fakeDateB)
+        expect(resBA).toEqual(expectedBAComparisson)
+        //    expect(res).toBeTruthy()
+    })
+})
+
+describe("ChartService, ALL_DIFFERENT_PROJECT_COLORS returns the pre-defined project colors", ()=>{
+    it("ALL_DIFFERENT_PROJECT_COLORS returns ['indigo','cyan','orange','green']", ()=>{
+        let expectedColors = ['indigo','cyan','orange','green']
+        let res = chartService.ALL_DIFFERENT_PROJECT_COLORS()
+     //   expect(res).toBeTruthy()
+        expect(res).toEqual(expectedColors)
     })
 })

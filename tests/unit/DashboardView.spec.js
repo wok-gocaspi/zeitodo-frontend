@@ -31,11 +31,9 @@ describe("Proposal View", () => {
         })
     })
     it("renders the three vue-cards in the Dashboard", () => {
-  //      expect(wrapper.get("#midCard").text()).toEqual("2022-08-12 --- 2022-08-20")
         expect(wrapper.get("#midCard")).toBeTruthy()
         expect(wrapper.get("#topCard")).toBeTruthy()
         expect(wrapper.get("#botCard")).toBeTruthy()
-  //
     })
 
     it("midCard renders correct title", ()=>{

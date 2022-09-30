@@ -122,17 +122,37 @@ export default {
 
 
   methods:{
-
+  // Given a valid user id , all timeentries of that user gets fetched for the zeitodo-api.
+  // The data gets destructured in [dates,projects,durations], whereas each is an array containing (date of the timeentry, project of that timeentry, duration of that entry)
+  // If the data is fetched successfully the createBar methods fills the bar chart of the component given the fetched data
     async getAllEntries1(userId){
       await userService.getAllTimeEntries2(userId)
           .then(resp => {
-          let  entries = resp.data
-            console.log(entries, "new getAllEntries")
-            let [dates,projects,durations] =  chartService.extractDatesProjectDuration(entries)
-            console.log([dates,projects,durations ])
+            let [dates,projects,durations] =  chartService.extractDatesProjectDuration(resp.data)
+            console.log("dates,projects,durations",[dates,projects,durations])
             this.createBarRewriten(dates,projects,durations)
           })
           .catch(err => console.log(err))
+    },
+
+
+    async getEffort1(userId){
+      await userService.getProjectEffort1(userId)
+          .then(async (resp) =>{
+            this.completeEffort = resp.data
+            let time = resp.data
+            let projects = [];
+            for(let key in time){
+              projects.push(key);
+            }
+
+            let efforts = Object.values(time)
+            console.log("This are the time values of getEffort: ", efforts)
+            let total = userService.getTotalTime(time)
+            this.total = total
+            const ctx = document.getElementById('myChart');
+            await this.createDoughnut(projects,efforts,ctx)
+          })
     },
     getDateListAudi(dates,projects,durations){
       let AudiDates =[]
@@ -178,26 +198,6 @@ export default {
       }
       return [AudiDates,AudiValues]
     },
-
-    async getEffort1(userId){
-      await userService.getProjectEffort1(userId)
-          .then(async (resp) =>{
-            this.completeEffort = resp.data
-            let time = resp.data
-            let projects = [];
-            for(let key in time){
-              projects.push(key);
-            }
-
-            let efforts = Object.values(time)
-            console.log("This are the time values of getEffort: ", efforts)
-            let total = userService.getTotalTime(time)
-            this.total = total
-            const ctx = document.getElementById('myChart');
-            await this.createDoughnut(projects,efforts,ctx)
-          })
-    },
-
       // chart generation methods. parameter ctx controls the canvas that gets used to plot the graph
     async createDoughnut(projects,efforts,ctx){
       let colorMap = []
