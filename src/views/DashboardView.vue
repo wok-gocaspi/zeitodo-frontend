@@ -29,8 +29,10 @@
         class="margin-top"
         id="midCard"
     >
-      <v-card-title>
-        Leistungen
+      <v-card-title
+      id="midCard-title"
+      >
+        Leistungen in Stunden
       </v-card-title>
       <v-card-subtitle>
 
@@ -44,8 +46,10 @@
         class="margin-top"
         id="botCard"
     >
-      <v-card-title>
-        Projekte
+      <v-card-title
+      id="botCard-title"
+      >
+        Projekte in Minuten
       </v-card-title>
       <v-card-subtitle>
 
@@ -110,9 +114,6 @@ export default {
   data: ()=>({
     getUserErr:"",
     token:"",
-    testName:"Peter",
-    testPwd:"234",
-    completeEffort:{BMW:49},
     chart:{},
     busLoginData:[],
     total:0,
@@ -187,7 +188,9 @@ export default {
             for(let key in time){
               projects.push(key);
             }
+
             let efforts = Object.values(time)
+            console.log("This are the time values of getEffort: ", efforts)
             let total = userService.getTotalTime(time)
             this.total = total
             const ctx = document.getElementById('myChart');
@@ -197,9 +200,7 @@ export default {
 
       // chart generation methods. parameter ctx controls the canvas that gets used to plot the graph
     async createDoughnut(projects,efforts,ctx){
-   //   let colors = chartService.ALL_DIFFERENT_PROJECT_COLORS()
       let colorMap = []
-      console.log("doughnut projects:", projects)
 
       for (let i = 0; i < projects.length;i++){
         if(projects[i] === "Employee-Register"){
@@ -215,13 +216,16 @@ export default {
           colorMap.push('cyan')
         }
       }
-
+      let concatProjects = []
+      projects.forEach(p =>{
+        concatProjects.push("# Stunden in " + p)
+      })
       new Chart(ctx, {
         type: 'doughnut',
         data: {
-          labels: projects,
+          labels:  projects,
           datasets: [{
-            label: '# hours worked in project',
+            label: '# Stunden worked in project in hours',
             data: efforts,
             backgroundColor: colorMap,
             borderColor: colorMap,
@@ -323,9 +327,10 @@ formattedDates.forEach(date =>{
       let sets = []
       let colorMap = chartService.ALL_DIFFERENT_PROJECT_COLORS()
       for (let i = 0; i < 4 ; i++){
-        if (checkArray[i].values.length > 0){
+        if (!chartService.allArrayElementsAreZero(checkArray[i].values)){
+          console.log(checkArray[i].values,"THese are the v aluse from checkarray")
           sets.push({
-            label: '# hours worked in project: ' + checkArray[i].projectName,
+            label: checkArray[i].projectName,
             data: formattedCheckArray[i],
             backgroundColor: colorMap[i],
             borderColor: colorMap[i],
@@ -333,7 +338,6 @@ formattedDates.forEach(date =>{
           })
         }
       }
-  console.log("Check of Sets",sets)
 
       new Chart(ctx, {
         type: 'bar',

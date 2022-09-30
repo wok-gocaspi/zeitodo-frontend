@@ -56,21 +56,39 @@ export default {
         timeEntries.forEach((entry) =>  {
             dates.push(entry.start)
             projects.push(entry.project)
-            durations.push(this.getTimeDiff(entry.start,entry.end))
+            durations.push(this.getTimeDiff(entry.start,entry.end) - this.getTimeDiff(entry.breakStart,entry.breakEnd))
         })
         return [dates,projects,durations]
     },
     getTimeDiff(dateA,dateB){
-        return this.convertMsToH(new Date(dateB)-new Date(dateA))
+        return this.convertMsToMinutes(new Date(dateB)-new Date(dateA))
     },
     convertMsToH(milliseconds) {
         let seconds = Math.floor(milliseconds / 1000);
         let minutes = Math.floor(seconds / 60);
 
 
-        return Math.floor(minutes / 60);
-    },
-    genBarChartDataSet(){
+      return Math.floor(minutes / 60);
 
+    },
+    convertMsToMinutes(milliseconds) {
+        let seconds = Math.floor(milliseconds / 1000);
+        let minutes = Math.floor(seconds / 60);
+
+
+        return minutes;
+
+    },
+    allArrayElementsAreZero(floatArray){
+        let sum = 0
+        floatArray.forEach(entry =>{
+        sum += entry
+        })
+       if (sum == 0){
+           return true
+       }
+       else {
+           return false
+       }
     }
 }
