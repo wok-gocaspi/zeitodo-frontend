@@ -102,6 +102,7 @@ import chartService from "@/services/chartService";
 import Chart from "chart.js/auto";
 import {useUserStore} from "@/stores/user";
 import {storeToRefs} from "pinia";
+import moment from "moment-timezone";
 
 export default {
   name: "DashboardView.vue",
@@ -328,10 +329,17 @@ formattedDates.forEach(date =>{
       let colorMap = chartService.ALL_DIFFERENT_PROJECT_COLORS()
       for (let i = 0; i < 4 ; i++){
         if (!chartService.allArrayElementsAreZero(checkArray[i].values)){
-          console.log(checkArray[i].values,"THese are the v aluse from checkarray")
+    //      console.log(checkArray[i].values,"THese are the v aluse from checkarray")
+       //  console.log("formattedCHeckArray is : ", formattedCheckArray[i])
+          let millisecToDUration = [];
+         formattedCheckArray[i].forEach(milliseconds =>{
+           millisecToDUration.push(moment.duration(milliseconds, 'milliseconds').asHours())
+         })
+          console.log("try to catch duration via moment js ", moment.duration(formattedCheckArray[i][1], 'milliseconds').asHours(), "values: ", formattedCheckArray[i][1])
           sets.push({
             label: checkArray[i].projectName,
-            data: formattedCheckArray[i],
+        //    data: formattedCheckArray[i],
+            data: millisecToDUration,
             backgroundColor: colorMap[i],
             borderColor: colorMap[i],
             borderWidth: 1

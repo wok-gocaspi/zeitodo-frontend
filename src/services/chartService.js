@@ -63,7 +63,8 @@ export default {
         return [dates,projects,durations]
     },
     getTimeDiff(dateA,dateB){
-        return this.convertMsToMinutes(new Date(dateB)-new Date(dateA))
+      //  return this.convertMsToMinutes(new Date(dateB)-new Date(dateA))
+        return new Date(dateB)- new Date(dateA)
     },
     convertMsToH(milliseconds) {
         let seconds = Math.floor(milliseconds / 1000);
