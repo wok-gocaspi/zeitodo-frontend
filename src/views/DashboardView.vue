@@ -327,6 +327,10 @@ formattedDates.forEach(date =>{
       let formattedCheckArray =[AudiData,ZeitodoData, ProjektXData,EmployeeRegisterData]
       let sets = []
       let colorMap = chartService.ALL_DIFFERENT_PROJECT_COLORS()
+      //
+      // get data offset method
+      //
+      console.log("This are the ofsetted data with offset 10", chartService.getDataOfset(dates,projects,durations,"2022-09-28T08:00:00Z"))
       for (let i = 0; i < 4 ; i++){
         if (!chartService.allArrayElementsAreZero(checkArray[i].values)){
     //      console.log(checkArray[i].values,"THese are the v aluse from checkarray")

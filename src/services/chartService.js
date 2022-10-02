@@ -84,6 +84,22 @@ export default {
         sum += entry
         })
         return sum == 0 ? true:false
+    },
+    getDataOfset(dates,projects,durations,ofset){
+     //   let now = Date.now()
+        let today = new Date()
+        let newDates =[]
+        let newProjects = []
+        let newDurations = []
+        console.log("Calculation of the ofset to the dates",today.setDate(today.getDate() - ofset))
+        dates.forEach((date,index) =>{
+            if(date > ofset){
+                newDates.push(date)
+                newProjects.push(projects[index])
+                newDurations.push(durations[index])
+            }
+        })
+        return [newDates,newProjects,newDurations]
     }
 
 }
