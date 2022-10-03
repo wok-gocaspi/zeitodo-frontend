@@ -27,7 +27,7 @@
 <v-btn
     @click="setDataOffsetBarChart()"
 >
-  set offset to yyyy:mm.dd
+  Betrachte nur die letzten 10 Tage
 </v-btn>
     <v-card
         elevation="12"
@@ -269,11 +269,17 @@ export default {
       return {projectName: projectChecker,dates: datesOfProject, values: dataToProject}
     },
     setDataOffsetBarChart(){
-      let offset = "2022-09-28T08:00:00Z"
+      let today = new Date()
+      today.setDate(today.getDate() - 10);
+      today.toISOString()
+      console.log("today is given back as ", today.toISOString())
+      console.log(this.barChartOffset)
+  //    let offset = "2022-09-28T08:00:00Z"
+      let offset = today.toISOString()
       this.barChartOffset = offset
       this.barChart.destroy()
       this.getAllEntries1(this.user.id)
-      console.log(this.barChartOffset)
+
     },
     async createBarRewriten(dates,projects,durations){
       const ctx = document.getElementById('barChart');
