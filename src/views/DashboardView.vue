@@ -23,7 +23,12 @@
          <h1><p align="center" >&#128337; {{this.total}} STD</p></h1>
       </v-card-text>
     </v-card>
-
+    <!-- test chooseble ofset for date data  -->
+<v-btn
+    @click="setDataOffsetBarChart()"
+>
+  set offset to yyyy:mm.dd
+</v-btn>
     <v-card
         elevation="12"
         class="margin-top"
@@ -118,7 +123,9 @@ export default {
     chart:{},
     busLoginData:[],
     total:0,
-    err:""
+    err:"",
+    barChartOffset:"",
+    barChart:{}
   }),
 
 
@@ -261,8 +268,22 @@ export default {
       }
       return {projectName: projectChecker,dates: datesOfProject, values: dataToProject}
     },
+    setDataOffsetBarChart(){
+      let offset = "2022-09-28T08:00:00Z"
+      this.barChartOffset = offset
+      this.barChart.destroy()
+      this.getAllEntries1(this.user.id)
+      console.log(this.barChartOffset)
+    },
     async createBarRewriten(dates,projects,durations){
       const ctx = document.getElementById('barChart');
+
+      // try to set the offset
+      if (this.barChartOffset != ""){
+        [dates,projects,durations] = chartService.getDataOfset(dates,projects,durations,this.barChartOffset)
+        console.log("after setting offset ",[dates,projects,durations])
+
+      }
 
       let formattedDates = []
       dates.forEach(d => {
@@ -319,6 +340,8 @@ formattedDates.forEach(date =>{
 
       })
 
+
+console.log("after the if block in create barchart",dates,projects,durations)
       let checkProjektX = this.dataSetToOneProject(dates,projects,durations, "ProjektX")
       let checkZeiToDo = this.dataSetToOneProject(dates,projects,durations, "ZeiToDo")
       let checkEmployeeRegister = this.dataSetToOneProject(dates,projects,durations, "Employee-Register")
@@ -351,7 +374,7 @@ formattedDates.forEach(date =>{
         }
       }
 
-      new Chart(ctx, {
+    let barChart=  new Chart(ctx, {
         type: 'bar',
         data: {
           labels: formattedDates,
@@ -366,6 +389,8 @@ formattedDates.forEach(date =>{
           }
         }
       })
+      this.barChart = barChart
+      barChart
     },
   },
 
