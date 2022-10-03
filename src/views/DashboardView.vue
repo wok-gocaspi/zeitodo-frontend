@@ -1,13 +1,33 @@
 <template>
   <v-container>
     <h1>Dashboard</h1>
-    <!--
-    <v-btn v-on:click="getCurrentUId()">Get user Id of Peter</v-btn>
-    <v-btn v-on:click="getUserObj(tempUserId)" >Get user Info</v-btn>
-    <v-btn v-on:click="getToken(testName,testPwd)">get Token of Peter</v-btn>
-    <v-btn v-on:click="getTokenServiceR()">get Token of Peter</v-btn>
-    <v-btn v-on:click="getComplete()">get complete</v-btn>
-    -->
+
+    <!-- start bar chart offset picker -->
+    <div class="text-center">
+      <v-menu offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+              color="primary"
+              dark
+              v-bind="attrs"
+              v-on="on"
+          >
+            Alle Daten
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-item
+              v-for="(item, index) in items"
+              :key="index"
+              @click="setDataOffsetBarChart(item.offsetValue)"
+          >
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </div>
+    <!-- end bar chart offset picker -->
+
     <v-card
         elevation="12"
         id="topCard"
@@ -23,12 +43,7 @@
          <h1><p align="center" >&#128337; {{this.total}} STD</p></h1>
       </v-card-text>
     </v-card>
-    <!-- test chooseble ofset for date data  -->
-<v-btn
-    @click="setDataOffsetBarChart()"
->
-  Betrachte nur die letzten 10 Tage
-</v-btn>
+
     <v-card
         elevation="12"
         class="margin-top"
@@ -125,7 +140,12 @@ export default {
     total:0,
     err:"",
     barChartOffset:"",
-    barChart:{}
+    barChart:{},
+    items: [
+      { title: 'Letzte 7 Tage', offsetValue: 7 },
+      { title: 'Letzte 28 Tage', offsetValue: 28 },
+      { title: 'Heute', offsetValue: 1 },
+    ],
   }),
 
 
@@ -268,9 +288,9 @@ export default {
       }
       return {projectName: projectChecker,dates: datesOfProject, values: dataToProject}
     },
-    setDataOffsetBarChart(){
+    setDataOffsetBarChart(offsetPicker){
       let today = new Date()
-      today.setDate(today.getDate() - 10);
+      today.setDate(today.getDate() - offsetPicker);
       today.toISOString()
       console.log("today is given back as ", today.toISOString())
       console.log(this.barChartOffset)
