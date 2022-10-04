@@ -17,7 +17,6 @@
                 <v-date-picker v-model="datePicker" range></v-date-picker>
               </v-col>
             </v-row>
-            {{sDate}}
               <v-col>
                 <v-select
                   :items="proposalTypes"
