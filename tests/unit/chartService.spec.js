@@ -147,3 +147,22 @@ describe("ChartService, convertMsToM", ()=>{
         expect(res2).toEqual(2)
     })
 })
+
+describe('ChartService, getDataOffset', function () {
+    it('should slice the arrays of dates, projects and efforts determined by the parameter offset', function () {
+        let fakeProjects = ["projectA", "projectB", "projectC"]
+        let fakeDates = ["2022-09-28T06:00:00Z", "2022-09-28T11:00:00Z", "2022-10-03T18:00:00Z",]
+        let fakeEfforts = [2,2,2]
+        let offset =  "2022-10-01T18:00:00Z"
+        let expectedProjects = ["projectC"]
+        let expectedDates = ["2022-10-03T18:00:00Z"]
+        let expectedEfforts = [2]
+
+        let [actualDates,actualProjects,actualEfforts] = chartService.getDataOfset(fakeDates,fakeProjects,fakeEfforts,offset)
+
+        expect(actualDates).toEqual(expectedDates)
+        expect(actualProjects).toEqual(expectedProjects)
+        expect(actualEfforts).toEqual(expectedEfforts)
+
+    });
+});

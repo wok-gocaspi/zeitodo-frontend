@@ -3,7 +3,8 @@
     <h1>Dashboard</h1>
 
     <!-- start bar chart offset picker -->
-    <div class="text-center">
+    <div class="text-center"
+    id="offsetPicker">
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
@@ -26,7 +27,8 @@
         </v-list>
       </v-menu>
     </div>
-    <!-- end bar chart offset picker -->
+    <!-- end chart offset picker -->
+
 
     <v-card
         elevation="12"
@@ -84,12 +86,8 @@
 
 <style>
 #myChart{
-
-  max-width: 300px !important;
-  max-height: 300px !important;
-
-
-
+  max-width: 600px !important;
+  max-height: 600px !important;
 }
 #barChart{
   /*
@@ -99,6 +97,11 @@
    */
 
 
+}
+
+#offsetPicker{
+  text-align: unset !important;
+  margin-bottom: 1rem;
 }
 .margin-top{
   margin-top: 1rem;
@@ -190,12 +193,20 @@ export default {
                 offsetEfforts.push(project.hourValue)
                 offsetProjects.push(project.projectname)
                 this.createDoughnut(offsetProjects,offsetEfforts,ctx)
-                return
+          //      return
               })
+             this.total = this.calculateTotalAgainstOffset(offsetEfforts)
             }
             await this.createDoughnut(projects,efforts,ctx)
 
           })
+    },
+    calculateTotalAgainstOffset(effortsArray){
+      let sum = 0;
+      effortsArray.forEach(e =>{
+        sum += e
+      })
+      return sum
     },
     getDateListAudi(dates,projects,durations){
       let AudiDates =[]

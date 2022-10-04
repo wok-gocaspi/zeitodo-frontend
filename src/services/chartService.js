@@ -63,7 +63,6 @@ export default {
         return [dates,projects,durations]
     },
     getTimeDiff(dateA,dateB){
-      //  return this.convertMsToMinutes(new Date(dateB)-new Date(dateA))
         return new Date(dateB)- new Date(dateA)
     },
     convertMsToH(milliseconds) {
@@ -86,7 +85,6 @@ export default {
         return sum == 0 ? true:false
     },
     getDataOfset(dates,projects,durations,ofset){
-     //   let now = Date.now()
         let today = new Date()
         let newDates =[]
         let newProjects = []
