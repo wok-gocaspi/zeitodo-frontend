@@ -19,7 +19,7 @@
           <v-list-item
               v-for="(item, index) in items"
               :key="index"
-              @click="setDataOffsetBarChart(item.offsetValue)"
+              @click="setDataOffsetBarChart(item.offsetValue),destroyDoughnut()"
           >
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item>
@@ -140,7 +140,9 @@ export default {
     total:0,
     err:"",
     barChartOffset:"",
+    helperDoughnutOffset:[],
     barChart:{},
+    doughnutChart:{},
     items: [
       { title: 'Letzte 7 Tage', offsetValue: 7 },
       { title: 'Letzte 28 Tage', offsetValue: 28 },
@@ -179,7 +181,20 @@ export default {
             let total = userService.getTotalTime(time)
             this.total = total
             const ctx = document.getElementById('myChart');
+
+           if(this.barChartOffset != ""){
+            this.doughnutChart.destroy()
+             let offsetProjects = []
+              let offsetEfforts =[]
+              this.helperDoughnutOffset.forEach(project =>{
+                offsetEfforts.push(project.hourValue)
+                offsetProjects.push(project.projectname)
+                this.createDoughnut(offsetProjects,offsetEfforts,ctx)
+                return
+              })
+            }
             await this.createDoughnut(projects,efforts,ctx)
+
           })
     },
     getDateListAudi(dates,projects,durations){
@@ -228,6 +243,19 @@ export default {
     },
       // chart generation methods. parameter ctx controls the canvas that gets used to plot the graph
     async createDoughnut(projects,efforts,ctx){
+      if(this.barChartOffset != ""){
+        this.doughnutChart.destroy()
+        let offsetProjects = []
+        let offsetEfforts =[]
+        this.helperDoughnutOffset.forEach(project => {
+          offsetEfforts.push(project.hourValue)
+          offsetProjects.push(project.projectname)
+        });
+        [projects,efforts] =[offsetProjects,offsetEfforts]
+        console.log("BarChartOffset is not EMPTY, offsetprojects, offset efforts are ", [offsetProjects,offsetEfforts])
+      }
+
+      console.log("this are the PROJECTS,EFFORTS of DOUGHNUT", projects,efforts)
       let colorMap = []
 
       for (let i = 0; i < projects.length;i++){
@@ -248,7 +276,7 @@ export default {
       projects.forEach(p =>{
         concatProjects.push("# Stunden in " + p)
       })
-      new Chart(ctx, {
+     let doughnutChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
           labels:  projects,
@@ -261,6 +289,8 @@ export default {
           }]
         }
       })
+      this.doughnutChart = doughnutChart
+      doughnutChart
     },
 
     // dataSet creates an Object to an given projectname (projectChecker) with all x (dates), y (duration of this date) values
@@ -288,7 +318,10 @@ export default {
       }
       return {projectName: projectChecker,dates: datesOfProject, values: dataToProject}
     },
-    setDataOffsetBarChart(offsetPicker){
+    destroyDoughnut(){
+      this.doughnutChart.destroy()
+    },
+    async setDataOffsetBarChart(offsetPicker){
       let today = new Date()
       today.setDate(today.getDate() - offsetPicker);
       today.toISOString()
@@ -298,7 +331,9 @@ export default {
       let offset = today.toISOString()
       this.barChartOffset = offset
       this.barChart.destroy()
-      this.getAllEntries1(this.user.id)
+      this.doughnutChart.destroy()
+     await this.getAllEntries1(this.user.id)
+      await this.getEffort1(this.user.id)
 
     },
     async createBarRewriten(dates,projects,durations){
@@ -399,6 +434,20 @@ console.log("after the if block in create barchart",dates,projects,durations)
           })
         }
       }
+
+   if(this.barChartOffset != ""){
+     let helperAllProfiles =[]
+     sets.forEach(s =>{
+       let helperSum = 0
+       s.data.forEach(entry =>{ helperSum += entry})
+       let helperProfilSnapshot = {projectname:s.label, hourValue:helperSum}
+       helperAllProfiles.push(helperProfilSnapshot)
+     })
+      this.helperDoughnutOffset = helperAllProfiles
+     console.log("This is my helper for the doughnut offset ", helperAllProfiles)
+   }
+
+
 
     let barChart=  new Chart(ctx, {
         type: 'bar',
