@@ -137,7 +137,7 @@ describe("UserService", () => {
             AUDI: 15,
             Mercedes:20
         }
-        const expected = 45;
+        const expected = "45:00";
 
         let data = userService.data()
 
