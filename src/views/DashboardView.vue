@@ -71,7 +71,7 @@
       <v-card-title
       id="botCard-title"
       >
-        Projekte in Minuten
+        Projekte in Stunden
       </v-card-title>
       <v-card-subtitle>
 
