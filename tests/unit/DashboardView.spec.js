@@ -41,7 +41,7 @@ describe("Proposal View", () => {
         expect(wrapper.get("#midCard-title").text()).toEqual(expected)
     })
     it("botCard renders correct title", ()=>{
-        let expected = "Projekte in Minuten"
+        let expected = "Projekte in Stunden"
         expect(wrapper.get("#botCard-title").text()).toEqual(expected)
     })
     it('should return the sum of an array of effeorts. the value is in hours', function () {

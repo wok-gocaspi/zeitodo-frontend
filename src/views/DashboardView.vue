@@ -12,6 +12,7 @@
               dark
               v-bind="attrs"
               v-on="on"
+              id="offsetButton"
           >
             Alle Daten
           </v-btn>
@@ -20,7 +21,7 @@
           <v-list-item
               v-for="(item, index) in items"
               :key="index"
-              @click="setDataOffsetBarChart(item.offsetValue),destroyDoughnut()"
+              @click="setDataOffsetBarChart(item.offsetValue),destroyDoughnut(),  changeOffsetButtonText(item.title)"
           >
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item>
@@ -150,6 +151,7 @@ export default {
       { title: 'Letzte 7 Tage', offsetValue: 7 },
       { title: 'Letzte 28 Tage', offsetValue: 28 },
       { title: 'Heute', offsetValue: 1 },
+      { title: 'Alle Daten', offsetValue: 100000 },
     ],
   }),
 
@@ -162,12 +164,13 @@ export default {
       await userService.getAllTimeEntries2(userId)
           .then(resp => {
             let [dates,projects,durations] =  chartService.extractDatesProjectDuration(resp.data)
-            console.log("dates,projects,durations",[dates,projects,durations])
             this.createBarRewriten(dates,projects,durations)
           })
           .catch(err => console.log(err))
     },
-
+      changeOffsetButtonText(offsetDate){
+       document.getElementById('offsetButton').innerHTML = offsetDate
+      },
 
     async getEffort1(userId){
       await userService.getProjectEffort1(userId)
@@ -180,7 +183,6 @@ export default {
             }
 
             let efforts = Object.values(time)
-            console.log("This are the time values of getEffort: ", efforts)
             let total = userService.getTotalTime(time)
             this.total = total
             const ctx = document.getElementById('myChart');
@@ -263,10 +265,7 @@ export default {
           offsetProjects.push(project.projectname)
         });
         [projects,efforts] =[offsetProjects,offsetEfforts]
-        console.log("BarChartOffset is not EMPTY, offsetprojects, offset efforts are ", [offsetProjects,offsetEfforts])
       }
-
-      console.log("this are the PROJECTS,EFFORTS of DOUGHNUT", projects,efforts)
       let colorMap = []
 
       for (let i = 0; i < projects.length;i++){
@@ -335,10 +334,6 @@ export default {
     async setDataOffsetBarChart(offsetPicker){
       let today = new Date()
       today.setDate(today.getDate() - offsetPicker);
-      today.toISOString()
-      console.log("today is given back as ", today.toISOString())
-      console.log(this.barChartOffset)
-  //    let offset = "2022-09-28T08:00:00Z"
       let offset = today.toISOString()
       this.barChartOffset = offset
       this.barChart.destroy()
@@ -353,8 +348,6 @@ export default {
       // try to set the offset
       if (this.barChartOffset != ""){
         [dates,projects,durations] = chartService.getDataOfset(dates,projects,durations,this.barChartOffset)
-        console.log("after setting offset ",[dates,projects,durations])
-
       }
 
       let formattedDates = []
@@ -409,11 +402,8 @@ formattedDates.forEach(date =>{
           }
         }
         ProjektXData.push(sum)
-
       })
 
-
-console.log("after the if block in create barchart",dates,projects,durations)
       let checkProjektX = this.dataSetToOneProject(dates,projects,durations, "ProjektX")
       let checkZeiToDo = this.dataSetToOneProject(dates,projects,durations, "ZeiToDo")
       let checkEmployeeRegister = this.dataSetToOneProject(dates,projects,durations, "Employee-Register")
@@ -425,19 +415,14 @@ console.log("after the if block in create barchart",dates,projects,durations)
       //
       // get data offset method
       //
-      console.log("This are the ofsetted data with offset 10", chartService.getDataOfset(dates,projects,durations,"2022-09-28T08:00:00Z"))
       for (let i = 0; i < 4 ; i++){
         if (!chartService.allArrayElementsAreZero(checkArray[i].values)){
-    //      console.log(checkArray[i].values,"THese are the v aluse from checkarray")
-       //  console.log("formattedCHeckArray is : ", formattedCheckArray[i])
           let millisecToDUration = [];
          formattedCheckArray[i].forEach(milliseconds =>{
            millisecToDUration.push(moment.duration(milliseconds, 'milliseconds').asHours())
          })
-          console.log("try to catch duration via moment js ", moment.duration(formattedCheckArray[i][1], 'milliseconds').asHours(), "values: ", formattedCheckArray[i][1])
           sets.push({
             label: checkArray[i].projectName,
-        //    data: formattedCheckArray[i],
             data: millisecToDUration,
             backgroundColor: colorMap[i],
             borderColor: colorMap[i],
@@ -455,7 +440,6 @@ console.log("after the if block in create barchart",dates,projects,durations)
        helperAllProfiles.push(helperProfilSnapshot)
      })
       this.helperDoughnutOffset = helperAllProfiles
-     console.log("This is my helper for the doughnut offset ", helperAllProfiles)
    }
 
 
