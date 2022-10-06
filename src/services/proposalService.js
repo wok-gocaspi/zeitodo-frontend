@@ -106,5 +106,8 @@ export default {
     updateProposalStatus(proposal, status){
         proposal.status = status
         return axios.patch("/proposals?date=" + proposal.startDate, proposal)
+    },
+    updateProposal(proposal){
+        return axios.patch("/proposals?date=" + proposal.startDate, proposal)
     }
 }

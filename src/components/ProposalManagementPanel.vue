@@ -104,6 +104,7 @@
               </v-list-item>
               <v-list-item
                   link
+                  @click="updateProposal(proposal)"
               >
                 <v-list-item-avatar>
                   <v-icon>
@@ -120,6 +121,7 @@
     </div>
   </v-list>
   <DeleteProposalDialog @close="closeDeleteProposal()" v-if="deleteDialog" v-bind:proposal="selectedProposal" ></DeleteProposalDialog>
+  <ProposalUpdate @close="closeUpdateProposal()" v-if="updateDialog" v-bind:init-proposal="selectedProposal"></ProposalUpdate>
   <ProposalStatusDialog @close="closeStatusProposal()" v-if="statusDialog" v-bind:proposal="selectedProposal" v-bind:action="selectedAction"></ProposalStatusDialog>
 </v-container>
 
@@ -129,9 +131,10 @@
 import proposalService from "@/services/proposalService";
 import DeleteProposalDialog from "@/components/DeleteProposalDialog";
 import ProposalStatusDialog from "@/components/ProposalStatusDialog";
+import ProposalUpdate from "@/components/ProposalUpdate";
 export default {
   name: "ProposalManagementPanel.vue",
-  components: {DeleteProposalDialog, ProposalStatusDialog},
+  components: {DeleteProposalDialog, ProposalStatusDialog, ProposalUpdate},
   data(){
     return {
       proposalKinds: ["Ausstehend", "Genehmigt", "Abgelehnt", "Alle"],
@@ -148,6 +151,7 @@ export default {
       selectedAction: "",
       deleteDialog: false,
       statusDialog: false,
+      updateDialog: false,
       sicknessIndex: "",
       vacationIndex: "",
       proposalListTypes: [
@@ -185,6 +189,13 @@ export default {
     },
     closeStatusProposal(){
       this.statusDialog = false
+    },
+    updateProposal(proposal){
+      this.selectedProposal = proposal
+      this.updateDialog = true
+    },
+    closeUpdateProposal(){
+      this.updateDialog = false
     }
 
   }

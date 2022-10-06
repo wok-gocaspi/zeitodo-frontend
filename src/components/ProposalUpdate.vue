@@ -7,7 +7,7 @@
     >
       <v-card>
         <v-card-title>
-          <span class="text-h5">Neuer Antrag</span>
+          <span class="text-h5">Antrag Bearbeiten</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -17,15 +17,15 @@
                 <v-date-picker v-model="datePicker" range></v-date-picker>
               </v-col>
             </v-row>
-              <v-col>
-                <v-select
+            <v-col>
+              <v-select
                   :items="proposalTypes"
                   label="Type"
                   v-model="proposal.type"
-                  >
+              >
 
-                </v-select>
-              </v-col>
+              </v-select>
+            </v-col>
           </v-container>
           <small>*indicates required field</small>
         </v-card-text>
@@ -62,18 +62,23 @@ export default {
     const {user} = storeToRefs(userStore)
     return {user}
   },
+  props: {
+    InitProposal: Object
+  },
+
   data(){
     return {
       dialog: true,
-      proposal: {
-        startDate: "",
-        endDate: "",
-        type: "",
-        userid: this.user.id
-      },
       datePicker: [],
-      proposalTypes: ["sickness", "vacation"]
+      proposalTypes: ["sickness", "vacation"],
+      proposal: ""
     }
+  },
+  created() {
+    this.datePicker[1] = this.InitProposal.startDate
+    this.datePicker[0] = this.InitProposal.endDate
+    this.proposal.type = this.InitProposal.type
+    this.proposal.status = this.InitProposal.status
   },
 
   methods: {
@@ -81,24 +86,24 @@ export default {
       this.$emit('close')
       this.dialog = false
     },
-    submitData(){
-      this.proposal.startDate = this.sDate
-      this.proposal.endDate = this.eDate
-      ProposalService.createProposal(JSON.stringify(this.proposal))
+    submitData() {
+      this.proposal.startDate = this.datePicker[1]
+      this.proposal.endDate = this.datePicker[0]
+      ProposalService.updateProposal(this.proposal)
           .then(() => {
-            this.$parent.$emit("setsnackbar", {text: "Proposal was created!", color: "green", timeout: 5000})
+            this.$parent.$parent.$emit("setsnackbar", {text: "Antrag erfolgreich geändert!", color: "green", timeout: 5000})
           })
           .catch(err => {
-            this.$parent.$emit("setsnackbar", {text: err.response.data.errorMessage, color: "red", timeout: 5000})
+            this.$parent.$parent.$emit("setsnackbar", {text: err.response.date.errorMessage, color: "green", timeout: 5000})
           })
     }
   },
   computed: {
     sDate(){
-      return this.datePicker[1]
+      return this.datePicker[0]
     },
     eDate(){
-      return this.datePicker[0]
+      return this.datePicker[1]
     }
   }
 }
