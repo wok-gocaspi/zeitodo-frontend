@@ -39,12 +39,13 @@
       <template v-slot:activator>
         <v-list-item-title>{{user.username}}</v-list-item-title>
       </template>
-      <div v-if="selectedFilter.selectedType === 'Alle'">
+      <div
+          v-for="(ptypes, index) in proposalListTypes"
+          v-bind:key="index">
         <v-list-group
             sub-group
             no-action
-            v-for="(ptypes, index) in proposalListTypes"
-            v-bind:key="index"
+            v-if="(ptypes.name === selectedFilter.selectedType || selectedFilter.selectedType === 'Alle') && user[ptypes.proposal].length !== 0"
         >
           <template v-slot:activator>
             <v-list-item-content>
@@ -52,7 +53,7 @@
             </v-list-item-content>
           </template>
           <div
-              v-for="proposal in user.proposals"
+              v-for="proposal in user[ptypes.proposal]"
               v-bind:key="proposal.startDate"
           >
             <v-list-group
@@ -70,6 +71,7 @@
               </template>
               <v-list-item
               link
+              @click="statusProposal(proposal, 'approved')"
               >
                 <v-list-item-avatar>
                   <v-icon>
@@ -80,6 +82,7 @@
               </v-list-item>
               <v-list-item
                   link
+                  @click="statusProposal(proposal, 'denied')"
               >
                 <v-list-item-avatar>
                   <v-icon>
@@ -90,6 +93,7 @@
               </v-list-item>
               <v-list-item
                   link
+                  @click="deleteProposal(proposal)"
               >
                 <v-list-item-avatar>
                   <v-icon>
@@ -115,14 +119,19 @@
     </v-list-group>
     </div>
   </v-list>
+  <DeleteProposalDialog @close="closeDeleteProposal()" v-if="deleteDialog" v-bind:proposal="selectedProposal" ></DeleteProposalDialog>
+  <ProposalStatusDialog @close="closeStatusProposal()" v-if="statusDialog" v-bind:proposal="selectedProposal" v-bind:action="selectedAction"></ProposalStatusDialog>
 </v-container>
+
 </template>
 
 <script>
 import proposalService from "@/services/proposalService";
-
+import DeleteProposalDialog from "@/components/DeleteProposalDialog";
+import ProposalStatusDialog from "@/components/ProposalStatusDialog";
 export default {
   name: "ProposalManagementPanel.vue",
+  components: {DeleteProposalDialog, ProposalStatusDialog},
   data(){
     return {
       proposalKinds: ["Ausstehend", "Genehmigt", "Abgelehnt", "Alle"],
@@ -135,11 +144,15 @@ export default {
         searchedUser: ""
       },
       proposals: "",
+      selectedProposal: "",
+      selectedAction: "",
+      deleteDialog: false,
+      statusDialog: false,
       sicknessIndex: "",
       vacationIndex: "",
       proposalListTypes: [
-        {type: "sickness", name: "Krankheit"},
-        {type: "vacation", name: "Urlaub"}
+        {type: "sickness", name: "Krank", proposal: "sicknessProposals"},
+        {type: "vacation", name: "Urlaub", proposal: "vacationProposals"}
       ]
     }
   },
@@ -150,14 +163,30 @@ export default {
     getProposals(){
       proposalService.getAllProposals(JSON.stringify(this.selectedFilter))
           .then(res => {
-            console.log(res.data)
+            console.log(JSON.stringify(res.data))
             this.proposals = res.data
           })
           .catch(err => {
             console.log(err)
             this.proposals = []
           })
+    },
+    deleteProposal(proposal){
+      this.selectedProposal = proposal
+      this.deleteDialog = true
+    },
+    closeDeleteProposal(){
+      this.deleteDialog = false
+    },
+    statusProposal(proposal, action){
+      this.selectedProposal = proposal
+      this.selectedAction = action
+      this.statusDialog = true
+    },
+    closeStatusProposal(){
+      this.statusDialog = false
     }
+
   }
 
 }

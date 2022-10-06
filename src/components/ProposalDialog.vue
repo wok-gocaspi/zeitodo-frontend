@@ -7,13 +7,13 @@
     >
       <v-card>
         <v-card-title>
-          <span class="text-h5">User Profile</span>
+          <span class="text-h5">Neuer Antrag</span>
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
               <v-col>
-                <p>Select you're Timespan</p>
+                <p>Wähle die Zeitspanne</p>
                 <v-date-picker v-model="datePicker" range></v-date-picker>
               </v-col>
             </v-row>

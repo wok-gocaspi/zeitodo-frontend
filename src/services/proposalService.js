@@ -70,7 +70,6 @@ export default {
     },
     getAllProposals(filter){
             let queryFilter = JSON.parse(filter)
-            console.log(queryFilter.selectedOrder)
             let typeDict = {
                 "Alle": "all",
                 "Urlaub": "vacation",
@@ -97,13 +96,15 @@ export default {
             if (queryFilter.selectedOrder != ""){
                 params.sort = sortDict[queryFilter.selectedOrder]
             }
-            console.log(params)
             return axios.get("/proposals", {
                 params: params,
                 paramsSerializer: params => {
-                    console.log(qs.stringify(params))
                     return qs.stringify(params)
                 }
             })
+    },
+    updateProposalStatus(proposal, status){
+        proposal.status = status
+        return axios.patch("/proposals?date=" + proposal.startDate, proposal)
     }
 }

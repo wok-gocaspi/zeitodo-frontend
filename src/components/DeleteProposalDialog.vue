@@ -7,9 +7,9 @@
     >
       <v-card>
         <v-card-title class="text-h5" id="usr-title">
-          Delete Proposal
+          Antrag löschen
         </v-card-title>
-        <v-card-text id="usr-text">Are you sure to delete Proposal {{proposal.startDate}} ?</v-card-text>
+        <v-card-text id="usr-text">Sind sie sicher den Antrag vom {{proposal.startDate}} zu löschen?</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
@@ -18,7 +18,7 @@
               @click="disableDialog()"
               id="abort-btn"
           >
-            Abort
+            Abbrechen
           </v-btn>
           <v-btn
               color="red darken-1"
@@ -26,7 +26,7 @@
               @click="saveDialog()"
               id="delete-btn"
           >
-            Delete
+            Bestätigen
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -55,7 +55,7 @@ export default {
       console.log(JSON.stringify(this.proposal))
       await ProposalService.deleteProposal(JSON.stringify(this.proposal))
           .then(() => {
-            this.$parent.$parent.$emit("setsnackbar",{text: "Successfully Deleted Proposal!", timeout: 5000, color: "green"})
+            this.$parent.$parent.$emit("setsnackbar",{text: "Antrag erfolgreich gelöscht!", timeout: 5000, color: "green"})
             this.disableDialog()
           })
           .catch((err) => {
