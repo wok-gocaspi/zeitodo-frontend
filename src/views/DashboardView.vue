@@ -4,7 +4,7 @@
 
     <!-- start bar chart offset picker -->
     <div class="text-center"
-    id="offsetPicker">
+         id="offsetPicker">
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
@@ -43,7 +43,7 @@
       </v-card-title>
       <v-card-text>
         <h1><p align="center">   Gesamte Arbeitszeit </p></h1>
-         <h1><p align="center" >&#128337; {{this.total}} STD</p></h1>
+        <h1><p align="center" >&#128337; {{this.total}} STD</p></h1>
       </v-card-text>
     </v-card>
 
@@ -53,7 +53,7 @@
         id="midCard"
     >
       <v-card-title
-      id="midCard-title"
+          id="midCard-title"
       >
         Leistungen in Stunden
       </v-card-title>
@@ -70,14 +70,14 @@
         id="botCard"
     >
       <v-card-title
-      id="botCard-title"
+          id="botCard-title"
       >
         Projekte in Stunden
       </v-card-title>
       <v-card-subtitle>
 
       </v-card-subtitle>
-        <p align="center"> <canvas id="barChart" ></canvas></p>
+      <p align="center"> <canvas id="barChart" ></canvas></p>
 
     </v-card>
 
@@ -157,9 +157,9 @@ export default {
 
 
   methods:{
-  // Given a valid user id , all timeentries of that user gets fetched for the zeitodo-api.
-  // The data gets destructured in [dates,projects,durations], whereas each is an array containing (date of the timeentry, project of that timeentry, duration of that entry)
-  // If the data is fetched successfully the createBar methods fills the bar chart of the component given the fetched data
+    // Given a valid user id , all timeentries of that user gets fetched for the zeitodo-api.
+    // The data gets destructured in [dates,projects,durations], whereas each is an array containing (date of the timeentry, project of that timeentry, duration of that entry)
+    // If the data is fetched successfully the createBar methods fills the bar chart of the component given the fetched data
     async getAllEntries1(userId){
       await userService.getAllTimeEntries2(userId)
           .then(resp => {
@@ -168,9 +168,9 @@ export default {
           })
           .catch(err => console.log(err))
     },
-      changeOffsetButtonText(offsetDate){
-       document.getElementById('offsetButton').innerHTML = offsetDate
-      },
+    changeOffsetButtonText(offsetDate){
+      document.getElementById('offsetButton').innerHTML = offsetDate
+    },
 
     async getEffort1(userId){
       await userService.getProjectEffort1(userId)
@@ -187,17 +187,17 @@ export default {
             this.total = total
             const ctx = document.getElementById('myChart');
 
-           if(this.barChartOffset != ""){
-            this.doughnutChart.destroy()
-             let offsetProjects = []
+            if(this.barChartOffset != ""){
+              this.doughnutChart.destroy()
+              let offsetProjects = []
               let offsetEfforts =[]
               this.helperDoughnutOffset.forEach(project =>{
                 offsetEfforts.push(project.hourValue)
                 offsetProjects.push(project.projectname)
                 this.createDoughnut(offsetProjects,offsetEfforts,ctx)
-          //      return
+                //      return
               })
-             this.total = this.calculateTotalAgainstOffset(offsetEfforts)
+              this.total = this.calculateTotalAgainstOffset(offsetEfforts)
             }
             await this.createDoughnut(projects,efforts,ctx)
 
@@ -254,7 +254,7 @@ export default {
       }
       return [AudiDates,AudiValues]
     },
-      // chart generation methods. parameter ctx controls the canvas that gets used to plot the graph
+    // chart generation methods. parameter ctx controls the canvas that gets used to plot the graph
     async createDoughnut(projects,efforts,ctx){
       if(this.barChartOffset != ""){
         this.doughnutChart.destroy()
@@ -286,7 +286,7 @@ export default {
       projects.forEach(p =>{
         concatProjects.push("# Stunden in " + p)
       })
-     let doughnutChart = new Chart(ctx, {
+      let doughnutChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
           labels:  projects,
@@ -313,7 +313,7 @@ export default {
           dataToProject.push(durations[i])
           datesOfProject.push(dates[i])
         }
-       else if ( dates[i+1] && projects[i+1] === projectChecker && dates[i+1].split("T")[0] === dates[i].split("T")[0] && !(projects[i] === projectChecker ) ){
+        else if ( dates[i+1] && projects[i+1] === projectChecker && dates[i+1].split("T")[0] === dates[i].split("T")[0] && !(projects[i] === projectChecker ) ){
           dataToProject.push(durations[i+1])
           datesOfProject.push(dates[i])
         }
@@ -338,7 +338,7 @@ export default {
       this.barChartOffset = offset
       this.barChart.destroy()
       this.doughnutChart.destroy()
-     await this.getAllEntries1(this.user.id)
+      await this.getAllEntries1(this.user.id)
       await this.getEffort1(this.user.id)
 
     },
@@ -358,15 +358,15 @@ export default {
 
       let Audi = this.getDateListAudi(dates,projects,durations)
       let  AudiData =[]
-formattedDates.forEach(date =>{
-  let sum = 0
-  for (let i = 0; i< Audi[0].length; i++){
-    if (date === Audi[0][i].split("T")[0]){
-      sum += Audi[1][i]
-    }
-  }
-  AudiData.push(sum)
-})
+      formattedDates.forEach(date =>{
+        let sum = 0
+        for (let i = 0; i< Audi[0].length; i++){
+          if (date === Audi[0][i].split("T")[0]){
+            sum += Audi[1][i]
+          }
+        }
+        AudiData.push(sum)
+      })
 
       let ZeiToDo = this.getDateListZeiToDo(dates,projects,durations)
       let  ZeitodoData =[]
@@ -418,9 +418,9 @@ formattedDates.forEach(date =>{
       for (let i = 0; i < 4 ; i++){
         if (!chartService.allArrayElementsAreZero(checkArray[i].values)){
           let millisecToDUration = [];
-         formattedCheckArray[i].forEach(milliseconds =>{
-           millisecToDUration.push(moment.duration(milliseconds, 'milliseconds').asHours())
-         })
+          formattedCheckArray[i].forEach(milliseconds =>{
+            millisecToDUration.push(moment.duration(milliseconds, 'milliseconds').asHours())
+          })
           sets.push({
             label: checkArray[i].projectName,
             data: millisecToDUration,
@@ -431,20 +431,20 @@ formattedDates.forEach(date =>{
         }
       }
 
-   if(this.barChartOffset != ""){
-     let helperAllProfiles =[]
-     sets.forEach(s =>{
-       let helperSum = 0
-       s.data.forEach(entry =>{ helperSum += entry})
-       let helperProfilSnapshot = {projectname:s.label, hourValue:helperSum}
-       helperAllProfiles.push(helperProfilSnapshot)
-     })
-      this.helperDoughnutOffset = helperAllProfiles
-   }
+      if(this.barChartOffset != ""){
+        let helperAllProfiles =[]
+        sets.forEach(s =>{
+          let helperSum = 0
+          s.data.forEach(entry =>{ helperSum += entry})
+          let helperProfilSnapshot = {projectname:s.label, hourValue:helperSum}
+          helperAllProfiles.push(helperProfilSnapshot)
+        })
+        this.helperDoughnutOffset = helperAllProfiles
+      }
 
 
 
-    let barChart=  new Chart(ctx, {
+      let barChart=  new Chart(ctx, {
         type: 'bar',
         data: {
           labels: formattedDates,

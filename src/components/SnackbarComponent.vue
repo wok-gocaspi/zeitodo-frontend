@@ -1,8 +1,11 @@
 <template>
+  <nav>
+
   <v-snackbar
       v-model="snackbar"
       :timeout="snackbardata.timeout"
       class="main-snackbar"
+
   >
     {{ snackbardata.text }}
 
@@ -18,6 +21,7 @@
       </v-btn>
     </template>
   </v-snackbar>
+  </nav>
 </template>
 
 <script>

@@ -6,14 +6,14 @@ describe("GetRndColor", () => {
     it("random_rgba returns a string containing a randomized rgba code", async () => {
 
         let res = chartService.random_rgba()
-        console.log(res)
+
         expect(res).toBeTruthy()
     });
 
     it("getRandomColor returns a random but valid rgba color code for each project in a given array of project-titles", async () => {
         let input = ["project1","project2"]
         let res = chartService.getRandomColor(input)
-        console.log(res)
+
         expect(res.length).toEqual(input.length)
         expect(res).toBeTruthy()
     });
@@ -47,7 +47,7 @@ describe("GetRndColor", () => {
 
 
         let res = chartService.extractDatesProjectDuration(fakeTimeEntires)
-        console.log(res)
+
         expect(res).toBeTruthy()
       expect(res).toStrictEqual(expectedSort)
     });
@@ -57,7 +57,7 @@ describe("GetRndColor", () => {
         let fakeDateB = "2052-08-03T10:00:00.801Z"
    //     let expected = 2
         let res = chartService.getTimeDiff(fakeDateA,fakeDateB)
-        console.log(res)
+
         expect(res).toBeTruthy()
    //     expect(res).toEqual(expected)
     });
@@ -70,7 +70,7 @@ describe("ChartService, getTimeDiff", ()=>{
         let fakeDateB = "2052-08-03T10:00:00.801Z"
    //     let expected = 1
         let res = chartService.getTimeDiff(fakeDateA,fakeDateB)
-        console.log(res)
+
         expect(res).toBeTruthy()
  //       expect(res).toEqual(expected)
     });

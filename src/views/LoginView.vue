@@ -45,24 +45,25 @@
 
 <script>
 import {useUserStore} from "@/stores/user";
+import {storeToRefs} from "pinia";
 
 export default {
   name: "LoginView.vue",
   setup(){
     const userStore = useUserStore()
-    return {userStore}
+    const {error} = storeToRefs(userStore)
+    return {userStore, error}
   },
   data: () => ({
     password: "",
     username:"",
     response:"",
-    error:"",
   }),
   methods:{
     async Login(){
       await this.userStore.loginUser(this.username, this.password)
       if(this.userStore.isError){
-        this.$emit("setsnackbar", {text: "invalid credentials", color: "red", timeout: 5000})
+        this.$emit("setsnackbar", {text: this.error.response.data.errorMessage, color: "red", timeout: 5000})
       }
     },
   }

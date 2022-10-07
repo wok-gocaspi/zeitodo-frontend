@@ -1,6 +1,6 @@
 <template>
  <v-container>
-   <h1>UserManagement</h1>
+   <h1>User Management</h1>
    <v-list
        subheader
        two-line

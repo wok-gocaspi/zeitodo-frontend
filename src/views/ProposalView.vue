@@ -14,9 +14,29 @@
       </v-btn>
     </v-container>
     <v-container>
+      <v-card class="card-padding">
+        <v-card-title>Legende</v-card-title>
+        <v-card-text>
 
-      <v-card>
-        <v-card-title>My Proposals</v-card-title>
+          <v-list>
+            <v-list-item v-bind:key="index" v-for="(desc, index) in description">
+              <v-list-item-avatar>
+                <v-icon>
+                  {{desc.icon}}
+                </v-icon>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>{{desc.text}}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-card-text>
+      </v-card>
+
+      <v-card class="card-padding">
+
+        <v-card-title>Meine Anträge</v-card-title>
+
         <v-card-text>
           <v-list >
             <v-list-item
@@ -25,16 +45,19 @@
                 class="item-list"
             >
               <v-list-item-avatar>
-                <v-icon id="proposal-approved-true" v-if="proposal.approved === true">
+                <v-icon id="proposal-approved-true" v-if="proposal.status === 'approved'">
                   mdi-check
                 </v-icon>
-                <v-icon id="proposal-approved-false" v-else-if="proposal.approved === false">
+                <v-icon id="proposal-approved-false" v-else-if="proposal.status === 'pending'">
                   mdi-clock
+                </v-icon>
+                <v-icon id="proposal-approved-false" v-else-if="proposal.status === 'denied'">
+                  mdi-window-close
                 </v-icon>
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title id="proposal-title" v-text="proposal.startDate + ' --- ' + proposal.endDate "></v-list-item-title>
-                <v-list-item-subtitle id="proposal-subtitle" v-text="proposal.type"></v-list-item-subtitle>
+                <v-list-item-subtitle id="proposal-subtitle" v-text="typeDict[proposal.type]"></v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-action>
                 <v-row>
@@ -44,7 +67,7 @@
                         <v-icon>mdi-close</v-icon>
                       </v-btn>
                     </template>
-                    <span>Close Proposal</span>
+                    <span>Antrag zurückziehen</span>
                   </v-tooltip>
 
                 </v-row>
@@ -82,7 +105,16 @@ export default {
       proposals: "",
       proposalDialog: false,
       deleteProposalDialog: false,
-      selectedProposal: ""
+      selectedProposal: "",
+      typeDict: {
+        "vacation": "Urlaub",
+        "sickness": "Krank",
+      },
+      description: [
+        {icon: "mdi-check", text: "Angenommen"},
+        {icon: "mdi-window-close", text: "Abgelehnt"},
+        {icon: "mdi-clock", text: "Ausstehend"}
+      ]
     }
   },
   created(){
@@ -116,5 +148,7 @@ export default {
 </script>
 
 <style scoped>
-
+.card-padding{
+  margin-bottom: 1em;
+}
 </style>
