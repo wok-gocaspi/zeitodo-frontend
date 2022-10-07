@@ -49,7 +49,7 @@
         <v-list-group
             sub-group
             no-action
-            v-if="(ptypes.name === selectedFilter.selectedType || selectedFilter.selectedType === 'Alle') && user[ptypes.proposal].length !== 0"
+            v-if="(ptypes.name === selectedFilter.selectedType || selectedFilter.selectedType === 'Alle') && user[ptypes.proposal] !== null"
         >
           <template v-slot:activator>
             <v-list-item-content>
