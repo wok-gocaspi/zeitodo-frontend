@@ -89,19 +89,19 @@ export default {
                 "Absteigend": "desc",
                 "Aufsteigend": "asce"
             }
-            let params = {}
+            let parameter = {}
 
             if (queryFilter.selectedType != ("" || "Alle")){
-                params.type = typeDict[queryFilter.selectedType]
+                parameter.type = typeDict[queryFilter.selectedType]
             }
             if (queryFilter.selectedStatus != ("" || "Alle")){
-                params.status = statusDict[queryFilter.selectedStatus]
+                parameter.status = statusDict[queryFilter.selectedStatus]
             }
             if (queryFilter.selectedOrder != ""){
-                params.sort = sortDict[queryFilter.selectedOrder]
+                parameter.sort = sortDict[queryFilter.selectedOrder]
             }
             return axios.get("/proposals", {
-                params: params,
+                params: parameter,
                 paramsSerializer: params => {
                     return qs.stringify(params)
                 }
