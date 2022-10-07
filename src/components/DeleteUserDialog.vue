@@ -59,8 +59,8 @@ export default {
     },
     async deleteUser(userid){
       await userService.deleteUser(userid)
-          .then(res => {
-            console.log(res.data)
+          .then(() => {
+
               this.$parent.$parent.$emit("setsnackbar",{text: "Successfully Deleted User!", timeout: 5000, color: "green"})
           })
           .catch(err => {

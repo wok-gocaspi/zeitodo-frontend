@@ -11,9 +11,7 @@ export default {
                  timeentry.userId = res.data.id
 
              })
-             .catch(err => {
-                 console.log(err)
-             })
+
          return axios.post("/timeentry/createtime",JSON.stringify(timeentry))
 
 
@@ -26,9 +24,7 @@ export default {
                 userId = res.data.id
 
             })
-            .catch(err => {
-                console.log(err)
-            })
+
         return axios.get("/timeentry/gettime/" + userId)
 
     },
@@ -46,9 +42,7 @@ export default {
                 timeentry.userId = res.data.id
 
             })
-            .catch(err => {
-                console.log(err)
-            })
+
         return axios.put("/timeentry/update/"+timeentry.userId,JSON.stringify(timeentry))
 
 
