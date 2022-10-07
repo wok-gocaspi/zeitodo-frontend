@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h1>Dashboard</h1>
+
     <!--
     <v-btn v-on:click="getCurrentUId()">Get user Id of Peter</v-btn>
     <v-btn v-on:click="getUserObj(tempUserId)" >Get user Info</v-btn>
@@ -13,14 +13,14 @@
         id="topCard"
     >
       <v-card-title v-if="userStore.isLoggedIn">
-        Moin! {{user.username}}
+
       </v-card-title>
       <v-card-title v-if="!userStore.isLoggedIn">
         Bitte logge dich ein!
       </v-card-title>
       <v-card-text>
         <h1><p align="center">   Gesamte Arbeitszeit </p></h1>
-         <h1><p align="center" >&#128337; {{this.total}} STD</p></h1>
+        <h1><p align="center" >&#128337; {{this.total}} STD</p></h1>
       </v-card-text>
     </v-card>
 
@@ -52,7 +52,7 @@
         Das Diagramm zeigt die Tage an denen ein Zeiteintrag geleistet wurde gegenübergestellt die Anzahl an eingetragenen Stunden
         an diesem Eintrag. Alle Projekte mit selben Projekttitel sind gleich coloriert.
       </v-card-subtitle>
-        <p align="center"> <canvas id="barChart" ></canvas></p>
+      <p align="center"> <canvas id="barChart" ></canvas></p>
 
     </v-card>
 
@@ -124,17 +124,17 @@ export default {
 
   methods:{
 
-    async getAllEntries1(userId){
+    async getAllEntries1(userId) {
       await userService.getAllTimeEntries2(userId)
           .then(resp => {
-          let  entries = resp.data
-            console.log(entries, "new getAllEntries")
-            let [dates,projects,durations] =  chartService.extractDatesProjectDuration(entries)
-            console.log([dates,projects,durations ])
-            this.createBar(dates,projects,durations)
+            let entries = resp.data
+
+            let [dates, projects, durations] = chartService.extractDatesProjectDuration(entries)
+
+            this.createBar(dates, projects, durations)
           })
-          .catch(err => console.log(err))
     },
+
 
     async getEffort1(userId){
       await userService.getProjectEffort1(userId)
@@ -172,7 +172,7 @@ export default {
      */
 
 
-      // chart generation methods. parameter ctx controls the canvas that gets used to plot the graph
+
     async createDoughnut(projects,efforts,ctx){
       let colors = chartService.getRandomColor(projects)
       new Chart(ctx, {
@@ -191,7 +191,7 @@ export default {
     },
     async createBar(dates,projects,durations){
       const ctx = document.getElementById('barChart');
-   //   let colors = chartService.getRandomColor(projects)
+
       let colorMap = chartService.getColor_projectSpecific(projects)
       let formattedDates = []
       dates.forEach(d => {
