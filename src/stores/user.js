@@ -18,6 +18,7 @@ export const useUserStore = defineStore('user', {
     },
     actions: {
         async loginUser(username, pass){
+
             await userService.getLoggedinUser(username, pass)
                 .then(async res => {
                     axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`
@@ -35,6 +36,7 @@ export const useUserStore = defineStore('user', {
                 .catch(err => {
                     this.error = err
                 })
+
         },
         async logoutUser(){
             this.user = ""

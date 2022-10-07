@@ -21,7 +21,6 @@
       </v-list>
     </v-navigation-drawer>
     <v-app-bar app>
-
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title><h1>{{ items.title }}</h1></v-toolbar-title>
       <div class="toolbar-btn">
@@ -113,13 +112,10 @@ export default {
     items: [
       { title: 'Dashboard', icon: 'mdi-view-dashboard', path:"/" },
       { title: 'Zeiteinträge', icon: 'mdi-account-edit-outline', path:"/timeentry" },
-      { title: 'Proposals', icon: 'mdi-archive', path:"/proposals"},
+      { title: 'Anträge', icon: 'mdi-archive', path:"/proposals"},
       { title: 'Stundenkonto', icon: 'mdi-account-eye-outline', path:"/stundenkonto"},
-
-
     ],
     profilBtn:[
-
       {title: "Admin Panel", icon:"mdi-account-cog", path:"/admin/panel"},
       {title: "Login", icon:"mdi-account-lock-open", path:"/login"}
     ],

@@ -1,4 +1,5 @@
 import axios from "axios"
+import qs from "qs"
 
 export default {
     getProposalsByUserID(userid){
@@ -14,7 +15,11 @@ export default {
             proposal.startDate = this.MDTime2ZTime(proposal.startDate)
             proposal.endDate = this.MDTime2ZTime(proposal.endDate)
         }
-
+        let typeDict = {
+            "Urlaub": "vacation",
+            "Krank": "sickness"
+        }
+        proposal.type = typeDict[proposal.type]
         let proposalArray = []
         proposalArray.push(proposal)
         return axios.post('/proposals/' + proposal.userid, JSON.stringify(proposalArray))
@@ -66,5 +71,44 @@ export default {
                 break
         }
         return `${mdtime[0]}-${monthName}-${mdtime[2]}`
-    }
+    },
+    getAllProposals(filter){
+            let queryFilter = JSON.parse(filter)
+            let typeDict = {
+                "Alle": "all",
+                "Urlaub": "vacation",
+                "Krank": "sickness"
+            }
+            let statusDict = {
+                "Alle": "all",
+                "Ausstehend": "pending",
+                "Genehmigt": "approved",
+                "Abgelehnt": "denied"
+            }
+            let sortDict = {
+                "Absteigend": "desc",
+                "Aufsteigend": "asce"
+            }
+            let parameter = {}
+
+            if (queryFilter.selectedType != ("" || "Alle")){
+                parameter.type = typeDict[queryFilter.selectedType]
+            }
+            if (queryFilter.selectedStatus != ("" || "Alle")){
+                parameter.status = statusDict[queryFilter.selectedStatus]
+            }
+            if (queryFilter.selectedOrder != ""){
+                parameter.sort = sortDict[queryFilter.selectedOrder]
+            }
+            return axios.get("/proposals", {
+                params: parameter,
+                paramsSerializer: params => {
+                    return qs.stringify(params)
+                }
+            })
+    },
+    updateProposalStatus(proposal, status){
+        proposal.status = status
+        return axios.patch("/proposals?date=" + proposal.startDate, proposal)
+    },
 }

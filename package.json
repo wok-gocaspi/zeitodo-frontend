@@ -24,6 +24,7 @@
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.37",
     "pinia": "^2.0.22",
+    "qs": "^6.11.0",
     "sonarqube-scanner": "^2.8.1",
     "vue": "^2.7.10",
     "vue-router": "^3.5.1",
