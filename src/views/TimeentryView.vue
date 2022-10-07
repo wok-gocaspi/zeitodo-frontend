@@ -14,17 +14,7 @@
       >
 
 
-        <v-btn
-            outlined
-            class="mr-2"
-            color="primary"
-            dark
-            @click="timeentrydialoge()"
-        >
 
-          &#43;Zeiteintrag
-
-        </v-btn>
 
       <v-dialog
         v-model="dialog"
@@ -124,6 +114,16 @@
               Save
             </v-btn>
 
+             <template v-slot:actions>
+               <v-btn
+                 color="pink"
+                 variant="text"
+
+                 >
+                 close
+               </v-btn>
+             </template>
+
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -139,7 +139,7 @@
   >
 
     <v-card-subtitle>
-     Dank einer übersichtlichen kalenderansicht haben Sie alle Ihre Abwesenheiten auf einem Blick.
+
     </v-card-subtitle>
 
     <v-row class="fill-height">
@@ -185,6 +185,18 @@
             {{ $refs.calendar.title }}
             </v-toolbar-title>
             <v-spacer></v-spacer>
+            <v-btn
+                outlined
+                class="mr-2"
+                color="primary"
+                dark
+                @click="timeentrydialoge()"
+
+            >
+
+              &#43;Zeiteintrag
+
+            </v-btn>
             <v-menu
               bottom
               right
@@ -193,7 +205,7 @@
             <template v-slot:activator="{on,attrs}">
               <v-btn
                 outlined
-                color="grey darken-2"
+                color="primary"
                 v-bind="attrs"
                 v-on="on"
                 >
@@ -216,7 +228,7 @@
               <v-list-item-title>Month</v-list-item-title>
             </v-list-item>
             <v-list-item @click="type = '4day'">
-              <v-list-item-title>4 days</v-list-item-title>
+              <v-list-item-title>4 Day</v-list-item-title>
             </v-list-item>
           </v-list>
           </v-menu>
@@ -259,9 +271,7 @@
               </v-btn>
               <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
               <v-spacer></v-spacer>
-              <v-btn icon>
-                <v-icon>mdi-heart</v-icon>
-              </v-btn>
+
               <v-btn icon>
                 <v-icon>mdi-dots-vertical</v-icon>
               </v-btn>
@@ -280,7 +290,7 @@
                   @click="selectedOpen = false"
               >
                 Cancel
-              </v-btn>
+              </v-btn >
             </v-card-actions>
           </v-card>
            </v-menu>
@@ -303,6 +313,8 @@ export default {
 
   name: "TimeentryView.vue",
   data: () => ({
+
+    text:`Hallo,Test`,
     dialog: false,
     focus: '',
     type: 'month',
@@ -329,6 +341,7 @@ export default {
       breakStart:"",
       breakEnd:"",
       project:"",
+
     },
     selectedtype:"",
 
@@ -450,6 +463,7 @@ export default {
 
         this.dialog=true
         this.selectedtype="create"
+
    },
 
     cleartimenetry(){

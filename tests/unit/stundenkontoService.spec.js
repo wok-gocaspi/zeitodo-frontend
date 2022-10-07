@@ -6,6 +6,7 @@ import axios from "axios";
 
 
 
+jest.mock("axios")
 
 describe("Axios Requests",()=>{
 
@@ -28,19 +29,32 @@ describe("Axios Requests",()=>{
 })
 
 describe("Axios Requests",()=>{
+
     it ("get vacation and sickness",async ()=> {
         const userid = "123456789"
-        const proposal = JSON.stringify(
+        const mochresult = {"sickness": [{"endDate": "06-20-2022", "startDate": "06-12-2022", "type": "sickness", "userId": "1234"}], "vacation": [{"endDate": "06-20-2022", "startDate": "06-12-2022", "status": "approved", "type": "vacation", "userId": "1234"}]}
+        const proposal = ({data:[
+
             {
                 userId: "1234",
                 startDate: "06-12-2022",
                 endDate: "06-20-2022",
                 type: "sickness"
 
+            },
+            {
+                userId: "1234",
+                startDate: "06-12-2022",
+                endDate: "06-20-2022",
+                type: "vacation",
+                status:"approved"
+
             }
+            ]}
         )
-        const result = await stundenkontoService.getvacationandsickness(userid)
-        expect(result).toEqual(proposal)
+        axios.get.mockResolvedValueOnce(proposal)
+        const result = await stundenkontoService.getvacationandsickness(JSON.stringify(userid))
+        expect(result).toEqual(mochresult)
     })
 })
 describe("Axios Requests",()=>{

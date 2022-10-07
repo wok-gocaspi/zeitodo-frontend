@@ -11,6 +11,7 @@ export default {
 
    },
     async getvacationandsickness(userid){
+
         let filterproposal ={
             vacation :[],
             sickness :[],
