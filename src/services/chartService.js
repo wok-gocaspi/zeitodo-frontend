@@ -1,5 +1,13 @@
 export default {
+    /*
+    ALL_DIFFERENT_PROJECTS(){
+  return ["ProjektX", "ZeiToDo","Employee-Register","Audi"]
+    },
 
+     */
+    ALL_DIFFERENT_PROJECT_COLORS(){
+ return ['indigo','cyan','orange','green']
+    },
     random_rgba() {
         let o = Math.round, r = Math.random, s = 255;
         return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
@@ -50,18 +58,46 @@ export default {
         timeEntries.forEach((entry) =>  {
             dates.push(entry.start)
             projects.push(entry.project)
-            durations.push(this.getTimeDiff(entry.start,entry.end))
+            durations.push(this.getTimeDiff(entry.start,entry.end) - this.getTimeDiff(entry.breakStart,entry.breakEnd))
         })
         return [dates,projects,durations]
     },
     getTimeDiff(dateA,dateB){
-        return this.convertMsToH(new Date(dateB)-new Date(dateA))
+        return new Date(dateB)- new Date(dateA)
     },
     convertMsToH(milliseconds) {
         let seconds = Math.floor(milliseconds / 1000);
         let minutes = Math.floor(seconds / 60);
-
-
-        return Math.floor(minutes / 60);
+      return Math.floor(minutes / 60);
     },
+    convertMsToMinutes(milliseconds) {
+        let seconds = Math.floor(milliseconds / 1000);
+        return Math.floor(seconds / 60)
+    },
+    allArrayElementsAreZero(floatArray){
+        if(!Array.isArray(floatArray)){
+            return true
+        }
+        let sum = 0
+        floatArray.forEach(entry =>{
+        sum += entry
+        })
+        return sum == 0 ? true:false
+    },
+    getDataOfset(dates,projects,durations,ofset){
+        let today = new Date()
+        let newDates =[]
+        let newProjects = []
+        let newDurations = []
+        console.log("Calculation of the ofset to the dates",today.setDate(today.getDate() - ofset))
+        dates.forEach((date,index) =>{
+            if(date > ofset){
+                newDates.push(date)
+                newProjects.push(projects[index])
+                newDurations.push(durations[index])
+            }
+        })
+        return [newDates,newProjects,newDurations]
+    }
+
 }
