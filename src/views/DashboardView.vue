@@ -20,7 +20,7 @@
       </v-card-title>
       <v-card-text>
         <h1><p align="center">   Gesamte Arbeitszeit </p></h1>
-         <h1><p align="center" >&#128337; {{this.total}} STD</p></h1>
+        <h1><p align="center" >&#128337; {{this.total}} STD</p></h1>
       </v-card-text>
     </v-card>
 
@@ -52,7 +52,7 @@
         Das Diagramm zeigt die Tage an denen ein Zeiteintrag geleistet wurde gegenübergestellt die Anzahl an eingetragenen Stunden
         an diesem Eintrag. Alle Projekte mit selben Projekttitel sind gleich coloriert.
       </v-card-subtitle>
-        <p align="center"> <canvas id="barChart" ></canvas></p>
+      <p align="center"> <canvas id="barChart" ></canvas></p>
 
     </v-card>
 
