@@ -433,6 +433,7 @@ export default {
 
       this.dialog=true
       this.selectedtype="create"
+      this.$emit("Timeentries")
     },
 
     cleartimenetry(){
