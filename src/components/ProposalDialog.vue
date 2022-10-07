@@ -72,7 +72,11 @@ export default {
         userid: this.user.id
       },
       datePicker: [],
-      proposalTypes: ["sickness", "vacation"]
+      proposalTypes: ["Urlaub", "Krank"],
+      typeDict: {
+        "Urlaub": "vacation",
+        "Krank": "sickness"
+      }
     }
   },
 

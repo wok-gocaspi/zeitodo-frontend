@@ -1,32 +1,36 @@
 <template>
 <v-container>
-  <v-row>
-    <v-select
-        label="Status"
-        :items="proposalKinds"
-        v-model="selectedFilter.selectedStatus"
-        v-on:change="getProposals()"
-        class="select"
-    ></v-select>
-    <v-select
-        label="Sortierung"
-        :items="proposalTimeFilter"
-        v-model="selectedFilter.selectedOrder"
-        v-on:change="getProposals()"
-        class="select"
-    ></v-select>
-    <v-select
-        label="Typ"
-        :items="proposalTypes"
-        v-model="selectedFilter.selectedType"
-        v-on:change="getProposals()"
-        class="select"
-    ></v-select>
-    <v-text-field
-      label="Username"
-      v-model="selectedFilter.searchedUser"
-    ></v-text-field>
-  </v-row>
+  <h1>Proposal Management</h1>
+  <v-container class="filter-padding">
+    <v-row>
+      <v-select
+          label="Status"
+          :items="proposalKinds"
+          v-model="selectedFilter.selectedStatus"
+          v-on:change="getProposals()"
+          class="select"
+      ></v-select>
+      <v-select
+          label="Sortierung"
+          :items="proposalTimeFilter"
+          v-model="selectedFilter.selectedOrder"
+          v-on:change="getProposals()"
+          class="select"
+      ></v-select>
+      <v-select
+          label="Typ"
+          :items="proposalTypes"
+          v-model="selectedFilter.selectedType"
+          v-on:change="getProposals()"
+          class="select"
+      ></v-select>
+      <v-text-field
+        label="Username"
+        v-model="selectedFilter.searchedUser"
+        class="search-field"
+      ></v-text-field>
+    </v-row>
+  </v-container>
 
   <v-list>
     <div
@@ -72,6 +76,7 @@
               <v-list-item
               link
               @click="statusProposal(proposal, 'approved')"
+              v-if="proposal.status !== 'approved' && proposal.type !== 'sickness'"
               >
                 <v-list-item-avatar>
                   <v-icon>
@@ -83,6 +88,7 @@
               <v-list-item
                   link
                   @click="statusProposal(proposal, 'denied')"
+                  v-if="proposal.status !== 'denied' && proposal.type !== 'sickness'"
               >
                 <v-list-item-avatar>
                   <v-icon>
@@ -91,28 +97,6 @@
                 </v-list-item-avatar>
                 <v-list-item-title>Ablehnen</v-list-item-title>
               </v-list-item>
-              <v-list-item
-                  link
-                  @click="deleteProposal(proposal)"
-              >
-                <v-list-item-avatar>
-                  <v-icon>
-                    mdi-clipboard-off
-                  </v-icon>
-                </v-list-item-avatar>
-                <v-list-item-title>Löschen</v-list-item-title>
-              </v-list-item>
-              <v-list-item
-                  link
-                  @click="updateProposal(proposal)"
-              >
-                <v-list-item-avatar>
-                  <v-icon>
-                    mdi-clipboard-edit
-                  </v-icon>
-                </v-list-item-avatar>
-                <v-list-item-title>Bearbeiten</v-list-item-title>
-              </v-list-item>
             </v-list-group>
           </div>
         </v-list-group>
@@ -120,8 +104,6 @@
     </v-list-group>
     </div>
   </v-list>
-  <DeleteProposalDialog @close="closeDeleteProposal()" v-if="deleteDialog" v-bind:proposal="selectedProposal" ></DeleteProposalDialog>
-  <ProposalUpdate @close="closeUpdateProposal()" v-if="updateDialog" v-bind:init-proposal="selectedProposal"></ProposalUpdate>
   <ProposalStatusDialog @close="closeStatusProposal()" v-if="statusDialog" v-bind:proposal="selectedProposal" v-bind:action="selectedAction"></ProposalStatusDialog>
 </v-container>
 
@@ -129,12 +111,10 @@
 
 <script>
 import proposalService from "@/services/proposalService";
-import DeleteProposalDialog from "@/components/DeleteProposalDialog";
 import ProposalStatusDialog from "@/components/ProposalStatusDialog";
-import ProposalUpdate from "@/components/ProposalUpdate";
 export default {
   name: "ProposalManagementPanel.vue",
-  components: {DeleteProposalDialog, ProposalStatusDialog, ProposalUpdate},
+  components: { ProposalStatusDialog},
   data(){
     return {
       proposalKinds: ["Ausstehend", "Genehmigt", "Abgelehnt", "Alle"],
@@ -149,9 +129,7 @@ export default {
       proposals: "",
       selectedProposal: "",
       selectedAction: "",
-      deleteDialog: false,
       statusDialog: false,
-      updateDialog: false,
       sicknessIndex: "",
       vacationIndex: "",
       proposalListTypes: [
@@ -175,13 +153,6 @@ export default {
             this.proposals = []
           })
     },
-    deleteProposal(proposal){
-      this.selectedProposal = proposal
-      this.deleteDialog = true
-    },
-    closeDeleteProposal(){
-      this.deleteDialog = false
-    },
     statusProposal(proposal, action){
       this.selectedProposal = proposal
       this.selectedAction = action
@@ -190,13 +161,6 @@ export default {
     closeStatusProposal(){
       this.statusDialog = false
     },
-    updateProposal(proposal){
-      this.selectedProposal = proposal
-      this.updateDialog = true
-    },
-    closeUpdateProposal(){
-      this.updateDialog = false
-    }
 
   }
 
@@ -207,4 +171,12 @@ export default {
 .select{
   padding: 0em 1em 0em 1em;
 }
+.filter-padding{
+  margin-top: 1em;
+}
+
+.search-field{
+  transform: translateY(-17%);
+}
+
 </style>

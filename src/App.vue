@@ -111,7 +111,7 @@ export default {
     items: [
       { title: 'Dashboard', icon: 'mdi-view-dashboard', path:"/" },
       { title: 'Zeiteinträge', icon: 'mdi-account-edit-outline', path:"/timeentry" },
-      { title: 'Proposals', icon: 'mdi-archive', path:"/proposals"}
+      { title: 'Anträge', icon: 'mdi-archive', path:"/proposals"}
     ],
     profilBtn:[
       {title: "Admin Panel", icon:"mdi-account-cog", path:"/admin/panel"},

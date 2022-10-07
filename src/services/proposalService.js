@@ -15,7 +15,11 @@ export default {
             proposal.startDate = this.MDTime2ZTime(proposal.startDate)
             proposal.endDate = this.MDTime2ZTime(proposal.endDate)
         }
-
+        let typeDict = {
+            "Urlaub": "vacation",
+            "Krank": "sickness"
+        }
+        proposal.type = typeDict[proposal.type]
         let proposalArray = []
         proposalArray.push(proposal)
         return axios.post('/proposals/' + proposal.userid, JSON.stringify(proposalArray))
@@ -107,7 +111,4 @@ export default {
         proposal.status = status
         return axios.patch("/proposals?date=" + proposal.startDate, proposal)
     },
-    updateProposal(proposal){
-        return axios.patch("/proposals?date=" + proposal.startDate, proposal)
-    }
 }

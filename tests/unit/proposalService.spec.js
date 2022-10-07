@@ -65,6 +65,40 @@ describe("Axios Requests", () => {
 
 
     })
+    it("get all proposals", async() => {
+        const mockFilter = {
+            selectedType: "Urlaub",
+            selectedStatus: "All",
+            selectedOrder: "Aufsteigend",
+            selectedUser: "Peter"
+        }
+        const mockResult = [
+            {
+                userId: "123",
+            }
+        ]
+        axios.get.mockResolvedValueOnce(mockResult)
+        const result = await proposalService.getAllProposals(JSON.stringify(mockFilter))
+        expect(result).toEqual(mockResult)
+
+    })
+    it("update proposal status", async() => {
+        const mockProposal = {
+            userId: "1234",
+            startDate: "06-12-2022",
+            endDate: "06-20-2022",
+            type: "sickness"
+        }
+        const mockStatus = "approved"
+        const mockResult = {
+            updatedItems: 1,
+        }
+
+        axios.patch.mockResolvedValueOnce(mockResult)
+        const result = await proposalService.updateProposalStatus(mockProposal, mockStatus)
+        expect(result).toEqual(mockResult)
+
+    })
     it("test mdtime2time", async() => {
         const dateSamples = ["2022-01-10", "2022-02-13", "2022-03-12", "2022-04-20", "2022-05-21", "2022-06-17", "2022-07-23", "2022-08-26", "2022-09-22", "2022-10-03", "2022-11-17", "2022-12-19"]
         const dateResults = ["2022-Jan-10", "2022-Feb-13", "2022-Mar-12", "2022-Apr-20", "2022-May-21", "2022-Jun-17", "2022-Jul-23", "2022-Aug-26", "2022-Sep-22", "2022-Oct-03", "2022-Nov-17", "2022-Dec-19"]
@@ -73,6 +107,7 @@ describe("Axios Requests", () => {
             expect(result).toEqual(dateResults[index])
         })
     })
+
 
 
 })
