@@ -2,6 +2,8 @@
   <v-container>
 
     <h1>Planer für Abwesenheiten</h1><br>
+
+
     <v-layout row>
       <v-flex xs50 md12>
         <div ><v-card
@@ -10,8 +12,28 @@
             color="grey lighten-3"
 
         >
+          <v-row
+            align="center"
+            justify="center"
+            class="ma-12"
+            >
+            <v-col
+              cols="12"
+              md="8"
+              >
+              <v-select
+                v-model="variant"
+                :items="items"
+                clearable
+                label="Variant"
+                ></v-select>
           <div style=""><h1>Mitarbeiter ohne Team &#128187; </h1></div><br><br>
           <div align="left"><h1> {{user.username}}</h1></div><br><br><br>
+            </v-col>
+          </v-row>
+
+
+
         </v-card></div></v-flex>
 
 
