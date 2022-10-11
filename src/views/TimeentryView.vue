@@ -410,6 +410,7 @@ export default {
         timeentryService.getTimeentry()
             .then(res => {
               res.data.forEach((te)=>{
+
                 this.events.push({
                   name:te.project,start:Date.parse(te.start),end:Date.parse(te.end),breakStart:Date.parse(te.breakStart),breakEnd:Date.parse(te.breakEnd),color:"blue",timed:true
 

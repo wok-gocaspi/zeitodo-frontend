@@ -72,6 +72,50 @@ export default {
         }
         return `${mdtime[0]}-${monthName}-${mdtime[2]}`
     },
+    ZTimeToMDTime(ztime){
+        ztime = ztime.split("-")
+        const month = ztime[1]
+        let monthName
+        switch (month) {
+            case 'Jan':
+                monthName = '01'
+                break
+            case 'Feb':
+                monthName = '02'
+                break
+            case 'Mar':
+                monthName = '03'
+                break
+            case 'Apr':
+                monthName = '04'
+                break
+            case 'May':
+                monthName = '05'
+                break
+            case 'Jun':
+                monthName = '06'
+                break
+            case 'Jul':
+                monthName = '07'
+                break
+            case 'Aug':
+                monthName = '08'
+                break
+            case 'Sep':
+                monthName = '09'
+                break
+            case 'Oct':
+                monthName = '10'
+                break
+            case 'Nov':
+                monthName = '11'
+                break
+            case 'Dec':
+                monthName = '12'
+                break
+        }
+        return `${ztime[0]}-${monthName}-${ztime[2]}`
+    },
     getAllProposals(filter){
             let queryFilter = JSON.parse(filter)
             let typeDict = {
