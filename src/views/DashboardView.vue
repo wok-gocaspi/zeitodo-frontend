@@ -198,6 +198,7 @@ export default {
                 //      return
               })
               this.total = this.calculateTotalAgainstOffset(offsetEfforts)
+              this.total = userService.formatTime(this.total)
             }
             await this.createDoughnut(projects,efforts,ctx)
 
