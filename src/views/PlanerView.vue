@@ -1,45 +1,21 @@
 <template>
-
   <v-container>
-<div align="left">
-  <h1>StundenKonto </h1><br>
 
-</div>
+    <h1>Planer für Abwesenheiten</h1><br>
+    <v-layout row>
+      <v-flex xs50 md12>
+        <div ><v-card
+            class=""
+
+            color="grey lighten-3"
+
+        >
+          <div style=""><h1>Mitarbeiter ohne Team &#128187; </h1></div><br><br>
+          <div align="left"><h1> {{user.username}}</h1></div><br><br><br>
+        </v-card></div></v-flex>
 
 
-
-     <v-layout row>
-       <v-flex xs50 md4>
-    <div ><v-card
-        class=""
-
-        color="grey lighten-3"
-
-    >
-      <div style=""><h1>Mitarbeiter &#128187; </h1></div><br><br>
-      <div align="center"><h1> {{user.username}}</h1></div><br><br><br>
-    </v-card></div></v-flex>
-       <v-flex xs12 md4>
-    <div><v-card
-
-        color="grey lighten-3"
-
-    >
-      <h1>Abwesenheiten &#128197; &#127973;</h1><br><br>
-      <div >&emsp;Urlaubstage :&emsp;{{this.absence.vacation}} von {{this.absence.totalVacation}}</div><br>
-      <div >&emsp;Krankheitstage :&emsp;{{this.absence.sickness}}</div><br><br>
-    </v-card></div>
-         </v-flex>
-       <v-flex xs12 md4>
-    <div><v-card
-
-        color="grey lighten-3"
-    >
-      <div><h1>Stundenkonto &#128337;</h1></div><br><br>
-      <div align="left">&emsp;{{this.total}} h von {{this.total}} h Soll-Stunden</div><br><br><br><br>
-    </v-card></div>
-         </v-flex>
-     </v-layout>
+    </v-layout>
 
 
     <v-card
@@ -88,6 +64,7 @@
                   mdi-chevron-right
                 </v-icon>
               </v-btn>
+
               <v-toolbar-title v-if="$refs.calendar">
                 {{ $refs.calendar.title }}
               </v-toolbar-title>
@@ -117,10 +94,6 @@
                   <v-list-item @click="type = 'month'">
                     <v-list-item-title>Month</v-list-item-title>
                   </v-list-item>
-                  <v-list-item @click="type = '4day'">
-                    <v-list-item-title>4 days</v-list-item-title>
-                  </v-list-item>
-
                 </v-list>
               </v-menu>
             </v-toolbar>
@@ -204,7 +177,7 @@ import stundenkontoService from "@/services/stundenkontoService";
 
 export default {
 
-  name: "DashboardView.vue",
+  name: "PlanerView.vue",
   setup(){
     const userStore = useUserStore()
     const {user, error} = storeToRefs(userStore)
@@ -225,17 +198,13 @@ export default {
     type: 'month',
     typeToLabel: {
       month: 'Month',
-      week: 'Week',
-      day: 'Day',
-      '4day': '4 Days',
-
     },
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
     events: [],
-    colors: ['indigo', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', ],
-    names: ['Meeting', 'Holiday', 'Travel', 'Event', 'Birthday', 'Conference'],
+    colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', ],
+    names: ['NIL', 'WOK', 'SAM', 'ING', 'MIL', 'FAB'],
     dragEvent: null,
     dragStart: null,
     createStart:null,
@@ -263,8 +232,8 @@ export default {
   }),
   mounted () {
 
-      this.getEffort1(this.user.id)
-      this.getAllEntries1(this.user.id)
+    this.getEffort1(this.user.id)
+    this.getAllEntries1(this.user.id)
     this.$refs.calendar.checkChange()
   },
   created() {
@@ -318,57 +287,30 @@ export default {
             await this.createDoughnut(projects,efforts,ctx)
           })
     },
-    creattimeentry(timeentry){
-
-      let te = timeentry
-
-      te.start=new Date(this.startdate)
-      te.start=te.start.toISOString()
-
-      te.end=new Date(this.enddate)
-      te.end=te.end.toISOString()
-
-      te.breakStart=new Date(this.breakstartdate)
-      te.breakStart=te.breakStart.toISOString()
-
-      te.breakEnd=new Date(this.breakenddate)
-      te.breakEnd=te.breakEnd.toISOString()
-
-
-
-      this.events.push({
-
-        name:te.project,start:Date.parse(te.start),end:Date.parse(te.end),breakStart:Date.parse(te.breakStart),breakEnd:Date.parse(te.breakEnd),color:"blue",timed:true
-
-
-
-      })
-
-      timeentryService.creattimeentry(JSON.stringify(te))
-
-    },
 
     async getproposal(){
 
       let proposals= await stundenkontoService.getvacationandsickness(this.user.id)
-         console.log(proposals)
-          proposals.vacation.forEach((vacation)=>{
+      console.log(proposals)
 
-            this.events.push({
-              name:"Urlaub",start:Date.parse(vacation.startDate),end:Date.parse(vacation.endDate),color:"teal",timed:false
+      proposals.vacation.forEach((vacation)=>{
+        this.events.push({
+          name: this.names[this.rnd(0,this.names.length -1)],start:Date.parse(vacation.startDate),end:Date.parse(vacation.endDate),color: this.colors[this.rnd(0,this.colors.length - 1)],timed:false
 
-            })
+        })
+      })
+
+      proposals.sickness.forEach((sickness)=>{
+        this.events.push({
+          name:this.names[this.rnd(0,this.names.length -1)],start:Date.parse(sickness.startDate),end:Date.parse(sickness.endDate),color: this.colors[this.rnd(0,this.colors.length - 1)],timed:false
+        })
+
+      })
+
+      stundenkontoService.getAbsence(this.user.id)
+          .then(res=>{
+            this.absence = res.data
           })
-          proposals.sickness.forEach((sickness)=>{
-              this.events.push({
-                name:"Krank",start:Date.parse(sickness.startDate),end:Date.parse(sickness.endDate),color:"green",timed:false
-              })
-
-          })
-         stundenkontoService.getAbsence(this.user.id)
-             .then(res=>{
-               this.absence = res.data
-             })
 
 
     },
@@ -379,7 +321,7 @@ export default {
       timeentryService.getTimeentry()
           .then(res => {
             res.data.forEach((te)=>{
-              this.events.push({
+              this.events({
                 name:te.project,start:Date.parse(te.start),end:Date.parse(te.end),breakStart:Date.parse(te.breakStart),breakEnd:Date.parse(te.breakEnd),color:"blue",timed:true
 
               })
@@ -511,6 +453,8 @@ export default {
     },
   },
 }
-
-
 </script>
+
+<style scoped>
+
+</style>

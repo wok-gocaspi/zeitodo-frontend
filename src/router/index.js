@@ -6,6 +6,7 @@ import LoginView from "@/views/LoginView";
 import {useUserStore} from "@/stores/user";
 import ProposalView from "@/views/ProposalView";
 import StundenkontoView from "@/views/StundenkontoView";
+import PlanerView from "@/views/PlanerView";
 
 
 
@@ -39,6 +40,14 @@ const routes = [
     path: '/stundenkonto',
     name: 'stundenkonto',
     component: StundenkontoView,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/planer',
+    name: 'planer',
+    component: PlanerView,
     meta: {
       requiresAuth: true
     }

@@ -1,14 +1,13 @@
 <template>
   <v-container>
+    <div align="left">
+    <h1>Stundentafel </h1><br>
+    </div>
   <v-card
       elevation="1"
       id="topCard"
   >
-<v-container>
-  <v-card-title>
-  <h1>Stundentafel </h1>
-    </v-card-title>
-</v-container>
+
     <v-row
       justify="center"
       >
