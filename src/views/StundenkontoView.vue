@@ -165,7 +165,7 @@
                   <span v-html="selectedEvent.details"></span>
                 </v-card-text>
                 <v-card-text>
-                  <div align="center"></div>
+                  <div class="text-center">{{this.absence.sickness}} Krankheitstage </div>
 
                 </v-card-text>
                 <v-card-actions>

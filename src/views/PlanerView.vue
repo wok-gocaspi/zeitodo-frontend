@@ -12,24 +12,59 @@
             color="grey lighten-3"
 
         >
+
           <v-row
-            align="center"
-            justify="center"
+            align="left"
+            justify="left"
             class="ma-12"
             >
             <v-col
-              cols="12"
-              md="8"
+              cols="6"
+              sm="4"
               >
-              <v-select
-                v-model="variant"
-                :items="items"
-                clearable
-                label="Variant"
-                ></v-select>
-          <div style=""><h1>Mitarbeiter ohne Team &#128187; </h1></div><br><br>
-          <div align="left"><h1> {{user.username}}</h1></div><br><br><br>
+          <v-select
+            v-model="selectedTeams"
+            :items="teams"
+            chips
+            label="Teams"
+            multiple
+            solo
+            >
+            <template v-slot:prepend-item>
+              <v-list-item
+                ripple
+                @mousedown.prevent
+                @click="toggle"
+                >
+                <v-list-item-action>
+                  <v-icon >
+                    {{icon}}
+                  </v-icon>
+                </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>
+                  Select All
+                </v-list-item-title>
+              </v-list-item-content>
+              </v-list-item>
+              <v-divider class="mt-2"></v-divider>
+            </template>
+
+          </v-select>
             </v-col>
+           <v-col
+             cols="6"
+             sm="4"
+             >
+             <v-text-field
+               value=""
+               label=""
+               solo
+               readonly
+             ></v-text-field>
+           </v-col>
+          <div align="left"> {{teammenber}} &#128188; </div>
+
           </v-row>
 
 
@@ -159,8 +194,8 @@
                 <v-card-text>
                   <span v-html="selectedEvent.details"></span>
                 </v-card-text>
-                <v-card-text>
-                  <div align="center"></div>
+                <v-card-text v-if="absence.sickness">
+                  <div class="text-center">{{this.absence.sickness}} Krankheitstage </div>
 
                 </v-card-text>
                 <v-card-actions>
@@ -208,6 +243,10 @@ export default {
   },
 
   data: () => ({
+    teams:['ZeiToDo','Okapie','Ohne Team'],
+    selectedTeams:['ZeiToDo','Okapie','Ohne Team'],
+    teammenber:"",
+    username:"",
     getUserErr:"",
     token:"",
     completeEffort:{BMW:49},
@@ -226,7 +265,7 @@ export default {
     selectedOpen: false,
     events: [],
     colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', ],
-    names: ['NIL', 'WOK', 'SAM', 'ING', 'MIL', 'FAB'],
+    names: [],
     dragEvent: null,
     dragStart: null,
     createStart:null,
@@ -252,6 +291,7 @@ export default {
 
 
   }),
+
   mounted () {
 
     this.getEffort1(this.user.id)
@@ -261,9 +301,13 @@ export default {
   created() {
     this.gettimeentry()
     this.getproposal()
+    this.teammember()
 
   },
   computed :{
+    allTeams(){
+      return this.selectedTeams.length=== this.teams.length
+    },
 
     startdate(){
       return this.date + "T" + this.timeentry.start + ":00+02:00"
@@ -280,6 +324,15 @@ export default {
   },
 
   methods: {
+    toggle () {
+      this.$nextTick(()=>{
+        if(this.allTeams){
+          this.selectedTeams=[]
+        } else {
+          this.selectedTeams = this.teams.slice()
+        }
+      })
+    },
     async getAllEntries1(userId){
       await userService.getAllTimeEntries2(userId)
           .then(resp => {
@@ -290,6 +343,19 @@ export default {
             this.createBar(dates,projects,durations)
           })
 
+    },
+    async teammember(){
+      await userService.getAllteammenber(this.user.id)
+
+          .then(resp => {
+            console.log(resp.data)
+            resp.data.forEach((tm)=>{
+              this.teammenber = this.teammenber + tm.firstname +"  "+ tm.lastname + " , "
+            })
+          })
+          .catch(err =>{
+            console.log(err)
+          })
     },
 
 
@@ -317,14 +383,14 @@ export default {
 
       proposals.vacation.forEach((vacation)=>{
         this.events.push({
-          name: this.names[this.rnd(0,this.names.length -1)],start:Date.parse(vacation.startDate),end:Date.parse(vacation.endDate),color: this.colors[this.rnd(0,this.colors.length - 1)],timed:false
+          name: this.teammenber[this.rnd(0,this.teammenber.length -1)],start:Date.parse(vacation.startDate),end:Date.parse(vacation.endDate),color: this.colors[this.rnd(0,this.colors.length - 1)],timed:false
 
         })
       })
 
       proposals.sickness.forEach((sickness)=>{
         this.events.push({
-          name:this.names[this.rnd(0,this.names.length -1)],start:Date.parse(sickness.startDate),end:Date.parse(sickness.endDate),color: this.colors[this.rnd(0,this.colors.length - 1)],timed:false
+          name:this.teammenber[this.rnd(0,this.teammenber.length -1)],start:Date.parse(sickness.startDate),end:Date.parse(sickness.endDate),color: this.colors[this.rnd(0,this.colors.length - 1)],timed:false
         })
 
       })
