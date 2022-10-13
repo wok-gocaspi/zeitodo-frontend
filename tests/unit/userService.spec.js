@@ -17,6 +17,18 @@ describe("Axios Requests", () => {
         const result = await userService.getLoggedinUser(loginForm.username, loginForm.password)
         expect(result).toEqual(token)
     })
+
+    it("get all Teammember", async () => {
+        const user = {
+             "team":"ZeiTodo",
+            "id": "123"
+        }
+
+        axios.post.mockResolvedValueOnce(user)
+
+        const result = await userService.getAllteammenber(user)
+        expect(result).toEqual(user)
+    })
     it("get all user", async () => {
         const user = [
             {

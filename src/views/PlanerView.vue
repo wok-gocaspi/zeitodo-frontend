@@ -18,54 +18,42 @@
             justify="left"
             class="ma-12"
             >
+
             <v-col
-              cols="6"
-              sm="4"
+              cols="13"
+              sm="6"
               >
-          <v-select
-            v-model="selectedTeams"
-            :items="teams"
-            chips
+          <v-combobox
+            v-model="select"
+            :items="items"
             label="Teams"
             multiple
+            outlined
             solo
-            >
+            @click="teammember()"
+          ></v-combobox>
+            </v-col>
+
             <template v-slot:prepend-item>
-              <v-list-item
-                ripple
-                @mousedown.prevent
-                @click="toggle"
-                >
-                <v-list-item-action>
-                  <v-icon >
-                    {{icon}}
-                  </v-icon>
-                </v-list-item-action>
-              <v-list-item-content>
-                <v-list-item-title>
-                  Select All
-                </v-list-item-title>
-              </v-list-item-content>
-              </v-list-item>
               <v-divider class="mt-2"></v-divider>
             </template>
 
-          </v-select>
-            </v-col>
            <v-col
-             cols="6"
-             sm="4"
+             cols="12"
+             sm="6"
              >
              <v-text-field
-               value=""
-               label=""
-               solo
-               readonly
+                 id="items"
+                 value = ""
+                 label="Teammitglied"
+                 solo
+                 readonly
              ></v-text-field>
            </v-col>
-          <div align="left"> {{teammenber}} &#128188; </div>
-
           </v-row>
+          <div align="left" > <h1>{{teammenber}}  </h1> </div>
+
+
 
 
 
@@ -195,7 +183,7 @@
                   <span v-html="selectedEvent.details"></span>
                 </v-card-text>
                 <v-card-text v-if="absence.sickness">
-                  <div class="text-center">{{this.absence.sickness}} Krankheitstage </div>
+                  <div class="text-center">{{user.username}} Abwesenheit sind  {{this.absence}} <br><br> &#128153;Urlaub</div>
 
                 </v-card-text>
                 <v-card-actions>
@@ -229,6 +217,8 @@ import chartService from "@/services/chartService";
 import {useUserStore} from "@/stores/user";
 import {storeToRefs} from "pinia";
 import stundenkontoService from "@/services/stundenkontoService";
+import planerService from "@/services/planerService";
+
 
 
 
@@ -243,8 +233,11 @@ export default {
   },
 
   data: () => ({
-    teams:['ZeiToDo','Okapie','Ohne Team'],
+      select: ['ZeiToDo'],
+    items:['ZeiToDo','Okapie','Employee Register'],
     selectedTeams:['ZeiToDo','Okapie','Ohne Team'],
+    userr:[],
+    UserMember:[],
     teammenber:"",
     username:"",
     getUserErr:"",
@@ -277,8 +270,11 @@ export default {
       end:"",
       sickness:"",
       vacation:"",
+      teammember:"",
     },
-
+    value :{
+      teammenber:"",
+    },
     timeentry:{
       start:"",
       end:"",
@@ -288,8 +284,17 @@ export default {
     },
     selectedtype:"",
     absence:"",
-
-
+    allproposal:{
+      start:"",
+      end:"",
+      sickness:"",
+      vacation:"",
+      teammember:"",
+    },
+    teammemberfeld:{
+        firstname:"",
+        lastname:"",
+    }
   }),
 
   mounted () {
@@ -297,11 +302,13 @@ export default {
     this.getEffort1(this.user.id)
     this.getAllEntries1(this.user.id)
     this.$refs.calendar.checkChange()
+
   },
   created() {
     this.gettimeentry()
     this.getproposal()
     this.teammember()
+    this.getAllproposal()
 
   },
   computed :{
@@ -345,6 +352,7 @@ export default {
 
     },
     async teammember(){
+
       await userService.getAllteammenber(this.user.id)
 
           .then(resp => {
@@ -379,20 +387,13 @@ export default {
     async getproposal(){
 
       let proposals= await stundenkontoService.getvacationandsickness(this.user.id)
-      console.log(proposals)
+
 
       proposals.vacation.forEach((vacation)=>{
         this.events.push({
-          name: this.teammenber[this.rnd(0,this.teammenber.length -1)],start:Date.parse(vacation.startDate),end:Date.parse(vacation.endDate),color: this.colors[this.rnd(0,this.colors.length - 1)],timed:false
+          name:this.user.username,start:Date.parse(vacation.startDate),end:Date.parse(vacation.endDate),color:"blue",timed:false
 
         })
-      })
-
-      proposals.sickness.forEach((sickness)=>{
-        this.events.push({
-          name:this.teammenber[this.rnd(0,this.teammenber.length -1)],start:Date.parse(sickness.startDate),end:Date.parse(sickness.endDate),color: this.colors[this.rnd(0,this.colors.length - 1)],timed:false
-        })
-
       })
 
       stundenkontoService.getAbsence(this.user.id)
@@ -402,6 +403,26 @@ export default {
 
 
     },
+    async getAllproposal(){
+
+      let allteam= await planerService.getAlluservacation(this.user.id)
+      console.log(allteam)
+
+      allteam.vacation.forEach((vacation)=>{
+        this.events.push({
+          name:this.user.username,start:Date.parse(vacation.startDate),end:Date.parse(vacation.endDate),color:"blue",timed:false
+
+        })
+      })
+
+      stundenkontoService.getAbsence(this.user.id)
+          .then(res=>{
+            this.absence = res.data
+          })
+
+
+    },
+
 
     gettimeentry(){
 
