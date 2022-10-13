@@ -198,6 +198,8 @@ import {useUserStore} from "@/stores/user";
 import {storeToRefs} from "pinia";
 import stundenkontoService from "@/services/stundenkontoService";
 import proposalService from "@/services/proposalService";
+import userService from "@/services/userService";
+
 
 
 
@@ -262,8 +264,8 @@ export default {
   }),
   mounted () {
 
-      this.getEffort1(this.user.id)
-      this.getAllEntries1(this.user.id)
+     this.getEffort1(this.user.id)
+     // this.getAllEntries1(this.user.id)
     this.$refs.calendar.checkChange()
   },
   async created() {
@@ -289,6 +291,25 @@ export default {
 
   methods: {
 
+    async getEffort1(userId){
+      await userService.getProjectEffort1(userId)
+          .then(async (resp) =>{
+            this.completeEffort = resp.data
+            let time = resp.data
+            let projects = [];
+            for(let key in time){
+              projects.push(key);
+            }
+
+       //     let efforts = Object.values(time)
+            let total = userService.getTotalTime(time)
+            this.total = total
+
+
+
+          })
+    },
+
     async getproposal(){
 
       let proposals= await stundenkontoService.getvacationandsickness(this.user.id)
@@ -311,6 +332,8 @@ export default {
              })
 
     },
+
+
 
     gettimeentry(){
 

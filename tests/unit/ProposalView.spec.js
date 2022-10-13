@@ -31,6 +31,6 @@ describe("Proposal View", () => {
     })
     it("check render", () => {
         expect(wrapper.get("#proposal-title").text()).toEqual("2022-08-12 --- 2022-08-20")
-        expect(wrapper.get("#proposal-subtitle").text()).toEqual("sickness")
+        expect(wrapper.get("#proposal-subtitle").text()).toEqual("Krank")
     })
 })
