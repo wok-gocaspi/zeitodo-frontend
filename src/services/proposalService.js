@@ -111,4 +111,7 @@ export default {
         proposal.status = status
         return axios.patch("/proposals?date=" + proposal.startDate, proposal)
     },
+    getTeamProposal(userid){
+        return axios.get("/proposals?userid=" + userid)
+    }
 }

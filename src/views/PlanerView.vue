@@ -30,7 +30,7 @@
             multiple
             outlined
             solo
-            @click="teammember()"
+
           ></v-combobox>
             </v-col>
 
@@ -217,7 +217,7 @@ import chartService from "@/services/chartService";
 import {useUserStore} from "@/stores/user";
 import {storeToRefs} from "pinia";
 import stundenkontoService from "@/services/stundenkontoService";
-import planerService from "@/services/planerService";
+import proposalService from "@/services/proposalService";
 
 
 
@@ -234,8 +234,8 @@ export default {
 
   data: () => ({
       select: ['ZeiToDo'],
-    items:['ZeiToDo','Okapie','Employee Register'],
-    selectedTeams:['ZeiToDo','Okapie','Ohne Team'],
+    items:['ZeiToDo','Okapi','Employee Register'],
+    selectedTeams:['ZeiToDo','Okapi','Ohne Team'],
     userr:[],
     UserMember:[],
     teammenber:"",
@@ -306,7 +306,6 @@ export default {
   },
   created() {
     this.gettimeentry()
-    this.getproposal()
     this.teammember()
     this.getAllproposal()
 
@@ -384,36 +383,19 @@ export default {
           })
     },
 
-    async getproposal(){
 
-      let proposals= await stundenkontoService.getvacationandsickness(this.user.id)
-
-
-      proposals.vacation.forEach((vacation)=>{
-        this.events.push({
-          name:this.user.username,start:Date.parse(vacation.startDate),end:Date.parse(vacation.endDate),color:"blue",timed:false
-
-        })
-      })
-
-      stundenkontoService.getAbsence(this.user.id)
-          .then(res=>{
-            this.absence = res.data
-          })
-
-
-    },
     async getAllproposal(){
 
-      let allteam= await planerService.getAlluservacation(this.user.id)
+      let allteam= await proposalService.getTeamProposal(this.user.id)
       console.log(allteam)
-
-      allteam.vacation.forEach((vacation)=>{
-        this.events.push({
-          name:this.user.username,start:Date.parse(vacation.startDate),end:Date.parse(vacation.endDate),color:"blue",timed:false
-
+      allteam.data.forEach((user)=>{
+        user.vacationProposals.forEach((proposal)=>{
+          this.events.push({
+            name:user.username,start:Date.parse(proposal.startDate),end:Date.parse(proposal.endDate),color:"blue",timed:false
+          })
         })
       })
+
 
       stundenkontoService.getAbsence(this.user.id)
           .then(res=>{
