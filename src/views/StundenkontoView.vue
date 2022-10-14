@@ -1,12 +1,6 @@
 <template>
 
   <v-container>
-<div align="center">
-  <h2>StundenKonto </h2><br>
-
-</div>
-
-
 
      <v-layout row>
        <v-flex xs50 md4>
