@@ -1,7 +1,7 @@
 <template>
 
   <v-container>
-
+<!--
      <v-layout row>
        <v-flex xs50 md4>
     <div ><v-card
@@ -35,6 +35,23 @@
          </v-flex>
      </v-layout>
 
+
+    -->
+
+    <v-card id="rowContainer">
+      <v-card>
+        <v-card-title>Mitarbeiter &#128187;</v-card-title>
+        <v-card-text>{{user.username}}</v-card-text>
+      </v-card>
+      <v-card>
+        <v-card-title>Abwesenheiten &#128197; &#127973;</v-card-title>
+        <v-card-text>Urlaubstage :&emsp;{{this.absence.vacation}} von {{this.absence.totalVacation}} <br> Krankheitstage :&emsp;{{this.absence.sickness}}</v-card-text>
+      </v-card>
+      <v-card>
+        <v-card-title>Stundenkonto &#128337;</v-card-title>
+        <v-card-text>{{this.total}} STD von {{this.total}} STD Soll-Stunden</v-card-text>
+      </v-card>
+    </v-card>
 
     <v-card
         elevation="20"
@@ -185,7 +202,15 @@
   </v-container>
 
 </template>
-
+<style>
+#rowContainer{
+  display: flex;
+  flex-direction: row;
+  max-width: max-content;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+</style>
 <script>
 import timeentryService from "@/services/timeentryService";
 import {useUserStore} from "@/stores/user";
