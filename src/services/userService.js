@@ -39,7 +39,7 @@ export default{
         return axios.patch("/user", JSON.stringify(userBody))
     },
      getProjectEffort1(userId){
-       return axios.get("/timeentry/calcul/" + userId )
+       return axios.get("/timeentry/calculate?userid=" + userId )
     },
     getTotalTime(time){
         let sum = 0

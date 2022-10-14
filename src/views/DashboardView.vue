@@ -171,8 +171,8 @@ export default {
     async getEffort1(userId){
       await userService.getProjectEffort1(userId)
           .then(async (resp) =>{
-            this.completeEffort = resp.data
-            let time = resp.data
+            this.completeEffort = resp.data.projects
+            let time = resp.data.projects
             let projects = [];
             for(let key in time){
               projects.push(key);
