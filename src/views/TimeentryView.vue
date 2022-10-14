@@ -22,7 +22,6 @@
         <v-card>
           <span class="text-h5" >Neuer Zeiteintrag</span> &#8505;
         </v-card>
-
         <v-card >
           <v-card-text>
             <v-container>

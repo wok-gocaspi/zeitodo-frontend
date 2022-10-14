@@ -60,7 +60,7 @@
                   <v-icon>mdi-account-lock-open</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
-                  <v-list-item-title @click="getCurrentHeadline(LoginText)">Logout</v-list-item-title>
+                  <v-list-item-title>Logout</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item
@@ -72,7 +72,7 @@
                   <v-icon>mdi-account-cog</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
-                  <v-list-item-title @click="getCurrentHeadline(adminPanelText)">Admin Panel</v-list-item-title>
+                  <v-list-item-title>Admin Panel</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </v-list>
@@ -114,8 +114,9 @@ export default {
     items: [
       { title: 'Dashboard', icon: 'mdi-view-dashboard', path:"/" },
       { title: 'Zeiteinträge', icon: 'mdi-account-edit-outline', path:"/timeentry" },
-      { title: 'Anträge', icon: 'mdi-archive', path:"/proposals"},
       { title: 'Stundenkonto', icon: 'mdi-account-eye-outline', path:"/stundenkonto"},
+      { title: 'Planer', icon: 'mdi-calendar', path:"/planer"},
+      { title: 'Anträge', icon: 'mdi-archive', path:"/proposals"},
     ],
     profilBtn:[
       {title: "Admin Panel", icon:"mdi-account-cog", path:"/admin/panel"},

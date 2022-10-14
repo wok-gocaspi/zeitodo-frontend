@@ -29,6 +29,9 @@ export default{
     getAllUser(){
         return axios.get("/user")
     },
+    getAllteammenber(userid){
+        return axios.get("/user/team?id="+ userid)
+    },
     deleteUser(userid){
         return axios.delete("/user/" + userid)
     },
@@ -49,7 +52,7 @@ export default{
         })
         return this.formatTime(sum)
     },
-    // formatTime takes a float and returns the float in the format hh:mm (h = hour, m = minute) for the view in the Dashboard
+
     formatTime(decimal){
         let decimalTime = parseFloat(decimal);
         decimalTime = decimalTime * 60 * 60;
