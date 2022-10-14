@@ -21,7 +21,7 @@ describe("Proposal View", () => {
                         {
                             "startDate": "2022-08-12",
                             "endDate": "2022-08-20",
-                            "type": "sickness",
+                            "type": "Krank",
                             "approved": true
                         }
                     ]

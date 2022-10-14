@@ -4,6 +4,7 @@
 <div align="left">
   <h1>StundenKonto </h1><br>
 
+
 </div>
 
 
@@ -36,7 +37,7 @@
         color="grey lighten-3"
     >
       <div><h1>Stundenkonto &#128337;</h1></div><br><br>
-      <div align="left">&emsp;{{this.total}} h von {{this.total}} h Soll-Stunden</div><br><br><br><br>
+      <div align="left">&emsp;{{this.total}} h von {{this.sollstunden}} h Soll-Stunden</div><br><br><br><br>
     </v-card></div>
          </v-flex>
      </v-layout>
@@ -258,6 +259,7 @@ export default {
     },
     selectedtype:"",
     absence:"",
+    sollstunden:"",
 
 
   }),
@@ -265,7 +267,7 @@ export default {
 
       this.getEffort1(this.user.id)
       this.getAllEntries1(this.user.id)
-    this.$refs.calendar.checkChange()
+      this.$refs.calendar.checkChange()
   },
   created() {
     this.gettimeentry()
@@ -305,9 +307,15 @@ export default {
     async getEffort1(userId){
       await userService.getProjectEffort1(userId)
           .then(async (resp) =>{
-            this.completeEffort = resp.data
-            let time = resp.data
+
+            this.completeEffort = resp.data.projects
+            let time = resp.data.projects
+
             let projects = [];
+
+            this.sollstunden = resp.data.required
+
+            console.log(this.sollstunden)
             for(let key in time){
               projects.push(key);
             }

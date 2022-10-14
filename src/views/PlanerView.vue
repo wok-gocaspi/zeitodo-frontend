@@ -27,9 +27,10 @@
 
             <div align="left"><h1>&#128101;Teams Mitglieder:</h1></div>
 
-          &nbsp;&nbsp;&nbsp;&nbsp;<div align="left" >&nbsp;<h1>{{teammenber}}</h1> </div>
+          &nbsp;&nbsp;&nbsp;&nbsp;<div align="left" ><h1>{{teammenber}}</h1> </div>
 
           </v-row>
+
 
 
 
@@ -115,7 +116,11 @@
                   <v-list-item @click="type = 'month'">
                     <v-list-item-title>Month</v-list-item-title>
                   </v-list-item>
+                  <v-list-item @click="type = 'day'">
+                    <v-list-item-title>Day</v-list-item-title>
+                  </v-list-item>
                 </v-list>
+
               </v-menu>
             </v-toolbar>
           </v-sheet>
@@ -228,6 +233,7 @@ export default {
     type: 'month',
     typeToLabel: {
       month: 'Month',
+      day:'Day',
     },
     selectedEvent: {},
     selectedElement: null,
@@ -333,7 +339,7 @@ export default {
           .then(resp => {
             console.log(resp.data)
             resp.data.forEach((tm)=>{
-              this.teammenber = this.teammenber + tm.firstname +"  "+ tm.lastname + " , "
+              this.teammenber = this.teammenber +" * "+ tm.firstname +"   "+ tm.lastname + "   "
             })
           })
           .catch(err =>{
