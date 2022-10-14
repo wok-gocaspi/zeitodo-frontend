@@ -1,7 +1,5 @@
 <template>
   <v-container>
-    <h1>Dashboard</h1>
-
     <!-- start bar chart offset picker -->
     <div class="text-center"
          id="offsetPicker">
@@ -93,10 +91,8 @@
 #barChart{
   /*
     max-width: 400px !important;
-   max-height: 400px !important;
-
    */
-
+  max-height: 600px !important;
 
 }
 
@@ -175,8 +171,8 @@ export default {
     async getEffort1(userId){
       await userService.getProjectEffort1(userId)
           .then(async (resp) =>{
-            this.completeEffort = resp.data
-            let time = resp.data
+            this.completeEffort = resp.data.projects
+            let time = resp.data.projects
             let projects = [];
             for(let key in time){
               projects.push(key);
@@ -187,6 +183,7 @@ export default {
             this.total = total
             const ctx = document.getElementById('myChart');
 
+            // helper variable offsets
             if(this.barChartOffset != ""){
               this.doughnutChart.destroy()
               let offsetProjects = []
@@ -195,12 +192,11 @@ export default {
                 offsetEfforts.push(project.hourValue)
                 offsetProjects.push(project.projectname)
                 this.createDoughnut(offsetProjects,offsetEfforts,ctx)
-                //      return
               })
               this.total = this.calculateTotalAgainstOffset(offsetEfforts)
+              this.total = userService.formatTime(this.total)
             }
             await this.createDoughnut(projects,efforts,ctx)
-
           })
     },
     calculateTotalAgainstOffset(effortsArray){

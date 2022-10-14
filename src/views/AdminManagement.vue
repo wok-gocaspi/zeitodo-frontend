@@ -1,6 +1,5 @@
 <template>
 <v-container>
-  <h1>Admin Management Panel</h1>
   <v-container>
     <v-tabs v-model="tab" class="tabs-margin">
       <v-tab>User Management</v-tab>

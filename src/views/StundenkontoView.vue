@@ -1,13 +1,7 @@
 <template>
 
   <v-container>
-<div align="left">
-  <h1>StundenKonto </h1><br>
-
-</div>
-
-
-
+<!--
      <v-layout row>
        <v-flex xs50 md4>
     <div ><v-card
@@ -41,6 +35,25 @@
          </v-flex>
      </v-layout>
 
+
+    -->
+    <div id="centerDiv">
+      <v-card id="rowContainer">
+        <v-card>
+          <v-card-title>Mitarbeiter &#128187;</v-card-title>
+          <v-card-text>{{user.username}}</v-card-text>
+        </v-card>
+        <v-card>
+          <v-card-title>Abwesenheiten &#128197; &#127973;</v-card-title>
+          <v-card-text>Urlaubstage :&emsp;{{this.absence.vacation}} von {{this.absence.totalVacation}} <br> Krankheitstage :&emsp;{{this.absence.sickness}}</v-card-text>
+        </v-card>
+        <v-card>
+          <v-card-title>Stundenkonto &#128337;</v-card-title>
+          <v-card-text>{{this.total}} STD von {{this.total}} STD Soll-Stunden</v-card-text>
+        </v-card>
+      </v-card>
+
+    </div>
 
     <v-card
         elevation="20"
@@ -191,13 +204,27 @@
   </v-container>
 
 </template>
-
+<style>
+#rowContainer{
+  display: flex;
+  flex-direction: row;
+  max-width: max-content;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+#centerDiv{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+</style>
 <script>
 import timeentryService from "@/services/timeentryService";
 import {useUserStore} from "@/stores/user";
 import {storeToRefs} from "pinia";
 import stundenkontoService from "@/services/stundenkontoService";
-import proposalService from "@/services/proposalService";
+import userService from "@/services/userService";
+
 
 
 
@@ -262,8 +289,8 @@ export default {
   }),
   mounted () {
 
-      this.getEffort1(this.user.id)
-      this.getAllEntries1(this.user.id)
+     this.getEffort1(this.user.id)
+     // this.getAllEntries1(this.user.id)
     this.$refs.calendar.checkChange()
   },
   async created() {
@@ -289,19 +316,38 @@ export default {
 
   methods: {
 
+    async getEffort1(userId){
+      await userService.getProjectEffort1(userId)
+          .then(async (resp) =>{
+            this.completeEffort = resp.data
+            let time = resp.data
+            let projects = [];
+            for(let key in time){
+              projects.push(key);
+            }
+
+       //     let efforts = Object.values(time)
+            let total = userService.getTotalTime(time)
+            this.total = total
+
+
+
+          })
+    },
+
     async getproposal(){
 
       let proposals= await stundenkontoService.getvacationandsickness(this.user.id)
 
           proposals.vacation.forEach((vacation)=>{
             this.events.push({
-              name:"Urlaub",start:Date.parse(proposalService.ZTimeToMDTime(vacation.startDate)),end:Date.parse(proposalService.ZTimeToMDTime(vacation.endDate)),color:"teal",timed:false
+              name:"Urlaub",start:Date.parse(vacation.startDate),end:Date.parse(vacation.endDate),color:"teal",timed:false
 
             })
           })
           proposals.sickness.forEach((sickness)=>{
             this.events.push({
-                name:"Krank",start:Date.parse(proposalService.ZTimeToMDTime(sickness.startDate)),end:Date.parse(proposalService.ZTimeToMDTime(sickness.endDate)),color:"green",timed:false
+                name:"Krank",start:Date.parse(sickness.startDate),end:Date.parse(sickness.endDate),color:"green",timed:false
               })
 
           })

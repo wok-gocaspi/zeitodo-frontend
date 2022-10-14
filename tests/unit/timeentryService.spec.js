@@ -13,6 +13,7 @@ describe("Axios Requests", () => {
 
         it("creat time", async () => {
             const creattime = {
+                userId: "6317793bd4a3cd6e77d99360",
                 startdate :Date.now().toString(),
                 endDate :Date.now().toString(),
                 breakstartdate:Date.now().toString(),
@@ -20,7 +21,10 @@ describe("Axios Requests", () => {
 
             }
             const userid = "6317793bd4a3cd6e77d99360"
-            axios.get.mockResolvedValueOnce(userid)
+            const user = {data:{
+                    id:userid
+                }}
+            axios.get.mockResolvedValueOnce(user)
 
             axios.post.mockResolvedValueOnce(JSON.stringify(creattime))
 
@@ -39,7 +43,11 @@ describe("Axios Requests",()=>{
         breakEndDate: Date.now().toString(),
     }
     const userid = "6317793bd4a3cd6e77d99360"
-    axios.get.mockResolvedValueOnce(userid)
+
+        const user = {data:{
+                id:userid
+            }}
+    axios.get.mockResolvedValueOnce(user)
 
     axios.get.mockResolvedValueOnce(JSON.stringify(gettime))
     const result = await timeentryService.getTimeentry(JSON.stringify(gettime))
@@ -61,7 +69,10 @@ describe("Axios Requests",()=>{
             breakEnd:new Date(Date.now().toString()),
         }
         const userid = "6317793bd4a3cd6e77d99360"
-        axios.get.mockResolvedValueOnce(userid)
+        const user = {data:{
+                id:userid
+            }}
+        axios.get.mockResolvedValueOnce(user)
 
         axios.put.mockResolvedValueOnce(JSON.stringify(update))
         const result = await timeentryService.updatetimeentry(JSON.stringify(update))

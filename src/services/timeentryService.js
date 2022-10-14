@@ -8,7 +8,7 @@ export default {
 
         await axios.get("/user/self")
              .then(res => {
-                 timeentry.userId = res.data.id
+                     timeentry.userId = res.data.id
 
              })
 

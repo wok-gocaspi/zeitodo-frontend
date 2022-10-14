@@ -1,19 +1,17 @@
 <template>
   <v-container>
-    <div align="left">
-    <h1>Stundentafel </h1><br>
-    </div>
   <v-card
       elevation="1"
       id="topCard"
   >
-
-    <v-row
-      justify="center"
-      >
-
-
-
+    <!-- Moved viewHeader to the toolbar
+<v-container>
+  <v-card-title>
+  <h1>Stundentafel </h1>
+    </v-card-title>
+</v-container>
+    -->
+    <v-row justify="center">
 
       <v-dialog
         v-model="dialog"
@@ -23,22 +21,15 @@
 
         <v-card>
           <span class="text-h5" >Neuer Zeiteintrag</span> &#8505;
-
         </v-card>
         <v-card >
-
           <v-card-text>
             <v-container>
               <v-row>
-
                 <form action="/timeentry" method="post"><br>
                   <div class="v-input-holder">
-
-
                   <label for=""><p>Datum :<input type="date" name="trip-start" v-model="date" ></p></label><br>
                   </div>
-
-
                 </form>
                 <v-row>
                 <form action="/timeentry" method="post"><br><br><br>
