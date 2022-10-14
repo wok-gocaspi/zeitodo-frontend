@@ -19,41 +19,17 @@
             class="ma-12"
             >
 
-            <v-col
-              cols="13"
-              sm="6"
-              >
-          <v-combobox
-            v-model="select"
-            :items="items"
-            label="Teams"
-            multiple
-            outlined
-            solo
 
-          ></v-combobox>
-            </v-col>
 
             <template v-slot:prepend-item>
               <v-divider class="mt-2"></v-divider>
             </template>
 
-           <v-col
-             cols="12"
-             sm="6"
-             >
-             <v-text-field
-                 id="items"
-                 value = ""
-                 label="Teammitglied"
-                 solo
-                 readonly
-             ></v-text-field>
-           </v-col>
+            <div align="left"><h1>&#128101;Teams Mitglieder:</h1></div>
+
+          &nbsp;&nbsp;&nbsp;&nbsp;<div align="left" >&nbsp;<h1>{{teammenber}}</h1> </div>
+
           </v-row>
-          <div align="left" > <h1>{{teammenber}}  </h1> </div>
-
-
 
 
 
@@ -257,7 +233,7 @@ export default {
     selectedElement: null,
     selectedOpen: false,
     events: [],
-    colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', ],
+    colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'blue'],
     names: [],
     dragEvent: null,
     dragStart: null,
@@ -391,7 +367,7 @@ export default {
       allteam.data.forEach((user)=>{
         user.vacationProposals.forEach((proposal)=>{
           this.events.push({
-            name:user.username,start:Date.parse(proposal.startDate),end:Date.parse(proposal.endDate),color:"blue",timed:false
+            name:user.username,start:Date.parse(proposal.startDate),end:Date.parse(proposal.endDate),color:this.colors[(0,this.colors.length - 1)],timed:false
           })
         })
       })

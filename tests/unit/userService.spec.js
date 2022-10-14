@@ -18,13 +18,18 @@ describe("Axios Requests", () => {
         expect(result).toEqual(token)
     })
 
-    it("get all Teammember", async () => {
-        const user = {
-             "team":"ZeiTodo",
-            "id": "123"
-        }
-
-        axios.post.mockResolvedValueOnce(user)
+    it("get all team member", async () => {
+        const user = [
+            {
+                "id": "123",
+                "username": "Peter"
+            },
+            {
+                "id": "234",
+                "username": "Hans"
+            }
+        ]
+        axios.get.mockResolvedValueOnce(user)
 
         const result = await userService.getAllteammenber(user)
         expect(result).toEqual(user)
