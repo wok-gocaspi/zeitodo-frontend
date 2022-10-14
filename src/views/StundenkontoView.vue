@@ -49,7 +49,7 @@
         </v-card>
         <v-card>
           <v-card-title>Stundenkonto &#128337;</v-card-title>
-          <v-card-text>{{this.total}} STD von {{this.total}} STD Soll-Stunden</v-card-text>
+          <v-card-text>{{this.total}} STD von {{this.sollstunden}} STD Soll-Stunden</v-card-text>
         </v-card>
       </v-card>
 
