@@ -223,7 +223,6 @@ import timeentryService from "@/services/timeentryService";
 import {useUserStore} from "@/stores/user";
 import {storeToRefs} from "pinia";
 import stundenkontoService from "@/services/stundenkontoService";
-import proposalService from "@/services/proposalService";
 import userService from "@/services/userService";
 
 
@@ -342,13 +341,13 @@ export default {
 
           proposals.vacation.forEach((vacation)=>{
             this.events.push({
-              name:"Urlaub",start:Date.parse(proposalService.ZTimeToMDTime(vacation.startDate)),end:Date.parse(proposalService.ZTimeToMDTime(vacation.endDate)),color:"teal",timed:false
+              name:"Urlaub",start:Date.parse(vacation.startDate),end:Date.parse(vacation.endDate),color:"teal",timed:false
 
             })
           })
           proposals.sickness.forEach((sickness)=>{
             this.events.push({
-                name:"Krank",start:Date.parse(proposalService.ZTimeToMDTime(sickness.startDate)),end:Date.parse(proposalService.ZTimeToMDTime(sickness.endDate)),color:"green",timed:false
+                name:"Krank",start:Date.parse(sickness.startDate),end:Date.parse(sickness.endDate),color:"green",timed:false
               })
 
           })
