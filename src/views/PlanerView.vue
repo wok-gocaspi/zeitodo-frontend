@@ -1,45 +1,42 @@
 <template>
-
   <v-container>
-<div align="left">
-  <h1>StundenKonto </h1><br>
 
-</div>
+    <h1>Planer für Abwesenheiten</h1><br>
 
 
+    <v-layout row>
+      <v-flex xs50 md12>
+        <div ><v-card
+            class=""
 
-     <v-layout row>
-       <v-flex xs50 md4>
-    <div ><v-card
-        class=""
+            color="grey lighten-3"
 
-        color="grey lighten-3"
+        >
 
-    >
-      <div style=""><h1>Mitarbeiter &#128187; </h1></div><br><br>
-      <div align="center"><h1> {{user.username}}</h1></div><br><br><br>
-    </v-card></div></v-flex>
-       <v-flex xs12 md4>
-    <div><v-card
+          <v-row
+            align="left"
+            justify="left"
+            class="ma-12"
+            >
 
-        color="grey lighten-3"
 
-    >
-      <h1>Abwesenheiten &#128197; &#127973;</h1><br><br>
-      <div >&emsp;Urlaubstage :&emsp;{{this.absence.vacation}} von {{this.absence.totalVacation}}</div><br>
-      <div >&emsp;Krankheitstage :&emsp;{{this.absence.sickness}}</div><br><br>
-    </v-card></div>
-         </v-flex>
-       <v-flex xs12 md4>
-    <div><v-card
 
-        color="grey lighten-3"
-    >
-      <div><h1>Stundenkonto &#128337;</h1></div><br><br>
-      <div align="left">&emsp;{{this.total}} h von {{this.total}} h Soll-Stunden</div><br><br><br><br>
-    </v-card></div>
-         </v-flex>
-     </v-layout>
+            <template v-slot:prepend-item>
+              <v-divider class="mt-2"></v-divider>
+            </template>
+
+            <div align="left"><h1>&#128101;Teams Mitglieder:</h1></div>
+
+          &nbsp;&nbsp;&nbsp;&nbsp;<div align="left" >&nbsp;<h1>{{teammenber}}</h1> </div>
+
+          </v-row>
+
+
+
+        </v-card></div></v-flex>
+
+
+    </v-layout>
 
 
     <v-card
@@ -88,6 +85,7 @@
                   mdi-chevron-right
                 </v-icon>
               </v-btn>
+
               <v-toolbar-title v-if="$refs.calendar">
                 {{ $refs.calendar.title }}
               </v-toolbar-title>
@@ -117,10 +115,6 @@
                   <v-list-item @click="type = 'month'">
                     <v-list-item-title>Month</v-list-item-title>
                   </v-list-item>
-                  <v-list-item @click="type = '4day'">
-                    <v-list-item-title>4 days</v-list-item-title>
-                  </v-list-item>
-
                 </v-list>
               </v-menu>
             </v-toolbar>
@@ -164,8 +158,8 @@
                 <v-card-text>
                   <span v-html="selectedEvent.details"></span>
                 </v-card-text>
-                <v-card-text>
-                  <div class="text-center"> {{user.username}} hat {{this.absence}} </div>
+                <v-card-text v-if="absence.sickness">
+                  <div class="text-center">{{user.username}} Abwesenheit sind  {{this.absence}} <br><br> &#128153;Urlaub</div>
 
                 </v-card-text>
                 <v-card-actions>
@@ -194,6 +188,8 @@
 
 <script>
 import timeentryService from "@/services/timeentryService";
+import userService from "@/services/userService";
+import chartService from "@/services/chartService";
 import {useUserStore} from "@/stores/user";
 import {storeToRefs} from "pinia";
 import stundenkontoService from "@/services/stundenkontoService";
@@ -201,9 +197,10 @@ import proposalService from "@/services/proposalService";
 
 
 
+
 export default {
 
-  name: "DashboardView.vue",
+  name: "PlanerView.vue",
   setup(){
     const userStore = useUserStore()
     const {user, error} = storeToRefs(userStore)
@@ -212,6 +209,13 @@ export default {
   },
 
   data: () => ({
+      select: ['ZeiToDo'],
+    items:['ZeiToDo','Okapi','Employee Register'],
+    selectedTeams:['ZeiToDo','Okapi','Ohne Team'],
+    userr:[],
+    UserMember:[],
+    teammenber:"",
+    username:"",
     getUserErr:"",
     token:"",
     completeEffort:{BMW:49},
@@ -224,17 +228,13 @@ export default {
     type: 'month',
     typeToLabel: {
       month: 'Month',
-      week: 'Week',
-      day: 'Day',
-      '4day': '4 Days',
-
     },
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
     events: [],
-    colors: ['indigo', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', ],
-    names: ['Meeting', 'Holiday', 'Travel', 'Event', 'Birthday', 'Conference'],
+    colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'blue'],
+    names: [],
     dragEvent: null,
     dragStart: null,
     createStart:null,
@@ -246,8 +246,11 @@ export default {
       end:"",
       sickness:"",
       vacation:"",
+      teammember:"",
     },
-
+    value :{
+      teammenber:"",
+    },
     timeentry:{
       start:"",
       end:"",
@@ -257,21 +260,36 @@ export default {
     },
     selectedtype:"",
     absence:"",
-
-
+    allproposal:{
+      start:"",
+      end:"",
+      sickness:"",
+      vacation:"",
+      teammember:"",
+    },
+    teammemberfeld:{
+        firstname:"",
+        lastname:"",
+    }
   }),
+
   mounted () {
 
-      this.getEffort1(this.user.id)
-      this.getAllEntries1(this.user.id)
+    this.getEffort1(this.user.id)
+    this.getAllEntries1(this.user.id)
     this.$refs.calendar.checkChange()
+
   },
-  async created() {
+  created() {
     this.gettimeentry()
-    await this.getproposal()
+    this.teammember()
+    this.getAllproposal()
 
   },
   computed :{
+    allTeams(){
+      return this.selectedTeams.length=== this.teams.length
+    },
 
     startdate(){
       return this.date + "T" + this.timeentry.start + ":00+02:00"
@@ -288,29 +306,81 @@ export default {
   },
 
   methods: {
+    toggle () {
+      this.$nextTick(()=>{
+        if(this.allTeams){
+          this.selectedTeams=[]
+        } else {
+          this.selectedTeams = this.teams.slice()
+        }
+      })
+    },
+    async getAllEntries1(userId){
+      await userService.getAllTimeEntries2(userId)
+          .then(resp => {
+            let  entries = resp.data
 
-    async getproposal(){
+            let [dates,projects,durations] =  chartService.extractDatesProjectDuration(entries)
 
-      let proposals= await stundenkontoService.getvacationandsickness(this.user.id)
-
-          proposals.vacation.forEach((vacation)=>{
-            this.events.push({
-              name:"Urlaub",start:Date.parse(proposalService.ZTimeToMDTime(vacation.startDate)),end:Date.parse(proposalService.ZTimeToMDTime(vacation.endDate)),color:"teal",timed:false
-
-            })
+            this.createBar(dates,projects,durations)
           })
-          proposals.sickness.forEach((sickness)=>{
-            this.events.push({
-                name:"Krank",start:Date.parse(proposalService.ZTimeToMDTime(sickness.startDate)),end:Date.parse(proposalService.ZTimeToMDTime(sickness.endDate)),color:"green",timed:false
-              })
-
-          })
-         stundenkontoService.getAbsence(this.user.id)
-             .then(res=>{
-               this.absence = res.data
-             })
 
     },
+    async teammember(){
+
+      await userService.getAllteammenber(this.user.id)
+
+          .then(resp => {
+            console.log(resp.data)
+            resp.data.forEach((tm)=>{
+              this.teammenber = this.teammenber + tm.firstname +"  "+ tm.lastname + " , "
+            })
+          })
+          .catch(err =>{
+            console.log(err)
+          })
+    },
+
+
+    async getEffort1(userId){
+      await userService.getProjectEffort1(userId)
+          .then(async (resp) =>{
+            this.completeEffort = resp.data
+            let time = resp.data
+            let projects = [];
+            for(let key in time){
+              projects.push(key);
+            }
+            let efforts = Object.values(time)
+            let total = userService.getTotalTime(time)
+            this.total = total
+            const ctx = document.getElementById('myChart');
+            await this.createDoughnut(projects,efforts,ctx)
+          })
+    },
+
+
+    async getAllproposal(){
+
+      let allteam= await proposalService.getTeamProposal(this.user.id)
+      console.log(allteam)
+      allteam.data.forEach((user)=>{
+        user.vacationProposals.forEach((proposal)=>{
+          this.events.push({
+            name:user.username,start:Date.parse(proposal.startDate),end:Date.parse(proposal.endDate),color:this.colors[(0,this.colors.length - 1)],timed:false
+          })
+        })
+      })
+
+
+      stundenkontoService.getAbsence(this.user.id)
+          .then(res=>{
+            this.absence = res.data
+          })
+
+
+    },
+
 
     gettimeentry(){
 
@@ -318,7 +388,7 @@ export default {
       timeentryService.getTimeentry()
           .then(res => {
             res.data.forEach((te)=>{
-              this.events.push({
+              this.events({
                 name:te.project,start:Date.parse(te.start),end:Date.parse(te.end),breakStart:Date.parse(te.breakStart),breakEnd:Date.parse(te.breakEnd),color:"blue",timed:true
 
               })
@@ -450,6 +520,8 @@ export default {
     },
   },
 }
-
-
 </script>
+
+<style scoped>
+
+</style>
