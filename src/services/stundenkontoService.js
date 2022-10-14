@@ -10,27 +10,34 @@ export default {
      return axios.get("/proposals/absence/"+userid)
 
    },
-    async getvacationandsickness(userid){
+    getvacationandsickness(userid){
+       return new Promise((resolve) => {
+           let filterproposal ={
+               vacation :[],
+               sickness :[],
+           }
+           proposalService.getProposalsByUserID(userid)
 
-        let filterproposal ={
-            vacation :[],
-            sickness :[],
-        }
-       await proposalService.getProposalsByUserID(userid)
+               .then(res=> {
+                   res.data.forEach((proposal)=>{
+                       if (proposal.type === "vacation" && proposal.status==="approved"){
+                           filterproposal.vacation.push(proposal)
 
-            .then(res=> {
-                res.data.forEach((proposal)=>{
-                    if (proposal.type === "vacation" && proposal.status==="approved"){
-                        filterproposal.vacation.push(proposal)
+                       }
+                       else if (proposal.type === "sickness")  {
+                           filterproposal.sickness.push(proposal)
+                       }
+                   })
+                   resolve(filterproposal)
+               })
+               .catch(err => {
+                   console.log(err)
+               })
 
-                    }
-                    else if (proposal.type === "sickness")  {
-                        filterproposal.sickness.push(proposal)
-                    }
-                })
-            })
 
-        return filterproposal
+       })
+
+
     },
 
 

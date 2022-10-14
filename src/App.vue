@@ -10,7 +10,9 @@
       </v-list>
       <v-divider></v-divider>
       <v-list dense nav>
-        <v-list-item v-for="item in items" v-bind:key="item.title" link :to="item.path">
+        <v-list-item v-for="item in items" v-bind:key="item.title" link :to="item.path"
+        @click="getCurrentHeadline(item.path)"
+        >
           <v-list-item-icon>
             <v-icon>{{item.icon}}</v-icon>
           </v-list-item-icon>
@@ -21,23 +23,19 @@
       </v-list>
     </v-navigation-drawer>
     <v-app-bar app>
-
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title><h1>{{ items.title }}</h1></v-toolbar-title>
-
+      <v-toolbar-title><h3>{{ headlineText }}</h3></v-toolbar-title>
       <div class="toolbar-btn">
-
         <div class="text-center">
           <v-menu offset-y>
-
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                   icon
+
                   v-bind="attrs"
                   v-on="on"
               >
                 <v-icon>mdi-account-circle</v-icon>
-
               </v-btn>
             </template>
             <v-list >
@@ -122,12 +120,12 @@ export default {
     ],
     profilBtn:[
       {title: "Admin Panel", icon:"mdi-account-cog", path:"/admin/panel"},
-      {title: "Login", icon:"mdi-account-lock-open", path:"/login"},
-
-
-
+      {title: "Login", icon:"mdi-account-lock-open", path:"/login"}
     ],
     drawer: false,
+    headlineText:"Dashboard",
+    adminPanelText:"AdminPanel",
+    LoginText:"Log in",
 
     snackbar: false,
     snackbarData: ""
@@ -141,6 +139,26 @@ export default {
     snackbarSetEvent(sb){
       this.snackbarData = sb
       this.snackbar = true
+    },
+    getCurrentHeadline(path){
+        if (path === "/"){
+          this.headlineText = "Dashboard"
+        }
+        if(path === "/proposals"){
+          this.headlineText = "Anträge"
+        }
+      if(path === "/timeentry"){
+        this.headlineText = "Zeiteinträge"
+      }
+      if(path === "/stundenkonto"){
+        this.headlineText = "Stundenkonto"
+      }
+      if(path === "AdminPanel"){
+        this.headlineText = "Admin Management Panel"
+      }
+      if(path === "Log in"){
+        this.headlineText = ""
+      }
     },
     async logout(){
       await this.userStore.logoutUser()

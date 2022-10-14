@@ -1,14 +1,7 @@
 <template>
 
   <v-container>
-<div align="left">
-  <h1>StundenKonto </h1><br>
-
-
-</div>
-
-
-
+<!--
      <v-layout row>
        <v-flex xs50 md4>
     <div ><v-card
@@ -37,11 +30,30 @@
         color="grey lighten-3"
     >
       <div><h1>Stundenkonto &#128337;</h1></div><br><br>
-      <div align="left">&emsp;{{this.total}} h von {{this.sollstunden}} h Soll-Stunden</div><br><br><br><br>
+      <div align="left">&emsp;{{this.total}} h von {{this.total}} h Soll-Stunden</div><br><br><br><br>
     </v-card></div>
          </v-flex>
      </v-layout>
 
+
+    -->
+    <div id="centerDiv">
+      <v-card id="rowContainer">
+        <v-card>
+          <v-card-title>Mitarbeiter &#128187;</v-card-title>
+          <v-card-text>{{user.username}}</v-card-text>
+        </v-card>
+        <v-card>
+          <v-card-title>Abwesenheiten &#128197; &#127973;</v-card-title>
+          <v-card-text>Urlaubstage :&emsp;{{this.absence.vacation}} von {{this.absence.totalVacation}} <br> Krankheitstage :&emsp;{{this.absence.sickness}}</v-card-text>
+        </v-card>
+        <v-card>
+          <v-card-title>Stundenkonto &#128337;</v-card-title>
+          <v-card-text>{{this.total}} STD von {{this.total}} STD Soll-Stunden</v-card-text>
+        </v-card>
+      </v-card>
+
+    </div>
 
     <v-card
         elevation="20"
@@ -192,14 +204,27 @@
   </v-container>
 
 </template>
-
+<style>
+#rowContainer{
+  display: flex;
+  flex-direction: row;
+  max-width: max-content;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+#centerDiv{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+</style>
 <script>
 import timeentryService from "@/services/timeentryService";
-import userService from "@/services/userService";
-import chartService from "@/services/chartService";
 import {useUserStore} from "@/stores/user";
 import {storeToRefs} from "pinia";
 import stundenkontoService from "@/services/stundenkontoService";
+import userService from "@/services/userService";
+
 
 
 
@@ -265,13 +290,13 @@ export default {
   }),
   mounted () {
 
-      this.getEffort1(this.user.id)
-      this.getAllEntries1(this.user.id)
-      this.$refs.calendar.checkChange()
+     this.getEffort1(this.user.id)
+     // this.getAllEntries1(this.user.id)
+    this.$refs.calendar.checkChange()
   },
-  created() {
+  async created() {
     this.gettimeentry()
-    this.getproposal()
+    await this.getproposal()
 
   },
   computed :{
@@ -291,18 +316,6 @@ export default {
   },
 
   methods: {
-    async getAllEntries1(userId){
-      await userService.getAllTimeEntries2(userId)
-          .then(resp => {
-            let  entries = resp.data
-
-            let [dates,projects,durations] =  chartService.extractDatesProjectDuration(entries)
-
-            this.createBar(dates,projects,durations)
-          })
-
-    },
-
 
     async getEffort1(userId){
       await userService.getProjectEffort1(userId)
@@ -319,49 +332,21 @@ export default {
             for(let key in time){
               projects.push(key);
             }
-            let efforts = Object.values(time)
+
+       //     let efforts = Object.values(time)
             let total = userService.getTotalTime(time)
             this.total = total
-            const ctx = document.getElementById('myChart');
-            await this.createDoughnut(projects,efforts,ctx)
+
+
+
           })
-    },
-    creattimeentry(timeentry){
-
-      let te = timeentry
-
-      te.start=new Date(this.startdate)
-      te.start=te.start.toISOString()
-
-      te.end=new Date(this.enddate)
-      te.end=te.end.toISOString()
-
-      te.breakStart=new Date(this.breakstartdate)
-      te.breakStart=te.breakStart.toISOString()
-
-      te.breakEnd=new Date(this.breakenddate)
-      te.breakEnd=te.breakEnd.toISOString()
-
-
-
-      this.events.push({
-
-        name:te.project,start:Date.parse(te.start),end:Date.parse(te.end),breakStart:Date.parse(te.breakStart),breakEnd:Date.parse(te.breakEnd),color:"blue",timed:true
-
-
-
-      })
-
-      timeentryService.creattimeentry(JSON.stringify(te))
-
     },
 
     async getproposal(){
 
       let proposals= await stundenkontoService.getvacationandsickness(this.user.id)
-         console.log(proposals)
-          proposals.vacation.forEach((vacation)=>{
 
+          proposals.vacation.forEach((vacation)=>{
             this.events.push({
               name:"Urlaub",start:Date.parse(vacation.startDate),end:Date.parse(vacation.endDate),color:"teal",timed:false
 
@@ -377,7 +362,6 @@ export default {
              .then(res=>{
                this.absence = res.data
              })
-
 
     },
 
