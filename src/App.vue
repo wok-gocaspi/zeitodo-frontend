@@ -159,6 +159,9 @@ export default {
       if(path === "Log in"){
         this.headlineText = ""
       }
+      if (path === "/planer"){
+        this.headlineText = "Planer für Abwesenheiten"
+      }
     },
     async logout(){
       await this.userStore.logoutUser()

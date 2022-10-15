@@ -1,8 +1,6 @@
 <template>
   <v-container>
 
-    <h1>Planer für Abwesenheiten</h1><br>
-
 
     <v-layout row>
       <v-flex xs50 md12>
@@ -25,9 +23,9 @@
               <v-divider class="mt-2"></v-divider>
             </template>
 
-            <div align="left"><h1>&#128101;Teams Mitglieder:</h1></div>
+            <div ><h1>&#128101;Teams Mitglieder:</h1></div>
 
-          &nbsp;&nbsp;&nbsp;&nbsp;<div align="left" ><h1>{{teammenber}}</h1> </div>
+          &nbsp;&nbsp;&nbsp;&nbsp;<div  ><h1>{{teammenber}}</h1> </div>
 
           </v-row>
 
