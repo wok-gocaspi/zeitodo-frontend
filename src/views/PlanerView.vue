@@ -2,6 +2,16 @@
   <v-container>
 
 
+
+    <div id="centerDiv">
+      <v-card id="rowContainer">
+        <v-card>
+          <v-card-title>&#128101;Team Mitglieder</v-card-title>
+          <v-card-text>{{teammenber}}</v-card-text>
+      </v-card>
+      </v-card>
+    </div>
+  <!--
     <v-layout row>
       <v-flex xs50 md12>
         <div ><v-card
@@ -36,7 +46,7 @@
 
 
     </v-layout>
-
+-->
 
     <v-card
         elevation="20"
@@ -188,7 +198,20 @@
   </v-container>
 
 </template>
-
+<style>
+#rowContainer{
+  display: flex;
+  flex-direction: row;
+  max-width: max-content;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+#centerDiv{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+</style>
 <script>
 import timeentryService from "@/services/timeentryService";
 import userService from "@/services/userService";
@@ -337,7 +360,7 @@ export default {
           .then(resp => {
             console.log(resp.data)
             resp.data.forEach((tm)=>{
-              this.teammenber = this.teammenber +" * "+ tm.firstname +"   "+ tm.lastname + "   "
+              this.teammenber = this.teammenber +"  "+ tm.firstname +"   "+ tm.lastname + "  , "
             })
           })
           .catch(err =>{
