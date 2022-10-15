@@ -194,7 +194,7 @@
 <script>
 import timeentryService from "@/services/timeentryService";
 import userService from "@/services/userService";
-import chartService from "@/services/chartService";
+
 import {useUserStore} from "@/stores/user";
 import {storeToRefs} from "pinia";
 import stundenkontoService from "@/services/stundenkontoService";
@@ -325,10 +325,10 @@ export default {
       await userService.getAllTimeEntries2(userId)
           .then(resp => {
             let  entries = resp.data
+    console.log("getAllEntries Returns: ", entries)
+         //   let [dates,projects,durations] =  chartService.extractDatesProjectDuration(entries)
 
-            let [dates,projects,durations] =  chartService.extractDatesProjectDuration(entries)
-
-            this.createBar(dates,projects,durations)
+         //   this.createBar(dates,projects,durations)
           })
 
     },
@@ -357,11 +357,11 @@ export default {
             for(let key in time){
               projects.push(key);
             }
-            let efforts = Object.values(time)
+       //     let efforts = Object.values(time)
             let total = userService.getTotalTime(time)
             this.total = total
-            const ctx = document.getElementById('myChart');
-            await this.createDoughnut(projects,efforts,ctx)
+      //      const ctx = document.getElementById('myChart');
+    //        await this.createDoughnut(projects,efforts,ctx)
           })
     },
 
@@ -394,7 +394,7 @@ export default {
       timeentryService.getTimeentry()
           .then(res => {
             res.data.forEach((te)=>{
-              this.events({
+              this.events.push({
                 name:te.project,start:Date.parse(te.start),end:Date.parse(te.end),breakStart:Date.parse(te.breakStart),breakEnd:Date.parse(te.breakEnd),color:"blue",timed:true
 
               })
