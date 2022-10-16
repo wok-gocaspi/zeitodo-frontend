@@ -25,12 +25,9 @@
               <v-divider class="mt-2"></v-divider>
             </template>
 
-            <div align="left"><h1>&#128101;Teams Mitglieder:</h1></div>
-
-          &nbsp;&nbsp;&nbsp;&nbsp;<div align="left" ><h1>{{teammenber}}</h1> </div>
+            <div align="left"><h1>&#128101;Team Mitglieder: {{teammenber}}</h1></div>
 
           </v-row>
-
 
 
 
@@ -192,9 +189,7 @@
 </template>
 
 <script>
-import timeentryService from "@/services/timeentryService";
 import userService from "@/services/userService";
-import chartService from "@/services/chartService";
 import {useUserStore} from "@/stores/user";
 import {storeToRefs} from "pinia";
 import stundenkontoService from "@/services/stundenkontoService";
@@ -233,7 +228,6 @@ export default {
     type: 'month',
     typeToLabel: {
       month: 'Month',
-      day:'Day',
     },
     selectedEvent: {},
     selectedElement: null,
@@ -321,64 +315,38 @@ export default {
         }
       })
     },
-    async getAllEntries1(userId){
-      await userService.getAllTimeEntries2(userId)
-          .then(resp => {
-            let  entries = resp.data
-
-            let [dates,projects,durations] =  chartService.extractDatesProjectDuration(entries)
-
-            this.createBar(dates,projects,durations)
-          })
-
-    },
     async teammember(){
 
       await userService.getAllteammenber(this.user.id)
-
-          .then(resp => {
-            console.log(resp.data)
+        .then(resp => {
+          if (resp.data.length !== 0){
             resp.data.forEach((tm)=>{
-              this.teammenber = this.teammenber +" * "+ tm.firstname +"   "+ tm.lastname + "   "
+              this.teammenber = this.teammenber + tm.firstname +"  "+ tm.lastname + " , "
             })
-          })
-          .catch(err =>{
-            console.log(err)
-          })
-    },
-
-
-    async getEffort1(userId){
-      await userService.getProjectEffort1(userId)
-          .then(async (resp) =>{
-            this.completeEffort = resp.data
-            let time = resp.data
-            let projects = [];
-            for(let key in time){
-              projects.push(key);
-            }
-            let efforts = Object.values(time)
-            let total = userService.getTotalTime(time)
-            this.total = total
-            const ctx = document.getElementById('myChart');
-            await this.createDoughnut(projects,efforts,ctx)
-          })
+          }
+        })
+        .catch(err =>{
+          console.log(err)
+        })
     },
 
 
     async getAllproposal(){
 
-      let allteam= await proposalService.getTeamProposal(this.user.id)
-      console.log(allteam)
-      allteam.data.forEach((user)=>{
-        user.vacationProposals.forEach((proposal)=>{
-          this.events.push({
-            name:user.username,start:Date.parse(proposal.startDate),end:Date.parse(proposal.endDate),color:this.colors[(0,this.colors.length - 1)],timed:false
+      proposalService.getTeamProposal(this.user.id)
+          .then(resp => {
+            if (resp.data.length !== 0){
+              resp.data.forEach((user)=>{
+                  user.vacationProposals?.forEach((proposal)=>{
+                    this.events.push({
+                      name:user.username,start:Date.parse(proposal.startDate),end:Date.parse(proposal.endDate),color:this.colors[(0,this.colors.length - 1)],timed:false
+                    })
+                  })
+
+
+              })
+            }
           })
-        })
-      })
-
-
       stundenkontoService.getAbsence(this.user.id)
           .then(res=>{
             this.absence = res.data
@@ -386,83 +354,6 @@ export default {
 
 
     },
-
-
-    gettimeentry(){
-
-
-      timeentryService.getTimeentry()
-          .then(res => {
-            res.data.forEach((te)=>{
-              this.events({
-                name:te.project,start:Date.parse(te.start),end:Date.parse(te.end),breakStart:Date.parse(te.breakStart),breakEnd:Date.parse(te.breakEnd),color:"blue",timed:true
-
-              })
-
-            })
-          })
-
-    },
-
-    updatedialog(){
-
-      this.date=timeentryService.getdate(this.selectedEvent.start)
-      this.timeentry.start=timeentryService.gettime(this.selectedEvent.start)
-      this.timeentry.end=timeentryService.gettime(this.selectedEvent.end)
-      this.timeentry.breakStart=timeentryService.gettime(this.selectedEvent.breakStart)
-      this.timeentry.breakEnd=timeentryService.gettime(this.selectedEvent.breakEnd)
-      this.timeentry.project=this.selectedEvent.name
-      this.dialog = true
-      this.selectedtype="update"
-
-    },
-
-    savetimeentry(){
-
-
-
-      if (this.selectedtype=="create"){
-        this.creattimeentry(this.timeentry)
-
-      }else {
-        this.updatetimeentry()
-
-      }
-
-    },
-    updatetimeentry(){
-
-      let te = this.timeentry
-
-      te.start=this.startdate
-      te.end=this.enddate
-      te.breakStart=this.breakstartdate
-      te.breakEnd=this.breakenddate
-
-      timeentryService.updatetimeentry(JSON.stringify(te))
-
-
-    },
-
-    timeentrydialoge(){
-
-      this.dialog=true
-      this.selectedtype="create"
-      this.$emit("Timeentries")
-    },
-
-    cleartimenetry(){
-      this.dialog=false
-      this.date=""
-      this.timeentry.start=""
-      this.timeentry.end=""
-      this.timeentry.breakStart=""
-      this.timeentry.breakEnd=""
-      this.timeentry.project=""
-    },
-
-
-
     viewDay ({ date }) {
       this.focus = date
       this.type = 'day'
