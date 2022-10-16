@@ -13,7 +13,6 @@ describe("Axios Requests", () => {
 
         it("creat time", async () => {
             const creattime = {
-                userId: "6317793bd4a3cd6e77d99360",
                 startdate :Date.now().toString(),
                 endDate :Date.now().toString(),
                 breakstartdate:Date.now().toString(),
@@ -21,9 +20,9 @@ describe("Axios Requests", () => {
 
             }
             const userid = "6317793bd4a3cd6e77d99360"
-            const user = {data:{
-                    id:userid
-                }}
+             const user={data:{
+                 id:userid
+                 }}
             axios.get.mockResolvedValueOnce(user)
 
             axios.post.mockResolvedValueOnce(JSON.stringify(creattime))
@@ -43,8 +42,7 @@ describe("Axios Requests",()=>{
         breakEndDate: Date.now().toString(),
     }
     const userid = "6317793bd4a3cd6e77d99360"
-
-        const user = {data:{
+        const user={data:{
                 id:userid
             }}
     axios.get.mockResolvedValueOnce(user)
@@ -69,7 +67,7 @@ describe("Axios Requests",()=>{
             breakEnd:new Date(Date.now().toString()),
         }
         const userid = "6317793bd4a3cd6e77d99360"
-        const user = {data:{
+        const user={data:{
                 id:userid
             }}
         axios.get.mockResolvedValueOnce(user)

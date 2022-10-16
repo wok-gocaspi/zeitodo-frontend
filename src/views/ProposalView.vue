@@ -117,7 +117,7 @@ export default {
         "sickness": "Krank",
       },
       description: [
-        {icon: "mdi-check", text: "Angenommen"},
+        {icon: " mdi-check", text: "Angenommen"},
         {icon: "mdi-window-close", text: "Abgelehnt"},
         {icon: "mdi-clock", text: "Ausstehend"}
       ]

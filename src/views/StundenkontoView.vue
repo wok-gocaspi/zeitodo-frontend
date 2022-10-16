@@ -49,7 +49,7 @@
         </v-card>
         <v-card>
           <v-card-title>Stundenkonto &#128337;</v-card-title>
-          <v-card-text>{{this.total}} STD von {{this.total}} STD Soll-Stunden</v-card-text>
+          <v-card-text>{{this.total}} STD von {{this.sollstunden}} STD Soll-Stunden</v-card-text>
         </v-card>
       </v-card>
 
@@ -284,6 +284,7 @@ export default {
     },
     selectedtype:"",
     absence:"",
+    sollstunden:"",
 
 
   }),
@@ -319,9 +320,15 @@ export default {
     async getEffort1(userId){
       await userService.getProjectEffort1(userId)
           .then(async (resp) =>{
-            this.completeEffort = resp.data
-            let time = resp.data
+
+            this.completeEffort = resp.data.projects
+            let time = resp.data.projects
+
             let projects = [];
+
+            this.sollstunden = resp.data.required
+
+            console.log(this.sollstunden)
             for(let key in time){
               projects.push(key);
             }
@@ -346,7 +353,7 @@ export default {
             })
           })
           proposals.sickness.forEach((sickness)=>{
-            this.events.push({
+              this.events.push({
                 name:"Krank",start:Date.parse(sickness.startDate),end:Date.parse(sickness.endDate),color:"green",timed:false
               })
 

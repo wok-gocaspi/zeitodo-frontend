@@ -23,7 +23,7 @@
               <v-divider class="mt-2"></v-divider>
             </template>
 
-            <div align="left"><h1>&#128101;Team Mitglieder: {{teammenber}}</h1></div>
+            <div><h1>&#128101;Team Mitglieder: {{teammenber}}</h1></div>
 
           </v-row>
 
@@ -111,7 +111,11 @@
                   <v-list-item @click="type = 'month'">
                     <v-list-item-title>Month</v-list-item-title>
                   </v-list-item>
+                  <v-list-item @click="type = 'day'">
+                    <v-list-item-title>Day</v-list-item-title>
+                  </v-list-item>
                 </v-list>
+
               </v-menu>
             </v-toolbar>
           </v-sheet>
@@ -268,12 +272,13 @@ export default {
   }),
 
   mounted () {
+
     this.$refs.calendar.checkChange()
+
   },
   created() {
     this.teammember()
     this.getAllproposal()
-
   },
   computed :{
     allTeams(){
