@@ -343,20 +343,14 @@ export default {
         let loop = true
         let j = 1
         while (loop) {
-          console.log("start looping")
           if (dates[i + j] && projects[i + j] === projectChecker && dates[i + j].split("T")[0] === dates[i].split("T")[0] && !(projects[i] === projectChecker)) {
             dataToProject.push(durations[i + j])
             datesOfProject.push(dates[i])
-            console.log("durations[i + j] sind : ", durations[i + j])
-            console.log("dates[i] sind :", dates[i])
           } else if (projects[i - j] === projectChecker && dates[i - j].split("T")[0] === dates[i].split("T")[0] && !(projects[i] === projectChecker)) {
             dataToProject.push(durations[i - j])
             datesOfProject.push(dates[i])
-            console.log("durations[i - j] sind : ", durations[i - j])
-            console.log("dates[i] sind :", dates[i])
           }
           j++
-          console.log("j incrementer is " , j)
           if (i + j >= dates.length) {
             loop = false
           }
