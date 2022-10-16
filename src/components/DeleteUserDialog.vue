@@ -60,8 +60,8 @@ export default {
     async deleteUser(userid){
       await userService.deleteUser(userid)
           .then(() => {
-
-              this.$parent.$parent.$emit("setsnackbar",{text: "Successfully Deleted User!", timeout: 5000, color: "green"})
+            this.$parent.$parent.$emit("setsnackbar",{text: "Successfully Deleted User!", timeout: 5000, color: "green"})
+            this.disableDialog()
           })
           .catch(err => {
             this.$parent.$parent.$emit("setsnackbar",{text: err, timeout: 5000, color: "red"})

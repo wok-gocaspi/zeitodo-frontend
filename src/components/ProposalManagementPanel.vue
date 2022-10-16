@@ -67,7 +67,7 @@
             >
               <template v-slot:activator>
                 <v-list-item-content>
-                  <v-list-item-title>{{proposal.startDate}}---{{proposal.endDate}}</v-list-item-title>
+                  <v-list-item-title>{{convertTime(proposal.startDate)}} - {{convertTime(proposal.endDate)}}</v-list-item-title>
                   <v-list-item-subtitle v-if="proposal.status === 'pending'">Ausstehend</v-list-item-subtitle>
                   <v-list-item-subtitle v-if="proposal.status === 'denied'">Abgelehnt</v-list-item-subtitle>
                   <v-list-item-subtitle v-if="proposal.status === 'approved'">Angenommen</v-list-item-subtitle>
@@ -161,6 +161,9 @@ export default {
     closeStatusProposal(){
       this.statusDialog = false
     },
+    convertTime(time){
+      return proposalService.readableTime(time)
+    }
 
   }
 

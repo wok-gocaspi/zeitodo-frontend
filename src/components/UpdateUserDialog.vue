@@ -149,6 +149,7 @@ export default {
       await userService.updateUser(this.user)
           .then(() => {
             this.$parent.$parent.$emit("setsnackbar",{text: "User Updated!", timeout: 5000, color: "green"})
+            this.closeDialog()
           })
           .catch(err => {
             this.$parent.$parent.$emit("setsnackbar", {text: err, timeout: 5000, color: "red"})

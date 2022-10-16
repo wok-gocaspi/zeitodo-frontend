@@ -1,5 +1,8 @@
 import axios from "axios"
 import qs from "qs"
+import moment from "moment-timezone"
+
+moment.locale("de-de")
 
 export default {
     getProposalsByUserID(userid){
@@ -157,5 +160,10 @@ export default {
     },
     getTeamProposal(userid){
         return axios.get("/proposals?userid=" + userid)
+    },
+    readableTime(time){
+        let currentTime = Date.parse(time)
+        return moment(currentTime).tz("Europe/Berlin").format("Do MMMM YYYY")
     }
+
 }

@@ -62,7 +62,7 @@
                 </v-icon>
               </v-list-item-avatar>
               <v-list-item-content>
-                <v-list-item-title id="proposal-title" v-text="proposal.startDate + ' --- ' + proposal.endDate "></v-list-item-title>
+                <v-list-item-title id="proposal-title" v-text="convertTime(proposal.startDate) + ' - ' + convertTime(proposal.endDate)"></v-list-item-title>
                 <v-list-item-subtitle id="proposal-subtitle" v-text="typeDict[proposal.type]"></v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-action>
@@ -96,6 +96,7 @@ import {useUserStore} from "@/stores/user";
 import {storeToRefs} from "pinia";
 import ProposalDialog from "@/components/ProposalDialog";
 import DeleteProposalDialog from "@/components/DeleteProposalDialog";
+import ProposalService from "@/services/proposalService";
 export default {
   name: "ProposalView.vue",
   components: {ProposalDialog, DeleteProposalDialog},
@@ -138,6 +139,9 @@ export default {
     openDeleteProposalDialog(index){
       this.selectedProposal = this.proposals[index]
       this.deleteProposalDialog = true
+    },
+    convertTime(time){
+      return ProposalService.readableTime(time)
     },
     loadProposals(){
       proposalService.getProposalsByUserID(this.user.id)
