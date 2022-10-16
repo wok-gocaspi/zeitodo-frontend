@@ -30,7 +30,7 @@ export default{
         return axios.get("/user")
     },
     getAllteammenber(userid){
-        return axios.get("/user/team?id="+ userid)
+        return axios.get("/user/team?userid="+ userid)
     },
     deleteUser(userid){
         return axios.delete("/user/" + userid)

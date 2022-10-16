@@ -45,7 +45,7 @@
         </v-card>
         <v-card>
           <v-card-title>Abwesenheiten &#128197; &#127973;</v-card-title>
-          <v-card-text>Urlaubstage :&emsp;{{this.absence.vacation}} von {{this.absence.totalVacation}} <br> Krankheitstage :&emsp;{{this.absence.sickness}}</v-card-text>
+          <v-card-text>Urlaubstage:&emsp;{{this.absence.vacation}} von {{this.absence.totalVacation}} <br> Krankheitstage:&emsp;{{this.absence.sickness}}</v-card-text>
         </v-card>
         <v-card>
           <v-card-title>Stundenkonto &#128337;</v-card-title>
@@ -401,17 +401,12 @@ export default {
 
     },
     updatetimeentry(){
-
       let te = this.timeentry
-
       te.start=this.startdate
       te.end=this.enddate
       te.breakStart=this.breakstartdate
       te.breakEnd=this.breakenddate
-
       timeentryService.updatetimeentry(JSON.stringify(te))
-
-
     },
 
     timeentrydialoge(){

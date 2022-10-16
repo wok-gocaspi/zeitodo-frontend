@@ -386,12 +386,16 @@ export default {
       this.events.push({
 
         name:te.project,start:Date.parse(te.start),end:Date.parse(te.end),breakStart:Date.parse(te.breakStart),breakEnd:Date.parse(te.breakEnd),color:"blue",timed:true
-
-
-
                       })
 
       timeentryService.creattimeentry(JSON.stringify(te))
+          .then(() => {
+            this.$emit("setsnackbar", {text: "Zeitantrag erfolgreich erstellt!", color: "green", timeout: 5000})
+            this.dialog = false
+          })
+          .catch(err => {
+            this.$emit("setsnackbar", {text: err.response.data.errorMessage, color: "red", timeout: 5000})
+          })
 
     },
       gettimeentry(){
@@ -425,8 +429,6 @@ export default {
 
     savetimeentry(){
 
-
-
         if (this.selectedtype=="create"){
           this.creattimeentry(this.timeentry)
 
@@ -446,6 +448,13 @@ export default {
      te.breakEnd=this.breakenddate
 
         timeentryService.updatetimeentry(JSON.stringify(te))
+            .then(() => {
+              this.$emit("setsnackbar", {text: "Zeitantrag erfolgreich geändert!", color: "green", timeout: 5000})
+              this.dialog = false
+            })
+            .catch(err => {
+              this.$emit("setsnackbar", {text: err.response.data.errorMessage, color: "red", timeout: 5000})
+            })
 
 
    },
