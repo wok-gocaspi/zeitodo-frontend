@@ -14,8 +14,6 @@
         >
 
           <v-row
-            align="left"
-            justify="left"
             class="ma-12"
             >
 
@@ -25,7 +23,7 @@
               <v-divider class="mt-2"></v-divider>
             </template>
 
-            <div align="left"><h1>&#128101;Team Mitglieder: {{teammenber}}</h1></div>
+            <div><h1>&#128101;Team Mitglieder: {{teammenber}}</h1></div>
 
           </v-row>
 
@@ -275,16 +273,12 @@ export default {
 
   mounted () {
 
-    this.getEffort1(this.user.id)
-    this.getAllEntries1(this.user.id)
     this.$refs.calendar.checkChange()
 
   },
   created() {
-    this.gettimeentry()
     this.teammember()
     this.getAllproposal()
-
   },
   computed :{
     allTeams(){
