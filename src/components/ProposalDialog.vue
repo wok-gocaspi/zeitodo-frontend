@@ -91,6 +91,7 @@ export default {
       ProposalService.createProposal(JSON.stringify(this.proposal))
           .then(() => {
             this.$parent.$emit("setsnackbar", {text: "Proposal was created!", color: "green", timeout: 5000})
+            this.closeDialog()
           })
           .catch(err => {
             this.$parent.$emit("setsnackbar", {text: err.response.data.errorMessage, color: "red", timeout: 5000})
