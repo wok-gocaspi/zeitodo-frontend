@@ -213,9 +213,7 @@
 }
 </style>
 <script>
-import timeentryService from "@/services/timeentryService";
 import userService from "@/services/userService";
-import chartService from "@/services/chartService";
 import {useUserStore} from "@/stores/user";
 import {storeToRefs} from "pinia";
 import stundenkontoService from "@/services/stundenkontoService";
@@ -302,13 +300,12 @@ export default {
 
   mounted () {
 
-    this.getEffort1(this.user.id)
-    this.getAllEntries1(this.user.id)
+  //  this.getEffort1(this.user.id)
+   // this.getAllEntries1(this.user.id)
     this.$refs.calendar.checkChange()
 
   },
   created() {
-    this.gettimeentry()
     this.teammember()
     this.getAllproposal()
 
