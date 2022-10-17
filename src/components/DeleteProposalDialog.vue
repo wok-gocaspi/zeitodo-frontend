@@ -9,7 +9,7 @@
         <v-card-title class="text-h5" id="usr-title">
           Antrag löschen
         </v-card-title>
-        <v-card-text id="usr-text">Sind sie sicher den Antrag vom {{proposal.startDate}} zu löschen?</v-card-text>
+        <v-card-text id="usr-text">Sind sie sicher den Antrag vom {{convertTime(proposal.startDate)}} zu löschen?</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
@@ -50,6 +50,9 @@ export default {
     disableDialog(){
       this.dialog = false
       this.$emit('close')
+    },
+    convertTime(time){
+      return ProposalService.readableTime(time)
     },
     async saveDialog(){
 

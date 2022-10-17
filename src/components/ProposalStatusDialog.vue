@@ -47,6 +47,7 @@ export default {
       proposalService.updateProposalStatus(this.proposal, this.action)
           .then(() => {
             this.$parent.$parent.$emit("setsnackbar",{text: "Antrag erfolgreich aktualisiert!", timeout: 5000, color: "green"})
+            this.disableDialog()
           })
           .catch(err => {
             this.$parent.$parent.$emit("setsnackbar",{text: err.response.data.errorMessage, timeout: 5000, color: "red"})
