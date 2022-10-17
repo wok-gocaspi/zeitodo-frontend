@@ -1,9 +1,17 @@
 <template>
   <v-container>
 
-    <h1>Planer für Abwesenheiten</h1><br>
 
 
+    <div id="centerDiv">
+      <v-card id="rowContainer">
+        <v-card>
+          <v-card-title>&#128101;Team Mitglieder</v-card-title>
+          <v-card-text>{{teammenber}}</v-card-text>
+      </v-card>
+      </v-card>
+    </div>
+  <!--
     <v-layout row>
       <v-flex xs50 md12>
         <div ><v-card
@@ -14,6 +22,8 @@
         >
 
           <v-row
+            align="left"
+            justify="left"
             class="ma-12"
             >
 
@@ -23,9 +33,12 @@
               <v-divider class="mt-2"></v-divider>
             </template>
 
-            <div><h1>&#128101;Team Mitglieder: {{teammenber}}</h1></div>
+            <div align="left"><h1>&#128101;Teams Mitglieder:</h1></div>
+
+          &nbsp;&nbsp;&nbsp;&nbsp;<div align="left" ><h1>{{teammenber}}</h1> </div>
 
           </v-row>
+
 
 
 
@@ -33,7 +46,7 @@
 
 
     </v-layout>
-
+-->
 
     <v-card
         elevation="20"
@@ -185,7 +198,20 @@
   </v-container>
 
 </template>
-
+<style>
+#rowContainer{
+  display: flex;
+  flex-direction: row;
+  max-width: max-content;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+#centerDiv{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+</style>
 <script>
 import userService from "@/services/userService";
 import {useUserStore} from "@/stores/user";
@@ -226,6 +252,7 @@ export default {
     type: 'month',
     typeToLabel: {
       month: 'Month',
+      day:'Day',
     },
     selectedEvent: {},
     selectedElement: null,
@@ -273,12 +300,15 @@ export default {
 
   mounted () {
 
+  //  this.getEffort1(this.user.id)
+   // this.getAllEntries1(this.user.id)
     this.$refs.calendar.checkChange()
 
   },
   created() {
     this.teammember()
     this.getAllproposal()
+
   },
   computed :{
     allTeams(){
@@ -309,6 +339,7 @@ export default {
         }
       })
     },
+
     async teammember(){
 
       await userService.getAllteammenber(this.user.id)

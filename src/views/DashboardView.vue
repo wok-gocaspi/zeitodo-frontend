@@ -324,6 +324,42 @@ export default {
       }
       return {projectName: projectChecker,dates: datesOfProject, values: dataToProject}
     },
+
+    dataSetToOneProject_LTE(dates,projects,durations,projectChecker){
+      let dataToProject = []
+      let datesOfProject = []
+      for (let i=0;i<dates.length;i++) {
+
+
+        if (projects[i] === projectChecker) {
+          dataToProject.push(durations[i])
+          datesOfProject.push(dates[i])
+        }
+        else {
+          dataToProject.push(0)
+          datesOfProject.push(dates[i])
+        }
+
+        let loop = true
+        let j = 1
+        while (loop) {
+          if (dates[i + j] && projects[i + j] === projectChecker && dates[i + j].split("T")[0] === dates[i].split("T")[0] && !(projects[i] === projectChecker)) {
+            dataToProject.push(durations[i + j])
+            datesOfProject.push(dates[i])
+          } else if (projects[i - j] === projectChecker && dates[i - j].split("T")[0] === dates[i].split("T")[0] && !(projects[i] === projectChecker)) {
+            dataToProject.push(durations[i - j])
+            datesOfProject.push(dates[i])
+          }
+          j++
+          if (i + j >= dates.length) {
+            loop = false
+          }
+        }
+
+      }
+
+      return {projectName: projectChecker,dates: datesOfProject, values: dataToProject}
+    },
     destroyDoughnut(){
       this.doughnutChart.destroy()
     },
@@ -400,10 +436,10 @@ export default {
         ProjektXData.push(sum)
       })
 
-      let checkProjektX = this.dataSetToOneProject(dates,projects,durations, "ProjektX")
-      let checkZeiToDo = this.dataSetToOneProject(dates,projects,durations, "ZeiToDo")
-      let checkEmployeeRegister = this.dataSetToOneProject(dates,projects,durations, "Employee-Register")
-      let checkAudi = this.dataSetToOneProject(dates,projects,durations, "Audi")
+      let checkProjektX = this.dataSetToOneProject_LTE(dates,projects,durations, "ProjektX")
+      let checkZeiToDo = this.dataSetToOneProject_LTE(dates,projects,durations, "ZeiToDo")
+      let checkEmployeeRegister = this.dataSetToOneProject_LTE(dates,projects,durations, "Employee-Register")
+      let checkAudi = this.dataSetToOneProject_LTE(dates,projects,durations, "Audi")
       let checkArray = [checkAudi,checkZeiToDo,checkProjektX,checkEmployeeRegister,]
       let formattedCheckArray =[AudiData,ZeitodoData, ProjektXData,EmployeeRegisterData]
       let sets = []
