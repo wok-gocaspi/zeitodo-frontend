@@ -390,7 +390,6 @@ export default {
     async getAllproposal(){
 
       let allteam= await proposalService.getTeamProposal(this.user.id)
-      console.log(allteam)
       allteam.data.forEach((user)=>{
         user.vacationProposals.forEach((proposal)=>{
           this.events.push({
@@ -410,18 +409,6 @@ export default {
 
 
     gettimeentry(){
-
-
-      timeentryService.getTimeentry()
-          .then(res => {
-            res.data.forEach((te)=>{
-              this.events.push({
-                name:te.project,start:Date.parse(te.start),end:Date.parse(te.end),breakStart:Date.parse(te.breakStart),breakEnd:Date.parse(te.breakEnd),color:"blue",timed:true
-
-              })
-
-            })
-          })
 
     },
 
